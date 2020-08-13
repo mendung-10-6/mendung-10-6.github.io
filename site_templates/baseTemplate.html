@@ -38,6 +38,11 @@
                     <span class="text-menu writeup">WRITEUP</span>
                 </div>
             </a>
+            <a href="/news">
+                <div class="menu-button">
+                    <span class="text-menu news">NEWS</span>
+                </div>
+            </a>
             <a href="/contact">
                 <div class="menu-button">
                     <span class="text-menu contact">CONTACT</span>
@@ -59,7 +64,7 @@
     window.setInterval(anim, 2500);
 
     function anim() {
-        var menus = ["aboutus", "notes", "writeup", "contact"]
+        var menus = ["aboutus", "notes", "writeup", "contact", "news"]
 
         lastPath = window.location.pathname.split("/").pop()
         menus = menus.filter(item => item !== lastPath)
@@ -86,7 +91,7 @@
     } 
 
     function hoveredExist() {
-        var menus = ["aboutus", "notes", "writeup", "contact"]
+        var menus = ["aboutus", "notes", "writeup", "contact", "news"]
         for (let index = 0; index < menus.length; index++) {
             const menu = menus[index];
             if ($("." + menu)
