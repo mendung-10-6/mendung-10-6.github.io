@@ -40,7 +40,18 @@ def main():
     writeContentToTemplate("contact", baseHtml)
         
     print("[+] Creating notes page")
-    writeContentToTemplate("notes", baseHtml)
+    with open("./data/notes.md", "r") as f:
+        notesContent = f.read()
+        notes = markdown2.markdown(notesContent, extras = [
+            "footnotes", 
+            "fenced-code-blocks", 
+            "tables", 
+            "markdown-in-html",
+            "target-blank-links"
+        ])
+        writeContentToTemplate("notes", baseHtml, {
+            "notes": notes
+        })
 
     print("[+] Creating about-us page")
     with open("./data/profiles.txt", "r") as f:
