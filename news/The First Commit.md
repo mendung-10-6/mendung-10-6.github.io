@@ -1,7 +1,7 @@
 tanggal: 17 Agustus 2020
 tldr: Website pertama (mendung)10^6 telah diluncurkan
 ===
-## The First Commit
+# The First Commit
 
 Setelah bermain lebih dari 20 kompetisi CTF (Capture The Flag), mengasah kemampuan dan belajar melalui banyak challenge selama kurang lebih 8 bulan.
 
