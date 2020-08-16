@@ -1,19 +1,19 @@
 <div>
     <div>
-        Kami adalah tim CTF (Capture The Flag) asal Indonesia yang memiliki mimpi untuk memajukan indonesia pada bidang Cyber Security melalui berbagai kompetisi CTF
+        Kami adalah tim CTF (Capture The Flag) asal Indonesia yang memiliki mimpi untuk memajukan indonesia pada bidang Cyber Security melalui berbagai kompetisi CTF 
     </div>
-
+    <br>
     <div>
         {% for profile in profiles %}
         <div>
-            <img src="/pictures/{{ profile.opcode }}.png" alt="{{ profile.opcode }}-profile-picture">
-            <span>{{ profile.fullname }}</span>
-            <span>{{ profile.handle }}</span>
-            <span>{{ profile.description }}</span>
-            <span>{{ profile.opcode }}</span>
+            <img src="/pictures/{{ profile.opcode }}.png" alt="{{ profile.opcode }}-profile-picture"><br>
+            <span>fullname = {{ profile.fullname }}</span><br>
+            <span>handle = {{ profile.handle }}</span><br>
+            <span>description = {{ profile.description }}</span><br>
+            <span>opcode = {{ profile.opcode }}</span><br>
 
             {% for type, contact in profile.contacts.items() %}
-            <span>{{ type }}: {{ contact }}</span>
+            <span>{{ type }}: {{ contact }}</span><br>
             {% endfor %}
         </div>
         {% endfor %}
