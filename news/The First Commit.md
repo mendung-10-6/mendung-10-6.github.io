@@ -1,4 +1,4 @@
-tanggal: 17 Agustus 2020
+date: 17 Agustus 2020
 tldr: Website pertama (mendung)10^6 telah diluncurkan
 ===
 # The First Commit
