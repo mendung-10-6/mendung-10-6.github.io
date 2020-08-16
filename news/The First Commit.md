@@ -9,4 +9,4 @@ Akhirnya salah satu pemain `(mendung)10^6` berkesempatan untuk membangun website
 
 Dan bertepatan dengan hari kemerdekaan **Indonesia** pada tanggal **17 Agustus 2020**, `(mendung)10^6` meluncurkan website ini dengan tujuan untuk membagikan ilmu-ilmu mengenai *information security*, terkhusus yang berkaitan dengan kompetisi CTF dan mungkin ilmu lainnya yang ada hubungannya dengan bidang ini.
 
-#IndonesiaIndependenceDay #IndonesiaFTW #InfosecIndonesia
+\#IndonesiaIndependenceDay \#IndonesiaFTW \#InfosecIndonesia
