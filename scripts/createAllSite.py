@@ -1,8 +1,6 @@
-from datetime import datetime
 from os.path import isfile, join
 from slugify import slugify
 from jinja2 import Template
-from pytz import timezone
 import markdown2, os
 
 def convertMDtoHTML(md_text):
@@ -117,7 +115,7 @@ def main():
         "allNews": allNewsProps
     })
         
-    print("[+] Creating writeup page")
+    print("[+] Creating writeup(s) page")
     writeContentToTemplate("writeup", baseHtml)
 
 if __name__ == "__main__" :
