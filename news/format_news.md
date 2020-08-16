@@ -8,3 +8,7 @@ Properti yang tersedia (case sensitive):
 
 - tanggal
 - tldr
+
+# Notes
+
+Write news in **md** file **not html** file
