@@ -1,0 +1,45 @@
+name: Organization Web Deployment
+
+on:
+  push:
+    branches:
+      - development  # default branch
+
+jobs:
+  build_and_deploy:
+    runs-on: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Cache pip
+        uses: actions/cache@v2
+        with:
+          # This path is specific to Ubuntu
+          path: ~/.cache/pip
+          # Look to see if there is a cache hit for the corresponding requirements file
+          key: ${{ runner.os }}-pip-${{ hashFiles('scripts/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+            ${{ runner.os }}-
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Run magic script and modify .gitignore
+        run: |
+          mkdir writeups
+          python scripts/createAllSite.py
+          rm .gitignore
+          echo "ctf-writeups-master/*" > .gitignore
+
+      - name: Deploy site
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.PERSONAL_TOKEN }}
+          publish_dir: ./
+          publish_branch: master  # deploying branch
