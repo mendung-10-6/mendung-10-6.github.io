@@ -1,5 +1,6 @@
 from datetime import datetime
 from os.path import isfile, join
+from slugify import slugify
 from jinja2 import Template
 from pytz import timezone
 import markdown2, os
@@ -19,13 +20,13 @@ def writeHTMLtoFILE(filename, content):
     indexFile.write(content)
     indexFile.close()
 
-def writeContentToTemplate(filename, templateHtml, props=None):
-    with open("./site_templates/{}Template.html".format(filename), "r") as f :
+def writeContentToTemplate(filename, templateHtml, isContent=False, filenameOutput=None, props=None):
+    with open("./site_templates/{}Template.html".format(filename + ("Content" if isContent else "")), "r") as f :
         contentHtml = f.read() 
         if props != None:
             contentHtml = Template(contentHtml).render(props)
         renderedResult = Template(templateHtml).render({"content": contentHtml})
-        writeHTMLtoFILE(filename, renderedResult)
+        writeHTMLtoFILE(filename if filenameOutput == None else filenameOutput, renderedResult)
 
 def main():
     print("[+] Running all sites creation sequence")
@@ -49,7 +50,7 @@ def main():
             "markdown-in-html",
             "target-blank-links"
         ])
-        writeContentToTemplate("notes", baseHtml, {
+        writeContentToTemplate("notes", baseHtml, props={
             "notes": notes
         })
 
@@ -57,6 +58,8 @@ def main():
     with open("./data/profiles.txt", "r") as f:
         profilesContent = f.read()
         profilesContent = profilesContent.split("===")
+        
+        print("[|] Found {} profile(s)".format(len(profilesContent)))
 
         profiles = []
         for profile in profilesContent:
@@ -72,12 +75,47 @@ def main():
 
             profiles.append(props)
 
-        writeContentToTemplate("aboutus", baseHtml, {
+        writeContentToTemplate("aboutus", baseHtml, props={
             "profiles": profiles
         })
         
     print("[+] Creating news page")
-    writeContentToTemplate("news", baseHtml)
+    allNews = [f for f in os.listdir("./news") if isfile(join("./news", f))]
+    allNews = [f.split(".md")[0] for f in allNews if f.split(".")[-1] == "md" and f != "format_news.md"]
+
+    allNewsProps = []
+    for news in allNews :
+        print("[|] Working on '{}'".format(news))
+
+        props = {
+            "title": news,
+            "slug": slugify(news)
+        }
+        allNewsProps.append(props)
+        
+        with open("./news/{}.md".format(news), "r") as newsFile:
+            newsContent = newsFile.read()
+
+            newsMd = newsContent.split("===\n")[1]
+            newsMeta = newsContent.split("===\n")[0]
+            newsHtml = markdown2.markdown(newsMd, extras = [
+                "footnotes", 
+                "fenced-code-blocks", 
+                "tables", 
+                "markdown-in-html",
+                "target-blank-links"
+            ])
+            
+            newsProps = {"content": newsHtml}
+            for meta in newsMeta.split("\n"):
+                if meta != "":
+                    newsProps[meta.split(": ")[0]] = meta.split(": ")[1]
+
+            writeContentToTemplate("news", baseHtml, isContent=True, filenameOutput=("news/" + slugify(news)), props=newsProps)
+
+    writeContentToTemplate("news", baseHtml, props={
+        "allNews": allNewsProps
+    })
         
     print("[+] Creating writeup page")
     writeContentToTemplate("writeup", baseHtml)

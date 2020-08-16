@@ -1,3 +1,13 @@
 <div>
-    blogs
+    news
+
+    <ul>
+        {% for news in allNews %}
+            <li>
+                <a href="/news/{{ news.slug }}.html">
+                    {{ news.title }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
 </div>
