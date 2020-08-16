@@ -1,0 +1,227 @@
+:root {
+    --body-color: rgb(255, 255, 255);
+    --page-color: rgb(10, 10, 10);
+    --menu-color: rgb(10, 10, 10);
+    --menu-hover-color: rgb(255, 255, 255);
+    --menu-text-color: linear-gradient(180deg, rgb(255, 255, 255) 0%, rgb(255, 255, 255) 50%, rgb(0, 0, 0) 50%, rgb(0, 0, 0) 100%);
+}
+
+body {
+    margin: 0rem;
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--body-color);
+}
+
+a {
+    color: inherit;
+    outline: none;
+    text-decoration: none;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+}
+
+/* ****************** */
+/* BLOG related style */
+/* ****************** */
+
+.blog-content {
+    margin-left: 7.5rem;
+    margin-right: 7.5rem;
+}
+
+.container > hr {
+    margin-right: 2rem;
+}
+
+.blog-content blockquote {
+    background: #fff8d3;
+    border-left: 10px solid rgb(104, 255, 84);
+    margin: 1.5em 0px;
+    padding: 1em 30px;
+}
+
+.blog-content blockquote p {
+    display: inline;
+    color: black;
+}
+
+.blog-content h1 {
+    font-family: 'Bitter', serif;
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
+
+.blog-content p, .blog-content h3 {
+    font-family: 'Raleway', sans-serif;
+    max-width: 900px;
+    word-wrap: break-word;
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+.blog-content h3 {
+    margin-top: 85px;
+}
+
+.blog-content .codehilite {
+    padding: 10px 30px;
+    border-radius: 10px;
+    overflow-x: auto;
+}
+
+.blog-content ol li {
+    margin-top: 50px;
+}
+
+.blog-content p {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.blog-content img {
+    border-radius: 10px;
+    max-width: calc(100%);
+}
+
+.blog-content p code {
+    border-radius: 5px;
+    background-color: white;
+    color: black;
+    padding: 2.5px;
+    font-size: 15px;
+}
+
+.tags-container {    
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.tag {
+    font-size: 15px;
+    padding: 3px;
+    margin: 2.5px;
+    border-radius: 3px;
+}
+
+#python {
+    color: black;
+    background: linear-gradient(90deg, #9ebd13 0%, #008552 100%);
+}
+
+#programming {
+    color: black;
+    background: linear-gradient(90deg, #d53369 0%, #daae51 100%);
+}
+
+#automation {
+    color: white;
+    background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+}
+
+#blogging {
+    color: black;
+    background: linear-gradient(90deg, #e3ffe7 0%, #d9e7ff 100%);
+}
+
+@media only screen and (max-width: 1250px) {
+
+    /* For mobile phones: */
+    .blog-content {
+        margin-left: 5rem;
+        margin-right: 5rem;
+    }
+}
+
+@media only screen and (max-width: 800px) {
+
+    /* For mobile phones: */
+    .blog-content {
+        margin-left: 1rem;
+        margin-right: 2rem;
+    }
+}
+
+/* ****************** */
+/* PAGE related style */
+/* ****************** */
+
+.main-content {
+    margin: 10px;
+    margin-top: -15px;
+    padding: 10px;
+    height: calc(100% - (10rem + 25px));
+    background-color: var(--page-color);
+    border-radius: 10px;
+    overflow: auto;
+    border-top: 30px solid var(--page-color);
+    border-bottom: 15px solid var(--page-color);
+    border-left: 10px solid var(--page-color);
+    border-right: 10px solid var(--page-color);
+}
+
+.header-content {
+    position: relative;
+    z-index: 100;
+}
+
+.menu-container {    
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.menu-button {
+    cursor: pointer;
+    margin-left: 10px;
+    margin-right: 10px;
+    width: auto;
+    height: 20px;
+    padding: 10px;
+    padding-top: 0px;
+    border-radius: 10px;
+    background: var(--menu-color);
+}
+
+.menu-button.hovered {
+    background: var(--menu-hover-color);
+}
+
+.text-menu {
+    margin: 10px;
+    font-size: 1.5rem;
+    font-family: 'Rowdies', cursive;
+    word-wrap: break-word;
+    background: var(--menu-text-color);
+    background-clip: text;
+    color: transparent;
+}
+
+.team-name {
+    margin: 20px;
+    font-size: 3rem;
+    font-family: 'Londrina Solid', cursive;
+}
+
+.text-normal {
+    font-size: 1rem;
+    font-family: 'IBM Plex Sans', sans-serif;
+    color: var(--body-color);
+}
+
+.text-code {
+    font-size: 1.1rem;
+    font-family: 'Fira Code', monospace;
+    word-wrap: break-word;
+    margin-right: 10px;
+    color: var(--body-color);
+}
+
+@media only screen and (max-width: 800px) {
+
+    /* For mobile phones: */
+    
+}

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code|Londrina+Solid:wght@900|IBM+Plex+Sans:ital,wght@0,500;0,700;1,500;1,700|Rowdies&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/base.css">
+
+    <script
+        src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="
+        crossorigin="anonymous"></script>
+    
+    <title>(mendung)10^6</title>
+</head>
+<body>
+    <div class="header-content">
+        <center>
+            <div class="team-name">
+                <span>(mendung)10^6 === Mega Mendung</span>
+            </div>
+        </center>
+        <div class="menu-container">
+            <a href="/aboutus.html">
+                <div class="menu-button">
+                    <span class="text-menu aboutus">ABOUT US</span>
+                </div>
+            </a>
+            <a href="/notes.html">
+                <div class="menu-button">
+                    <span class="text-menu notes">NOTES</span>
+                </div>
+            </a>
+            <a href="/writeup.html">
+                <div class="menu-button">
+                    <span class="text-menu writeup">WRITEUP</span>
+                </div>
+            </a>
+            <a href="/news.html">
+                <div class="menu-button">
+                    <span class="text-menu news">NEWS</span>
+                </div>
+            </a>
+            <a href="/contact.html">
+                <div class="menu-button">
+                    <span class="text-menu contact">CONTACT</span>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="main-content text-normal">
+        <div>
+    <h1>HackTM CTF 2020 Writeup By (mendung)10^6</h1>
+
+<h3>Author : Wrth</h3>
+
+<h2>RSA is easy #1</h2>
+
+<blockquote>
+  <p>50 Points <br />
+  Author: stackola <br />
+  <a target="_blank" href="https://ctfx.hacktm.ro/download?file_key=2023e147783e820d50f4c90beee184e9dec203d9ad556013a9b3f2299b1044cf&amp;team_key=f97dec9c20bf2f052fd05ffe394ebf025ac133286e0488702c39b07ec5b7629">challenge_files.zip</a>  </p>
+</blockquote>
+
+<p>Unzip the file and we get the public key with the encrypted flag, and also the python script used to encrypt the flag. Let's see what's inside the script:  </p>
+
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">my_math</span> <span class="kn">import</span> <span class="n">next_prime</span>
+
+<span class="kn">from</span> <span class="nn">flag</span> <span class="kn">import</span> <span class="n">flag</span>
+
+<span class="k">def</span> <span class="nf">egcd</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">a</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">q</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="n">b</span><span class="o">//</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">%</span> <span class="n">a</span>
+        <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">x</span><span class="o">-</span><span class="n">u</span><span class="o">*</span><span class="n">q</span><span class="p">,</span> <span class="n">y</span><span class="o">-</span><span class="n">v</span><span class="o">*</span><span class="n">q</span>
+        <span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">a</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span>
+        <span class="n">gcd</span> <span class="o">=</span> <span class="n">b</span>
+    <span class="k">return</span> <span class="n">gcd</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
+
+<span class="k">def</span> <span class="nf">gen_keys</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
+    <span class="n">e</span> <span class="o">=</span> <span class="mi">65537</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">p</span> <span class="o">*</span> <span class="n">q</span>
+    <span class="n">phi</span> <span class="o">=</span> <span class="p">(</span><span class="n">p</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">q</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">gcd</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">egcd</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">phi</span><span class="p">)</span>
+    <span class="c1"># Keys:((pub),  (priv))</span>
+    <span class="k">return</span> <span class="p">((</span><span class="n">e</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">enc</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+    <span class="n">e</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">key</span>
+    <span class="n">cipher</span> <span class="o">=</span> <span class="p">[</span><span class="nb">pow</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">char</span><span class="p">),</span> <span class="n">e</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">p</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">cipher</span>
+
+<span class="k">def</span> <span class="nf">dec</span><span class="p">(</span><span class="n">pk</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+    <span class="n">key</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">pk</span>
+    <span class="n">plain</span> <span class="o">=</span> <span class="p">[</span><span class="nb">chr</span><span class="p">(</span><span class="nb">pow</span><span class="p">(</span><span class="n">char</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span> <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">c</span><span class="p">]</span>
+    <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">plain</span><span class="p">)</span>
+
+
+<span class="n">p</span> <span class="o">=</span> <span class="n">next_prime</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">SystemRandom</span><span class="p">()</span><span class="o">.</span><span class="n">getrandbits</span><span class="p">(</span><span class="mi">512</span><span class="p">))</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">next_prime</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">SystemRandom</span><span class="p">()</span><span class="o">.</span><span class="n">getrandbits</span><span class="p">(</span><span class="mi">512</span><span class="p">))</span>
+
+<span class="n">flag_key</span><span class="o">=</span><span class="n">gen_keys</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Public key:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">flag_key</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="n">flag_c</span><span class="o">=</span><span class="p">(</span><span class="n">enc</span><span class="p">(</span><span class="n">flag_key</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">flag</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Encrypted flag:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">flag_c</span><span class="p">)</span>
+</code></pre></div>
+
+<p>It appears that the flag are encrypted character by character, so we can encrypt all character that could potentially be the in the flag with the public key, and bruteforce the cipher to get the flag.  </p>
+
+<p>Here's the python script I made to get the flag:</p>
+
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/python</span>
+<span class="n">encrypted_flag</span> <span class="o">=</span> <span class="p">[</span><span class="mi">24603931406187071861602497345394097692989773194039735745762181586628499407802825983901643034231448504738113184470035863824128031443012073830520233613935485192804104698999763287388765215634314977991988580048221541560353418280294402691661980705832590960497587810514295642811714680627768268704899874164681718449</span><span class="p">,</span> <span class="mi">11226318059664066669163529308725576208632153806776762372429671026861927737060205604020741904348343722215670471225630839065129589767356765848271000166982882271636977663052775953958080543340165408211633442938366994031562890034541604362383645601883118173819506187865617998294930587997187071040181458961091560176</span><span class="p">,</span> <span class="mi">15645290594995180815865397749136800126080704684884296404807344870555186823350216705796063922278419585484662234210001661578549560411864952462380096494781766394542247609648743673312823946783517115542404474786395934886667795692210287283039316418126796934535150832709500306153601987121172178183970841498331059732</span><span class="p">,</span> <span class="mi">24345863558959407738249127568820138362115734211146549194534219311913032290216606859385934708675962835857804566049600710875035366973110422262131331932310524891713319358676673958738776644229757625523955354996402750265022578843637525183704187498194489645838490640529841182709661371499013082259193633000753627261</span><span class="p">,</span> <span class="mi">9620679224297488175028367924764722982789333194446063577221477359704180638294602848741035585656113543497776415635770748468725814916994577398023154224563920936523717884116880223345204061598438291740007518025998041449406726084042681798053863495542392481059281588020105313791046017356493739244555377217866496734</span><span class="p">,</span> <span class="mi">1681724029430984846089508679185107538104072555994133932050319175633667369916570440070548756805254789524599169177371471218251246349461689959989338169394649813424706418737543924129213419625988100326558802566046751879531469160120914735332858786199496335523515150741728027296830843112416558460932541777024522279</span><span class="p">,</span> <span class="mi">20629854768856798537062426042570334097651328955665698429979954410631113160492201197690192324881508105172595216229624523572595589920695165876501026993810936392510720968159305964832449680889041278532807173859579419197780294984519222830572413180237776797800176462492384318120546495539728732366110782215071262307</span><span class="p">,</span> <span class="mi">7440918084186181327822271261394344901791253526257166181264874776746516620936925799031445704193589071453959493392065321806281801023425299535553522582376879027448581379760896052013060957519595664095702210758316558762834545655992756483227787274192094065257224706388623944855362716578806372564148647945479173348</span><span class="p">,</span> <span class="mi">5097867843777034076271397095201528351784693372027998615436445410912131141882225577577253530396333413579756394884096318434100382509189974240357351425474190558456256750742731090012822064840481143528081027106843123030275420215136304130321013605031261372665636366377162666476737296028608455229357416005773064242</span><span class="p">,</span> <span class="mi">10420107412794383499391199999666100864853724770814620968725971207705900061273163202891569477729023724554388008575891113425781557296798472693974759813058067631655217722786373465395279381307973425004404348124524059844749313287030234750535347511172780349725636807760402334957881556461382950021814486095167001394</span><span class="p">,</span> <span class="mi">20895198446192697825002890636650624361863759520944494391240191454443921345578043873584884838772334163748883476104011030592329948454531053024873263786017045083052443924403769542324123323834338391361149767913830998218951574784777785739566046139742309557536025214334831372509789246522325522982945241815388133477</span><span class="p">,</span> <span class="mi">11226318059664066669163529308725576208632153806776762372429671026861927737060205604020741904348343722215670471225630839065129589767356765848271000166982882271636977663052775953958080543340165408211633442938366994031562890034541604362383645601883118173819506187865617998294930587997187071040181458961091560176</span><span class="p">,</span> <span class="mi">16657126895659048065404729920028465477385009450133540950695155983380795627778054526133891673615252510518969355629562948102050307259107355106086468465392660721567070464708776158039303608428552547481825035736610837329720474688421062759594907620576318249542577396722737724172954532394471909440668625218820801756</span><span class="p">,</span> <span class="mi">11113777356910731413424023299582648618258376222028450254478672148119889617557563576704932635131420845868165014982665717620845578039880527701593963719893467068820107811384041511295664833904504511210342105242330522375476482706044695838957591685781703894244561607764476555630573446589408768780659378128082633769</span><span class="p">,</span> <span class="mi">20895198446192697825002890636650624361863759520944494391240191454443921345578043873584884838772334163748883476104011030592329948454531053024873263786017045083052443924403769542324123323834338391361149767913830998218951574784777785739566046139742309557536025214334831372509789246522325522982945241815388133477</span><span class="p">,</span> <span class="mi">1681724029430984846089508679185107538104072555994133932050319175633667369916570440070548756805254789524599169177371471218251246349461689959989338169394649813424706418737543924129213419625988100326558802566046751879531469160120914735332858786199496335523515150741728027296830843112416558460932541777024522279</span><span class="p">,</span> <span class="mi">5237767970074646857079948735567615361735616179074197239639640947679550920349684166643572837235712904929824521258264241503059989875517915784117038966236672390569320206379357882906463342282254405974383459878863044723383164329146669331810709270455492110346838097216174137176255793792848357953314563364460847842</span><span class="p">,</span> <span class="mi">20895198446192697825002890636650624361863759520944494391240191454443921345578043873584884838772334163748883476104011030592329948454531053024873263786017045083052443924403769542324123323834338391361149767913830998218951574784777785739566046139742309557536025214334831372509789246522325522982945241815388133477</span><span class="p">,</span> <span class="mi">2141625583250052666579569568613448089970148215959031795439930595139028085767825695294403905882459409861220995951141855281841435481587946825079031782977651718402048988278639212978854590412709087674713750292922397103941195760574072700517109381299788645871729355745594573785064162048047595009933642068871994670</span><span class="p">,</span> <span class="mi">278354276293884030290100330445865286604723740111170856624965259573282278044823323212960304154629174664076141280100412502135750130875356944835909175355370317285768658282746817782130476757714384697086179400629156643250500432197002583758692394681401772203578628635926749457621478296182304772136118691761841359</span><span class="p">,</span> <span class="mi">6039667595601233082552071610487048398346324705021423176423484623705376133358539134558362499891954091431687578305623106726900655384011241742715735786166290331136153240702822544221903404870992713778423167867663948083662620087859096707381620051266745156545213726214080049764382107442159825610310695543673475542</span><span class="p">,</span> <span class="mi">21353765873487781085375016306418205544750755310255410963646737671193146222650262290683259548572190880304009015662963424520575937651278866672082973874806201031606257157229306007587966460187818647603633973019548401357989358306250139692325474674826791149726161678649996852062656272851387461089863388359261125336</span><span class="p">,</span> <span class="mi">11226318059664066669163529308725576208632153806776762372429671026861927737060205604020741904348343722215670471225630839065129589767356765848271000166982882271636977663052775953958080543340165408211633442938366994031562890034541604362383645601883118173819506187865617998294930587997187071040181458961091560176</span><span class="p">,</span> <span class="mi">20576388598886140095325204584799302384454378372204683348252463729525849583734948105765087991438423260690623246579570440405616572326057536248148020737810766134083795050076636686776809469271643188562482921546497071402873405706504773345621716428511481598704631451463399778602486417840466985891815649711178813963</span><span class="p">,</span> <span class="mi">17347447662661486040040289855519394974371562320877472776529836975445205017304164550202099250096382852783253959549113036367974281750823938616836362593312254792770954856762797438690474329666549947795964992533463700161635382925555835347885819042031312006167190561233042383984087765920275010577545908085026177611</span><span class="p">,</span> <span class="mi">11788628214684738246695632901992250075758959059858474645166125685861157046466064692980236734739634298802473894878268029860203026238925142258303727438570051822763330338744774300757888262747314093511013562545738571326771345495509434761853742569509480619380000424215527153118231084573851377049921456961916278761</span><span class="p">,</span> <span class="mi">20895198446192697825002890636650624361863759520944494391240191454443921345578043873584884838772334163748883476104011030592329948454531053024873263786017045083052443924403769542324123323834338391361149767913830998218951574784777785739566046139742309557536025214334831372509789246522325522982945241815388133477</span><span class="p">,</span> <span class="mi">2141625583250052666579569568613448089970148215959031795439930595139028085767825695294403905882459409861220995951141855281841435481587946825079031782977651718402048988278639212978854590412709087674713750292922397103941195760574072700517109381299788645871729355745594573785064162048047595009933642068871994670</span><span class="p">,</span> <span class="mi">2710029303357232932696197225263692040597986927359269224740812600224998707144266259851604978553286889767425982708691908438984279442981540971935737617354609856642312100797081348174935195638083002333058089328102430432526612805955273581245352312630845237670744276402867230550537275379675828467791243032108754996</span><span class="p">,</span> <span class="mi">19981107233593350929447953514006501458466479260151660185153999799085657467921097940751860717309377498501638075002136637344148955811617399850718322497572421311807629329642551519284713638882025500074565475569618691516951449764680555447185364165687596161053684299589053909233984617244886185728811651967713024530</span><span class="p">,</span> <span class="mi">3975884358027162862622932959187611984655247354547659825042810425039322096401899672988989768997134724085482147901304365437476311647149733392577446833370358728610677436154877051592307539990184750467273668379065865808900410057533079113476991204462719784464847498582643056503810805516315622314948257403761762299</span><span class="p">,</span> <span class="mi">6039667595601233082552071610487048398346324705021423176423484623705376133358539134558362499891954091431687578305623106726900655384011241742715735786166290331136153240702822544221903404870992713778423167867663948083662620087859096707381620051266745156545213726214080049764382107442159825610310695543673475542</span><span class="p">,</span> <span class="mi">14296542628093736444815382636071360035549021313467366701986569710120268508807886041986007828960248665683292143486565404978073122476968882030310174125355932205646388813061197657253533595700948593692407928813318978600474254105007396254987998953819782624738628334271910759242195864082910860797444993756044746481</span><span class="p">,</span> <span class="mi">20895198446192697825002890636650624361863759520944494391240191454443921345578043873584884838772334163748883476104011030592329948454531053024873263786017045083052443924403769542324123323834338391361149767913830998218951574784777785739566046139742309557536025214334831372509789246522325522982945241815388133477</span><span class="p">,</span> <span class="mi">7983594351048693624291138893287137601848867970873700373034058935656045095987011116108642350616654713531373295621458596238107660073931212524833777531450461876588350132328332972361857441613098452082271331281504722310376573085001395356078670960667878342134517577992585442881605030717788248137764480486762452442</span><span class="p">,</span> <span class="mi">7983594351048693624291138893287137601848867970873700373034058935656045095987011116108642350616654713531373295621458596238107660073931212524833777531450461876588350132328332972361857441613098452082271331281504722310376573085001395356078670960667878342134517577992585442881605030717788248137764480486762452442</span><span class="p">,</span> <span class="mi">23267174349531278768420819619439317179083929128083924515569762521057285892931325108327037262091624670335579302436476096123152288550738706103166820604983405317430467198343871458522070337902643863890959573514405066297449924638838605501211486861582957963752388608487593217237563529201436917108304692859773404548</span><span class="p">]</span>
+<span class="n">flag</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">28150970547901913019901824364390497053600856369839321617996700606130553862041378369018779003752433356889118526332329074054728613209407037089320809898343953157935211086135010436283805891893636870991411236307901650696221491790470635225076251966300189483160148297407974155121570252648252906976186499329924342873</span>
+<span class="n">e</span> <span class="o">=</span> <span class="mi">65537</span>
+<span class="n">potentially_char_of_the_flag</span> <span class="o">=</span> <span class="s2">&quot;qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890!@$^_?</span><span class="si">{}</span><span class="s2">&quot;</span>
+<span class="n">potentially_char_of_the_flag_encrypted</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">potentially_char_of_the_flag</span><span class="p">:</span>
+    <span class="n">potentially_char_of_the_flag_encrypted</span><span class="p">[</span><span class="nb">pow</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="n">e</span><span class="p">,</span><span class="n">n</span><span class="p">)]</span><span class="o">=</span><span class="n">i</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">encrypted_flag</span><span class="p">:</span>
+    <span class="n">flag</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">potentially_char_of_the_flag_encrypted</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">flag</span><span class="p">))</span>
+</code></pre></div>
+
+<p>flag : <code>HackTM{why_ar3_MY_pR1va7es_pu8l1C_??}</code>  </p>
+
+<h2>RSA is easy #2</h2>
+
+<blockquote>
+  <p>50 Points <br />
+  provide the flag in this format:  </p>
+  
+  <p>HackTM{words<em>you</em>found}  </p>
+  
+  <p>Example: <br />
+  If you find "i am a flag" <br />
+  submit: <br />
+  HackTM{i<em>am</em>a_flag}  </p>
+  
+  <p>Author: stackola <br />
+  <a target="_blank" href="https://ctfx.hacktm.ro/download?file_key=9f5e9e2df1dd17b3599feed90b6b90b591faea6ca37b6c221fd96e623b9971af&amp;team_key=f97dec9c20bf2f052fd05ffe394ebf025ac133286e0488702c39b07ec5b76291">challenge<em>files</em>2.zip</a>  </p>
+</blockquote>
+
+<p>This challenge doesn't even give us a key at all, so I just assign a single character for each value and use <a target="_blank" href="https://quipqiup.com/">this tool</a> to help me break the substitution cipher <br />
+Here is what I get from doing it: <br />
+<code>when siswaksins colleges in s the s early sqzkjs is devi keds whats is believed swaks as brilliants encryption skcheme fsa skimple spk eudorandoms numbers ktreams waks added stos the s plain texts ktream stos creates ciphertex tfs thiks would skeemingly s thwarts any sWr eHuencys analykik soWs the s cipher text jsands would s b e sun cracEable seven stos the smokts rekource Wuls governments intelligences agenciekfs is Welts kosk mugs about smys achievement fs year ks later js is dik covered s thiks kames kchemes in skeveral sintroductory scryptography s text ksands tutorials paper kf shows nicefs others cryptographer k shads thought soWs the s kames kcheme fs unWortunately js the skchemes waks pre kented saks a skimples home worE sakkignments on shows to sukes elementary scrypt analytics techniHueks to strivially sc racEs it fskos much sWor smys brilliant skcheme f s W roms thiks humblings experiences is learned shows eaky sitsiks to s Walls into sas Walkes kenke soWs kecurity s when s deviking sans encryptions algorithm f smokts peoples donNts realiSe shows Wien dikh lys diW Wicult sitsik stos de v ike sans encryptions algorithms that scans with ktands as prolonged sands determined sat tacEs by s as rekource Wuls opponent fs here siks the s W l a g f s when sits com ekstos cryptos or scarpets nevers rolls your sown</code>  </p>
+
+<p>We already got some words, I cleaned all the <code>s</code> on the cipher and doing it again with clues this time for more accurate text and get:  </p>
+
+<p><code>when i was in college in the early j zski devised what i believed was a brilliant encryption scheme f a simple pseudo random number stream was added to the plain text stream to create ciphertext ft his would seemingly thwart any WreHuency analysis o W the cipher textk and would be un cracEable even to the most resource Wul government intelligence agencies fiWelt so smug about my achievement fyears later ki discovered this same scheme in several introductory cryptography texts and tutorial papers f how nice fother cryptographers had though toW the same scheme funWortunately k the scheme was presented as a simple home worE assignment on how to use elementary crypt analytic techniHues to trivially cracE itf so much Wormy brilliant scheme fW rom this humbling experience i learned how easy it is to Wall into a Walse sense oW security when devising an encryption algorithm f most people donNtreal i e how Wiendishly diW Wicult it is to devise an encryption algorithm that can withstand a prolonged and determined at tacE by a resource Wul opponent fhere is the W lagf when it comes to crypto or carpet never roll your own</code>  </p>
+
+<p>notice there are still some gibberish because i use some uppercase text but quipqiup treated it as the same letter with the lower case one, but still, we get the flag!  </p>
+
+<p>flag : <code>HackTM{when_it_comes_to_crypto_or_carpet_never_roll_your_own}</code>  </p>
+
+</div>
+    </div>
+</body>
+<script>
+    $(".menu-button").hover(function(){
+        $(this).addClass("hovered");
+    }, function(){
+        $(this).removeClass("hovered");
+    });
+
+    window.setInterval(anim, 2500);
+
+    function anim() {
+        var menus = ["aboutus", "notes", "writeup", "contact", "news"]
+
+        lastPath = window.location.pathname.split("/").pop().split(".html")[0]
+        menus = menus.filter(item => item !== lastPath)
+
+        if (!hoveredExist()) {
+            menu = menus[Math.floor(Math.random() * menus.length)]
+            for (let i = 0; i < 5; i++) {
+                blink(i, menu)  
+            }
+        }
+    }
+
+    function blink(i, menu) { 
+        setTimeout(function() { 
+            $("." + menu)
+                .parent()
+                .addClass("hovered")
+            setTimeout(function () {
+                $("." + menu)
+                    .parent()
+                    .removeClass("hovered")
+            }, 50);
+        }, 100 * i); 
+    } 
+
+    function hoveredExist() {
+        var menus = ["aboutus", "notes", "writeup", "contact", "news"]
+        for (let index = 0; index < menus.length; index++) {
+            const menu = menus[index];
+            if ($("." + menu)
+                    .parent()
+                    .hasClass("hovered")) {
+                return true
+            }   
+        }
+        return false
+    }
+</script>
+</html>

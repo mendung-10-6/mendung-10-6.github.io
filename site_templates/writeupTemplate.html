@@ -1,0 +1,13 @@
+<div>
+    writeups
+
+    <ul>
+        {% for writeup in writeups %}
+            <li>
+                <a href="/writeups/{{ writeup.slug }}.html">
+                    {{ writeup.title }}
+                </a><br>
+            </li>
+        {% endfor %}
+    </ul>
+</div>

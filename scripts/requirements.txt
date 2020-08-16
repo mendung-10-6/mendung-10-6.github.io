@@ -1,0 +1,6 @@
+Jinja2==2.11.1
+markdown2==2.3.9
+MarkupSafe==1.1.1
+Pygments==2.5.2
+pytz==2019.3
+python-slugify==4.0.1

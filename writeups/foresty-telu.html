@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code|Londrina+Solid:wght@900|IBM+Plex+Sans:ital,wght@0,500;0,700;1,500;1,700|Rowdies&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/base.css">
+
+    <script
+        src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="
+        crossorigin="anonymous"></script>
+    
+    <title>(mendung)10^6</title>
+</head>
+<body>
+    <div class="header-content">
+        <center>
+            <div class="team-name">
+                <span>(mendung)10^6 === Mega Mendung</span>
+            </div>
+        </center>
+        <div class="menu-container">
+            <a href="/aboutus.html">
+                <div class="menu-button">
+                    <span class="text-menu aboutus">ABOUT US</span>
+                </div>
+            </a>
+            <a href="/notes.html">
+                <div class="menu-button">
+                    <span class="text-menu notes">NOTES</span>
+                </div>
+            </a>
+            <a href="/writeup.html">
+                <div class="menu-button">
+                    <span class="text-menu writeup">WRITEUP</span>
+                </div>
+            </a>
+            <a href="/news.html">
+                <div class="menu-button">
+                    <span class="text-menu news">NEWS</span>
+                </div>
+            </a>
+            <a href="/contact.html">
+                <div class="menu-button">
+                    <span class="text-menu contact">CONTACT</span>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="main-content text-normal">
+        <div>
+    <h2>Tukang ngegas (100 pts)</h2>
+
+<p>Kita disuruh untuk connect pada ip dengan port berikut
+<code>nc 13.76.181.86 8100</code></p>
+
+<p>Dan didapatkan hint <code>lokasi flag di flag.txt</code></p>
+
+<p>Ketika connect menggunakan netcat, bisa dilihat bahwa service ini mengubah semua command menjadi huruf besar, setelah <em>googling</em> cara execute bash shell, ternyata variable $0 dapat mengexecute bash, sehingga kita bisa mengetikkan command seperti biasa dan  mendapatkan flagnya</p>
+
+<div class="codehilite"><pre><span></span><code>$ nc <span class="m">13</span>.76.181.86 <span class="m">8100</span>
+<span class="o">[</span>!<span class="o">]</span> Connecting to server..
+<span class="o">[</span>*<span class="o">]</span> Switching to interactive mode
+$ <span class="nv">$0</span>
+ls
+bin
+boot
+chall.py
+dev
+etc
+flag.txt
+home
+lib
+lib64
+media
+mnt
+opt
+proc
+root
+run
+sbin
+srv
+sys
+tmp
+usr
+var
+cat flag.txt
+Foresty2019<span class="o">{</span>5a399860ecef529b27d390a1241dc688<span class="o">}</span>
+</code></pre></div>
+
+<h2>Mamang post (50 pts)</h2>
+
+<p>Pada challenge ini kita mendapatkan sebuah file <code>inisoal.pcapng</code></p>
+
+<blockquote>
+  <p>pcapng merupakan sebuah file yang berisi <code>network capture</code> jadi bisa kita buka dengan menggunakan <strong>wireshark</strong></p>
+</blockquote>
+
+<p>Dilihat dari title challenge nya mungkin ada hubungan dengan post request(?), setelah dilihat lihat pada wireshark ternyata ada <em>packet</em> yang menarik </p>
+
+<p><img src="mamangpost1.png" alt="image1" /></p>
+
+<p>Sebuah post request pada login.php dengan <code>secret=Rm9yZXN0eTIwMTl7aHQ3cF9wMCR0X1IzcXVlc1RfaXNfbTNtM30</code></p>
+
+<p>Kita tahu bahwa itu adalah <strong>base64</strong> encrypted text jadi langsung saja kita decrypt dan dapatkan flag nya</p>
+
+<div class="codehilite"><pre><span></span><code><span class="nb">echo</span> Rm9yZXN0eTIwMTl7aHQ3cF9wMCR0X1IzcXVlc1RfaXNfbTNtM30 <span class="p">|</span> base64 -d &gt; flag.txt
+</code></pre></div>
+
+<h2>Sisipin 13x (70 pts)</h2>
+
+<p>Kita dapatkan sebuah file <code>sisipin-13x.zip</code> pada challenge ini</p>
+
+<p>Unzip file nya dan kita dapatkan sebuah image seperti berikut</p>
+
+<p><img src="sisipin13x1.jpeg" alt="image1" /></p>
+
+<p>Pasti ada sesuatu hal pada gambar itu, kita coba gunakan command <code>strings</code></p>
+
+<div class="codehilite"><pre><span></span><code>$ strings flag.jpg
+JFIF
+ , <span class="c1">#&amp;&#39;)*)</span>
+-0-<span class="o">(</span><span class="m">0</span>%<span class="o">()(</span>
+<span class="o">((((((((((((((((((((((((((((((((((((((((((((((((((</span>
+<span class="nv">$3</span>br
+%<span class="p">&amp;</span><span class="s1">&#39;()*456789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz</span>
+<span class="s1">        #3R</span>
+<span class="s1">&amp;&#39;</span><span class="o">()</span>*56789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz
+<span class="s2">&quot;~s@</span>
+<span class="s2">XKGe</span>
+<span class="s2">r1Sa</span>
+<span class="s2">4`K4</span>
+<span class="s2">tlM0</span>$<span class="s2"></span>
+<span class="s2">=I5C</span>
+<span class="s2">e#VIE</span>
+<span class="s2">^,Hw</span>
+<span class="s2">h`bI</span>
+<span class="s2">@9M@</span>
+<span class="s2">lt+{u</span>
+<span class="s2">oV0@aY</span>
+<span class="s2">C!r)</span>
+<span class="s2">(TEXT TIDAK PENTING……………)</span>
+<span class="s2">27?/</span>
+<span class="s2">9W=*</span>
+<span class="s2">L\P!O</span>
+<span class="s2">5Hhc</span>
+<span class="s2">U </span><span class="nv">$Q</span><span class="s2"></span>
+<span class="s2">Rar!</span>
+<span class="s2">flag.txt</span>
+<span class="s2">Sberfgl2019{5hZorE_vaSbez4gvx4_4q414u_AthYvx_Fraq1e1}</span>
+</code></pre></div>
+
+<p>Bisa kita lihat diakhir <code>strings</code> ada flag tetapi hanya huruf nya saja yang aneh (2019 tetap pada posisi dan  penempatan yang benar)</p>
+
+<p>Maka kita langsung saja coba <strong>ROT Bruteforce</strong> menggunakan <a target="_blank" href="https://www.dcode.fr/rot-cipher">dcode.fr</a> dan dapatkan flag nya</p>
+
+<p><img src="sisipin13x2.jpeg" alt="image2" /></p>
+
+<h2>This is not pcap file (50 pts)</h2>
+
+<p>Pada challenge ini kita diberikan file <code>SkypeIRC.pcap</code> dan telah diberi tahu secara tidak langsung oleh title challenge bahwa itu bukan merupakan file pcap</p>
+
+<p>Karena ini <em>mungkin</em> ada hubungannya dengan <strong>magic byte</strong> maka kita langsung saja cari magic byte untuk file <strong>pcap</strong></p>
+
+<p>Pada <a target="_blank" href="https://en.wikipedia.org/wiki/List_of_file_signatures">Wikipedia</a> didapatkan seperti berikut</p>
+
+<p><img src="thisisnotpcapfile1.png" alt="image1" /></p>
+
+<p>Karena mungkin saja ini juga pcapng jadi kita coba buka dengan <code>ghex</code> atau hex editor lainnya dan cari magic byte tersebut</p>
+
+<p>Dan saat pencarian dengan menggunakan magic byte yang kedua yaitu <code>d4 c3 b2 a1</code> didapatkan flag nya seperti berikut</p>
+
+<p><img src="thisisnotpcapfile2.png" alt="image2" /></p>
+
+<h2>Tiga step aja (100 pts)</h2>
+
+<p>Kita dapatkan cipher-cipher berikut</p>
+
+<pre><code>YjMyIC0+IDN4IA==
+
+JJFEYRKLKZFUQS2OIZKTMU2TLJFUMRCUIVLVGTKLJZEFMTKXJNEESTK2IRDVCU2PJRDESVKPKZNFMSSSJBKTEVCTKZFU4QKUJNKEGUCKGVFEIRKWGJMEURSDIU2FIS2XJM2UYVKLJZFU2SKKJBLEGVKLJBDUUTKVLFKEGTSJLJGUKT2RLJKEWSSBKU2FMU2UJM2DERCFKZBUGSSWJJDEWVJSIJDU4Q2FJVKEWS2LKZGFMQ2TJNCUUNKIIVGVMU2YI5FE2VKZKZFUOTCFGZKDEUCKGVEFKNSRHU6T2PI=
+
+Emuqzcxm kbh xmv? jmur, uvk nynsvai : Sbdmubl2019{Z1oqp_NbE_Xghm}
+</code></pre>
+
+<p>Dari text yang pertama, mudah dikenali bahwa text nya menggunakan enkripsi <strong>base64</strong>, hasil dekripsinya adalah petunjuk untuk mendekode text selanjutnya</p>
+
+<p><code>YjMyIC0+IDN4IA==</code> didekripsi base64 menjadi  <code>b32 -&gt; 3x</code></p>
+
+<p><code>JJFEYRKLKZFUQS2OIZKTMU2TLJFUMRCUIVLVGTKLJZEFMTKXJNEESTK2IRDVCU2PJRDESVKPKZNFMSSSJBKTEVCTKZFU4QKUJNKEGUCKGVFEIRKWGJMEURSDIU2FIS2XJM2UYVKLJZFU2SKKJBLEGVKLJBDUUTKVLFKEGTSJLJGUKT2RLJKEWSSBKU2FMU2UJM2DERCFKZBUGSSWJJDEWVJSIJDU4Q2FJVKEWS2LKZGFMQ2TJNCUUNKIIVGVMU2YI5FE2VKZKZFUOTCFGZKDEUCKGVEFKNSRHU6T2PI</code> didekripsi <strong>base32 sebanyak 3 kali</strong> menjadi <code>MICINN merupakan kunci untuk membuat makanan menjadi lebih nikmat.</code></p>
+
+<p><code>Emuqzcxm kbh xmv? jmur, uvk nynsvai : Sbdmubl2019{Z1oqp_NbE_Xghm}</code> didekripsi menggunakan vigenere cipher dengan key “MICINN” menjadi <code>Sesimple itu kan? hehe, ini flagnya : Foresty2019{M1cin_FoR_Lyfe}</code></p>
+
+<h2>Selamat datang crypto (50 pts)</h2>
+
+<p>Kita langsung disuguhkan dengan sebuah cipher text <code>u@C6DEJa_`hLrCJ!E_:$7F?N</code></p>
+
+<p>Terdapat hint seperti berikut</p>
+
+<blockquote>
+  <p>https://www.reddit.com/r/MRcryptography/comments/642mav/ciphers/</p>
+</blockquote>
+
+<p>Langsung saja kita buka <a target="_blank" href="https://gchq.github.io/CyberChef/">CyberChef</a> dan coba satu satu semua decoder nya dan ternyata <code>ROT47</code></p>
+
+<p><img src="selamatdatangcrypto1.jpeg" alt="image1" /></p>
+
+<p>Bisa juga buka <a target="_blank" href="https://www.dcode.fr/rot-cipher">dcode.fr</a> dan bruteforce semua enkripsi nya</p>
+
+<h2>John and rock (70 pts)</h2>
+
+<p>Disini kita mendapatkan sebuah file <code>rocky.zip</code> yang telah dilock dengan sebuah password</p>
+
+<p>Dilihat dari title challenge ini kita "disuruh" untuk menggunakan <code>johntheripper</code> maka langsung saja kita lakukan <code>zip2john</code> seperti berikut</p>
+
+<p><img src="johnrock1.png" alt="image1" /></p>
+
+<p>Setelah kita dapatkan hash.txt, maka langkah selanjutnya adalah menjalankan john pada file tersebut</p>
+
+<p><img src="johnrock2.png" alt="image2" /></p>
+
+<p>Kita dapatkan password <code>chinese</code> lalu kita extract dengan menggunakan password tersebut dan didapatkan sebuah image seperti berikut</p>
+
+<p><img src="johnrock4.png" alt="image3" /></p>
+
+<p>Setelah saya cari cari apa itu, ternyata itu ada kaitannya dengan password tadi yaitu merupakan sebuah simbol pada bahasa cina yang bisa kita decode dengan menggunakan <a target="_blank" href="https://www.dcode.fr/chinese-code">Chinese Decoder</a> dan dapatkan flagnya</p>
+
+<blockquote>
+  <p>in case kesulitan mencari tanda 3 pada simbol itu (ternyata itu hanya angka 3 biasa)</p>
+</blockquote>
+
+<p>flag = Foresty2019{JHONYL3BAYY}</p>
+
+<h2>Cookies choco chips (50 pts)</h2>
+
+<p>Pada challenge ini kita dihadapi dengan sebuah website seperti berikut</p>
+
+<p><img src="cookieschocochips1.png" alt="image1" /></p>
+
+<p>Karena pada title challenge mengatakan <strong>cookie</strong> maka kita langsung saja lihat pada inspect element bagian storage dan kita akan mendapatkan <strong>url encoded</strong> text</p>
+
+<p><img src="cookieschocochips2.png" alt="image1" /></p>
+
+<p>langsung saja decode dan dapatkan flag nya</p>
+
+<p>untuk mendecode bisa menggunakan <a target="_blank" href="https://gchq.github.io/CyberChef/">CyberChef</a></p>
+
+<h2>Request me (80 pts)</h2>
+
+<p>Di challenge ini kita akan dihadapi pada sebuah website</p>
+
+<p><img src="requestme1.png" alt="image1" /></p>
+
+<p>Kita lihat ada sebuah kolom yang bisa kita inputkan sesuatu dan tombol untuk mensubmit query, karena kita tidak tahu apa yang harus dimasukkan kita langsung saja lihat pada source di inspect element</p>
+
+<p><img src="requestme2.png" alt="image1" /></p>
+
+<p>Terlihat sesuatu hal yang <em>menarik</em> maka dari itu kita copy semua text yang commented dan disitu terlihat seperti sebuah pengecekan pada <strong>post request</strong> dan mengecek suatu value dari <code>inputan</code> serta mengecek setiap karakter nya dan jika benar dia akan <code>echo "flag"</code> langsung saja gunakan text editor favorite kalian dan ambil setiap karakter nya, satukan dan didapatkan flagnya</p>
+
+<h2>Ngoding web skuy (50 pts)</h2>
+
+<p>Kita buka challege nya dan kita akan langsung dihadapi dengan sebuah website seperti berikut</p>
+
+<p><img src="ngodingwebskuy1.png" alt="image1" /></p>
+
+<p>Setelah itu kita langsung cari cari hal yang sekiranya akan menarik perhatian (<em>mencurigakan</em>)</p>
+
+<p>Dan setelah dilihat lihat kita akan mendapatkan hal berikut</p>
+
+<p><img src="ngodingwebskuy3.png" alt="image2" /></p>
+
+<p>Dia mengatakan flag nya ada di style maka kita langsung saja lihat pada style nya dengan inspect element</p>
+
+<p><img src="ngodingwebskuy4.png" alt="image2" /></p>
+
+<p>Ternyata style nya berada pada <code>/style/style.css</code></p>
+
+<p>Maka kita langsung saja masuk pada link itu dan kita cari kembali hal yang <em>interesting</em></p>
+
+<p><img src="ngodingwebskuy5.png" alt="image2" /></p>
+
+<p>Digambar terlihat ada sebuah text yang kita sudah pasti biasa melihat dan bisa langsung <em>recognize</em> bahwa itu adalah <strong>base64</strong> encrypted text maka kita langsung saja decrypt</p>
+
+<div class="codehilite"><pre><span></span><code><span class="nb">echo</span> <span class="s1">&#39;Rm9yZXN0eTEwMX&#39;</span> <span class="p">|</span> base64 -d &gt; flag.txt
+</code></pre></div>
+
+<p>Bisa kita lihat pada <code>flag.txt</code> dan mungkin flag nya belum selesai(?) maka dari itu kita kembali melihat pada source di inspect element, dan kita akan dapatkan hal menarik seperti berikut</p>
+
+<p><img src="ngodingwebskuy2.png" alt="image2" /></p>
+
+<p>Terlihat ada source file lainnya yaitu <code>/style/script.js</code></p>
+
+<p><img src="ngodingwebskuy6.png" alt="image2" /></p>
+
+<p>Setelah kita buka dan lihat maka kita akan menemukan <strong>base64</strong> encrypted text lainnya, lakukan hal yang sama dan kita dapatkan seluruh flag nya</p>
+
+<div class="codehilite"><pre><span></span><code><span class="nb">echo</span> <span class="s1">&#39;X3RpZGFrX2FkYV95Z19hbWFu&#39;</span> <span class="p">|</span> base64 -d &gt; flag.txt
+</code></pre></div>
+
+<blockquote>
+  <p>Masukkan flag nya dengan wrapper <strong>Foresty2019{}</strong></p>
+</blockquote>
+
+</div>
+    </div>
+</body>
+<script>
+    $(".menu-button").hover(function(){
+        $(this).addClass("hovered");
+    }, function(){
+        $(this).removeClass("hovered");
+    });
+
+    window.setInterval(anim, 2500);
+
+    function anim() {
+        var menus = ["aboutus", "notes", "writeup", "contact", "news"]
+
+        lastPath = window.location.pathname.split("/").pop().split(".html")[0]
+        menus = menus.filter(item => item !== lastPath)
+
+        if (!hoveredExist()) {
+            menu = menus[Math.floor(Math.random() * menus.length)]
+            for (let i = 0; i < 5; i++) {
+                blink(i, menu)  
+            }
+        }
+    }
+
+    function blink(i, menu) { 
+        setTimeout(function() { 
+            $("." + menu)
+                .parent()
+                .addClass("hovered")
+            setTimeout(function () {
+                $("." + menu)
+                    .parent()
+                    .removeClass("hovered")
+            }, 50);
+        }, 100 * i); 
+    } 
+
+    function hoveredExist() {
+        var menus = ["aboutus", "notes", "writeup", "contact", "news"]
+        for (let index = 0; index < menus.length; index++) {
+            const menu = menus[index];
+            if ($("." + menu)
+                    .parent()
+                    .hasClass("hovered")) {
+                return true
+            }   
+        }
+        return false
+    }
+</script>
+</html>

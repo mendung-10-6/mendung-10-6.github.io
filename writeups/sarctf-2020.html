@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code|Londrina+Solid:wght@900|IBM+Plex+Sans:ital,wght@0,500;0,700;1,500;1,700|Rowdies&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/base.css">
+
+    <script
+        src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="
+        crossorigin="anonymous"></script>
+    
+    <title>(mendung)10^6</title>
+</head>
+<body>
+    <div class="header-content">
+        <center>
+            <div class="team-name">
+                <span>(mendung)10^6 === Mega Mendung</span>
+            </div>
+        </center>
+        <div class="menu-container">
+            <a href="/aboutus.html">
+                <div class="menu-button">
+                    <span class="text-menu aboutus">ABOUT US</span>
+                </div>
+            </a>
+            <a href="/notes.html">
+                <div class="menu-button">
+                    <span class="text-menu notes">NOTES</span>
+                </div>
+            </a>
+            <a href="/writeup.html">
+                <div class="menu-button">
+                    <span class="text-menu writeup">WRITEUP</span>
+                </div>
+            </a>
+            <a href="/news.html">
+                <div class="menu-button">
+                    <span class="text-menu news">NEWS</span>
+                </div>
+            </a>
+            <a href="/contact.html">
+                <div class="menu-button">
+                    <span class="text-menu contact">CONTACT</span>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="main-content text-normal">
+        <div>
+    <h1>SAR CTF 2020 Writeup By (mendung)10^6</h1>
+
+<h2>Author : Wrth</h2>
+
+<h3>True Detective</h3>
+
+<blockquote>
+  <p>1681 points <br />
+  And now it's time to show the skills of a real detective! <br />
+  https://clck.ru/MCop6  </p>
+</blockquote>
+
+<p>In this challenge we have to use our "detective skills" to find all the places in the picture, however I discovered a trick after the CTF ends that we can actually see the warning in the website source.</p>
+
+<p>Type <code>view source:</code> in front of the google forms website and we scroll down to the very bottom and we can find the flag  </p>
+
+<p><img src="img/img1.png" alt="img1" />  </p>
+
+<p>Flag : <code>FLAG{08c49c3d9ae88983437729747bcf1be8}</code> </p>
+
+<hr />
+
+<h3>Invitation</h3>
+
+<blockquote>
+  <p>873 points
+  Sherlock doesn't like going to parties. But this time an invitation came to him, which he could not refuse.
+  <a target="_blank" href="https://sarctf.tk/files/d5178d11789ae7616b4c3d462b8b9a27/task_3e55f673c10d.pdf?token=eyJ1c2VyX2lkIjo1MDAsInRlYW1faWQiOjMxOCwiZmlsZV9pZCI6MTB9.Xk49Ow.6s57deWU5ZOvmTCxcS3AS_yR7ME">task_3e55f673c10d.pdf</a></p>
+</blockquote>
+
+<p>In this challenge we are given a ciphertext with bunch of stick figures, I read some book of Sherlock Holmes and I know this is a <a target="_blank" href="https://www.dcode.fr/dancing-men-cipher">dancing men cipher</a>. However decoding each symbol by hand is quite inefficient, my friend propose to find the word <code>flag</code> first and starts decode around it, here is what we got:  </p>
+
+<p><code>this master huntsman flag disco in Saratov that the adventure was most grave one while the sardonic smile which occa</code>  </p>
+
+<p>we think that it just put the word flag randomly because I can't really see some "flag words" in it, so we decided to decode the whole ciphertext. a pdf file store a XObject instead of a normal image file, therefore we can see all the XObject identity of each character and convert it into a plaintext  </p>
+
+<p><img src="img/img2.png" alt="img2" />  </p>
+
+<p>The <code>R/Im</code> correspond to the position of character and 4 digit code after it is the identity <br />
+Here's the python script to sort it and assign single letter to each character  </p>
+
+<div class="codehilite"><pre><span></span><code><span class="n">text</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+    <span class="n">text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;xxxx&quot;</span><span class="p">)</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span><span class="o">=</span><span class="mi">1145</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">100</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">101</span><span class="p">]</span><span class="o">=</span><span class="mi">1149</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">102</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">103</span><span class="p">]</span><span class="o">=</span><span class="mi">1153</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">104</span><span class="p">]</span><span class="o">=</span><span class="mi">1153</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">105</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">106</span><span class="p">]</span><span class="o">=</span><span class="mi">1157</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">107</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">108</span><span class="p">]</span><span class="o">=</span><span class="mi">1145</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">109</span><span class="p">]</span><span class="o">=</span><span class="mi">1161</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span><span class="o">=</span><span class="mi">1153</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">110</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">111</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">112</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">113</span><span class="p">]</span><span class="o">=</span><span class="mi">1167</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">114</span><span class="p">]</span><span class="o">=</span><span class="mi">1149</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">115</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">116</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">117</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">118</span><span class="p">]</span><span class="o">=</span><span class="mi">1169</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">119</span><span class="p">]</span><span class="o">=</span><span class="mi">1171</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">120</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">121</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">122</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">123</span><span class="p">]</span><span class="o">=</span><span class="mi">1149</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">124</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">125</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">126</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">127</span><span class="p">]</span><span class="o">=</span><span class="mi">1153</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">128</span><span class="p">]</span><span class="o">=</span><span class="mi">1169</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">129</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span><span class="o">=</span><span class="mi">1175</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">130</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">131</span><span class="p">]</span><span class="o">=</span><span class="mi">1179</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">132</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">133</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">134</span><span class="p">]</span><span class="o">=</span><span class="mi">1181</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">135</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">136</span><span class="p">]</span><span class="o">=</span><span class="mi">1153</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">137</span><span class="p">]</span><span class="o">=</span><span class="mi">1145</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">138</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">139</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">14</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">140</span><span class="p">]</span><span class="o">=</span><span class="mi">1145</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">141</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">142</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">143</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">144</span><span class="p">]</span><span class="o">=</span><span class="mi">1149</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">145</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">146</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">147</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">148</span><span class="p">]</span><span class="o">=</span><span class="mi">1145</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">149</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">15</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">150</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">151</span><span class="p">]</span><span class="o">=</span><span class="mi">1153</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">152</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">153</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">154</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">155</span><span class="p">]</span><span class="o">=</span><span class="mi">1183</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">156</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">157</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">158</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">159</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">16</span><span class="p">]</span><span class="o">=</span><span class="mi">1153</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">160</span><span class="p">]</span><span class="o">=</span><span class="mi">1185</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">161</span><span class="p">]</span><span class="o">=</span><span class="mi">1153</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">162</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">163</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">164</span><span class="p">]</span><span class="o">=</span><span class="mi">1169</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">165</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">166</span><span class="p">]</span><span class="o">=</span><span class="mi">1157</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">167</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">168</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">169</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">17</span><span class="p">]</span><span class="o">=</span><span class="mi">1145</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">170</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">171</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">172</span><span class="p">]</span><span class="o">=</span><span class="mi">1149</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">173</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">174</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">175</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">176</span><span class="p">]</span><span class="o">=</span><span class="mi">1153</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">177</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">178</span><span class="p">]</span><span class="o">=</span><span class="mi">1169</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">179</span><span class="p">]</span><span class="o">=</span><span class="mi">1187</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">18</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">180</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">181</span><span class="p">]</span><span class="o">=</span><span class="mi">1157</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">182</span><span class="p">]</span><span class="o">=</span><span class="mi">1153</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">183</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">184</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">185</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">186</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">187</span><span class="p">]</span><span class="o">=</span><span class="mi">1145</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">188</span><span class="p">]</span><span class="o">=</span><span class="mi">1167</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">189</span><span class="p">]</span><span class="o">=</span><span class="mi">1187</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">19</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">190</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">191</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">192</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">193</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">194</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">195</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">196</span><span class="p">]</span><span class="o">=</span><span class="mi">1167</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">197</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">198</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">199</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="mi">1179</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">20</span><span class="p">]</span><span class="o">=</span><span class="mi">1169</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">200</span><span class="p">]</span><span class="o">=</span><span class="mi">1149</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">201</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">202</span><span class="p">]</span><span class="o">=</span><span class="mi">1157</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">203</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">204</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">205</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">206</span><span class="p">]</span><span class="o">=</span><span class="mi">1167</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">207</span><span class="p">]</span><span class="o">=</span><span class="mi">1149</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">208</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">209</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">21</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">210</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">211</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">212</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">213</span><span class="p">]</span><span class="o">=</span><span class="mi">1179</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">214</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">215</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">216</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">217</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">218</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">219</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">22</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">220</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">221</span><span class="p">]</span><span class="o">=</span><span class="mi">1189</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">222</span><span class="p">]</span><span class="o">=</span><span class="mi">1149</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">223</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">224</span><span class="p">]</span><span class="o">=</span><span class="mi">1179</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">225</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">226</span><span class="p">]</span><span class="o">=</span><span class="mi">1179</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">227</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">228</span><span class="p">]</span><span class="o">=</span><span class="mi">1149</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">229</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">23</span><span class="p">]</span><span class="o">=</span><span class="mi">1179</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">230</span><span class="p">]</span><span class="o">=</span><span class="mi">1145</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">231</span><span class="p">]</span><span class="o">=</span><span class="mi">1149</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">232</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">233</span><span class="p">]</span><span class="o">=</span><span class="mi">1179</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">234</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">235</span><span class="p">]</span><span class="o">=</span><span class="mi">1145</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">236</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">237</span><span class="p">]</span><span class="o">=</span><span class="mi">1179</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">238</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">239</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">24</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">240</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">241</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">242</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">243</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">244</span><span class="p">]</span><span class="o">=</span><span class="mi">1167</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">245</span><span class="p">]</span><span class="o">=</span><span class="mi">1185</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">246</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">247</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">248</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">249</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">25</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">250</span><span class="p">]</span><span class="o">=</span><span class="mi">1145</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">251</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">252</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">253</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">254</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">255</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">256</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">257</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">258</span><span class="p">]</span><span class="o">=</span><span class="mi">1153</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">259</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">26</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">260</span><span class="p">]</span><span class="o">=</span><span class="mi">1187</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">261</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">262</span><span class="p">]</span><span class="o">=</span><span class="mi">1181</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">263</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">264</span><span class="p">]</span><span class="o">=</span><span class="mi">1169</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">265</span><span class="p">]</span><span class="o">=</span><span class="mi">1187</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">266</span><span class="p">]</span><span class="o">=</span><span class="mi">1149</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">267</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">268</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">269</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">27</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">270</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">271</span><span class="p">]</span><span class="o">=</span><span class="mi">1145</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">272</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">273</span><span class="p">]</span><span class="o">=</span><span class="mi">1175</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">274</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">275</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">276</span><span class="p">]</span><span class="o">=</span><span class="mi">1179</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">277</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">278</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">279</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">28</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">280</span><span class="p">]</span><span class="o">=</span><span class="mi">1179</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">281</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">282</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">283</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">284</span><span class="p">]</span><span class="o">=</span><span class="mi">1179</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">285</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">286</span><span class="p">]</span><span class="o">=</span><span class="mi">1153</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">287</span><span class="p">]</span><span class="o">=</span><span class="mi">1145</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">288</span><span class="p">]</span><span class="o">=</span><span class="mi">1189</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">289</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">29</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">290</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">291</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">292</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">293</span><span class="p">]</span><span class="o">=</span><span class="mi">1179</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">294</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">295</span><span class="p">]</span><span class="o">=</span><span class="mi">1179</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">296</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">297</span><span class="p">]</span><span class="o">=</span><span class="mi">1149</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">298</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">299</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">30</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">300</span><span class="p">]</span><span class="o">=</span><span class="mi">1189</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">301</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">302</span><span class="p">]</span><span class="o">=</span><span class="mi">1167</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">303</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">304</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">305</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">306</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">307</span><span class="p">]</span><span class="o">=</span><span class="mi">1167</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">308</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">309</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">31</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">310</span><span class="p">]</span><span class="o">=</span><span class="mi">1145</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">311</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">312</span><span class="p">]</span><span class="o">=</span><span class="mi">1179</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">313</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">314</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">315</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">316</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">317</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">318</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">319</span><span class="p">]</span><span class="o">=</span><span class="mi">1145</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">320</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">321</span><span class="p">]</span><span class="o">=</span><span class="mi">1149</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">322</span><span class="p">]</span><span class="o">=</span><span class="mi">1175</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">323</span><span class="p">]</span><span class="o">=</span><span class="mi">1191</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">324</span><span class="p">]</span><span class="o">=</span><span class="mi">1167</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">325</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">326</span><span class="p">]</span><span class="o">=</span><span class="mi">1185</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">327</span><span class="p">]</span><span class="o">=</span><span class="mi">1153</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">328</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">329</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">33</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">330</span><span class="p">]</span><span class="o">=</span><span class="mi">1157</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">331</span><span class="p">]</span><span class="o">=</span><span class="mi">1181</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">332</span><span class="p">]</span><span class="o">=</span><span class="mi">1149</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">333</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">334</span><span class="p">]</span><span class="o">=</span><span class="mi">1169</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">335</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">336</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">337</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">338</span><span class="p">]</span><span class="o">=</span><span class="mi">1153</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">339</span><span class="p">]</span><span class="o">=</span><span class="mi">1153</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">34</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">340</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">341</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">342</span><span class="p">]</span><span class="o">=</span><span class="mi">1145</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">343</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">344</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">345</span><span class="p">]</span><span class="o">=</span><span class="mi">1189</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">346</span><span class="p">]</span><span class="o">=</span><span class="mi">1167</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">347</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">348</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">349</span><span class="p">]</span><span class="o">=</span><span class="mi">1179</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">35</span><span class="p">]</span><span class="o">=</span><span class="mi">1167</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">350</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">351</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">352</span><span class="p">]</span><span class="o">=</span><span class="mi">1179</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">353</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">354</span><span class="p">]</span><span class="o">=</span><span class="mi">1153</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">355</span><span class="p">]</span><span class="o">=</span><span class="mi">1153</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">356</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">357</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">358</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">359</span><span class="p">]</span><span class="o">=</span><span class="mi">1167</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">36</span><span class="p">]</span><span class="o">=</span><span class="mi">1149</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">360</span><span class="p">]</span><span class="o">=</span><span class="mi">1149</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">361</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">362</span><span class="p">]</span><span class="o">=</span><span class="mi">1145</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">363</span><span class="p">]</span><span class="o">=</span><span class="mi">1157</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">364</span><span class="p">]</span><span class="o">=</span><span class="mi">1149</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">365</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">366</span><span class="p">]</span><span class="o">=</span><span class="mi">1169</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">367</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">368</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">369</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">37</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">370</span><span class="p">]</span><span class="o">=</span><span class="mi">1189</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">371</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">372</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">373</span><span class="p">]</span><span class="o">=</span><span class="mi">1149</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">374</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">375</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">376</span><span class="p">]</span><span class="o">=</span><span class="mi">1185</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">377</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">378</span><span class="p">]</span><span class="o">=</span><span class="mi">1157</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">379</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">38</span><span class="p">]</span><span class="o">=</span><span class="mi">1157</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">380</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">381</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">382</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">383</span><span class="p">]</span><span class="o">=</span><span class="mi">1169</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">384</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">385</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">386</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">387</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">388</span><span class="p">]</span><span class="o">=</span><span class="mi">1149</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">389</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">39</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">390</span><span class="p">]</span><span class="o">=</span><span class="mi">1167</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">391</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">392</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">393</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">394</span><span class="p">]</span><span class="o">=</span><span class="mi">1169</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">395</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">396</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">397</span><span class="p">]</span><span class="o">=</span><span class="mi">1157</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">398</span><span class="p">]</span><span class="o">=</span><span class="mi">1153</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">399</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">40</span><span class="p">]</span><span class="o">=</span><span class="mi">1167</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">400</span><span class="p">]</span><span class="o">=</span><span class="mi">1185</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">401</span><span class="p">]</span><span class="o">=</span><span class="mi">1145</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">402</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">403</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">404</span><span class="p">]</span><span class="o">=</span><span class="mi">1181</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">405</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">406</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">407</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">408</span><span class="p">]</span><span class="o">=</span><span class="mi">1195</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">409</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">41</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">410</span><span class="p">]</span><span class="o">=</span><span class="mi">1149</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">411</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">412</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">413</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">414</span><span class="p">]</span><span class="o">=</span><span class="mi">1161</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">415</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">416</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">417</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">418</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">419</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">42</span><span class="p">]</span><span class="o">=</span><span class="mi">1145</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">420</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">421</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">422</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">423</span><span class="p">]</span><span class="o">=</span><span class="mi">1145</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">424</span><span class="p">]</span><span class="o">=</span><span class="mi">1161</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">425</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">426</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">427</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">428</span><span class="p">]</span><span class="o">=</span><span class="mi">1167</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">429</span><span class="p">]</span><span class="o">=</span><span class="mi">1149</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">43</span><span class="p">]</span><span class="o">=</span><span class="mi">1169</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">430</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">431</span><span class="p">]</span><span class="o">=</span><span class="mi">1179</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">432</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">433</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">434</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">435</span><span class="p">]</span><span class="o">=</span><span class="mi">1169</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">436</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">437</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">438</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">439</span><span class="p">]</span><span class="o">=</span><span class="mi">1185</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">44</span><span class="p">]</span><span class="o">=</span><span class="mi">1171</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">440</span><span class="p">]</span><span class="o">=</span><span class="mi">1149</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">441</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">442</span><span class="p">]</span><span class="o">=</span><span class="mi">1161</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">443</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">444</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">445</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">446</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">447</span><span class="p">]</span><span class="o">=</span><span class="mi">1179</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">448</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">449</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">45</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">450</span><span class="p">]</span><span class="o">=</span><span class="mi">1153</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">451</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">452</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">453</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">454</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">455</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">456</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">457</span><span class="p">]</span><span class="o">=</span><span class="mi">1149</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">458</span><span class="p">]</span><span class="o">=</span><span class="mi">1145</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">459</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">46</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">460</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">461</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">462</span><span class="p">]</span><span class="o">=</span><span class="mi">1181</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">463</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">464</span><span class="p">]</span><span class="o">=</span><span class="mi">1169</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">465</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">466</span><span class="p">]</span><span class="o">=</span><span class="mi">1153</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">467</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">468</span><span class="p">]</span><span class="o">=</span><span class="mi">1179</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">469</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">47</span><span class="p">]</span><span class="o">=</span><span class="mi">1153</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">470</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">471</span><span class="p">]</span><span class="o">=</span><span class="mi">1181</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">472</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">473</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">474</span><span class="p">]</span><span class="o">=</span><span class="mi">1181</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">475</span><span class="p">]</span><span class="o">=</span><span class="mi">1181</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">476</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">477</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">478</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">479</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">48</span><span class="p">]</span><span class="o">=</span><span class="mi">1157</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">480</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">481</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">482</span><span class="p">]</span><span class="o">=</span><span class="mi">1153</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">483</span><span class="p">]</span><span class="o">=</span><span class="mi">1153</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">484</span><span class="p">]</span><span class="o">=</span><span class="mi">1171</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">485</span><span class="p">]</span><span class="o">=</span><span class="mi">1189</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">486</span><span class="p">]</span><span class="o">=</span><span class="mi">1149</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">487</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">488</span><span class="p">]</span><span class="o">=</span><span class="mi">1175</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">489</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">49</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">490</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">491</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">492</span><span class="p">]</span><span class="o">=</span><span class="mi">1149</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">493</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">494</span><span class="p">]</span><span class="o">=</span><span class="mi">1167</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">495</span><span class="p">]</span><span class="o">=</span><span class="mi">1185</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">496</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">497</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">498</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">499</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">50</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">500</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">501</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">502</span><span class="p">]</span><span class="o">=</span><span class="mi">1181</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">503</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">504</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">505</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">506</span><span class="p">]</span><span class="o">=</span><span class="mi">1181</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">507</span><span class="p">]</span><span class="o">=</span><span class="mi">1185</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">508</span><span class="p">]</span><span class="o">=</span><span class="mi">1153</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">509</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">51</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">510</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">511</span><span class="p">]</span><span class="o">=</span><span class="mi">1169</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">512</span><span class="p">]</span><span class="o">=</span><span class="mi">1189</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">513</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">514</span><span class="p">]</span><span class="o">=</span><span class="mi">1145</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">515</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">516</span><span class="p">]</span><span class="o">=</span><span class="mi">1145</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">517</span><span class="p">]</span><span class="o">=</span><span class="mi">1153</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">518</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">519</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">52</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">520</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">521</span><span class="p">]</span><span class="o">=</span><span class="mi">1153</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">522</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">523</span><span class="p">]</span><span class="o">=</span><span class="mi">1185</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">524</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">525</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">526</span><span class="p">]</span><span class="o">=</span><span class="mi">1145</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">527</span><span class="p">]</span><span class="o">=</span><span class="mi">1157</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">528</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">529</span><span class="p">]</span><span class="o">=</span><span class="mi">1149</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">53</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">530</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">531</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">532</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">533</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">534</span><span class="p">]</span><span class="o">=</span><span class="mi">1189</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">535</span><span class="p">]</span><span class="o">=</span><span class="mi">1191</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">536</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">537</span><span class="p">]</span><span class="o">=</span><span class="mi">1181</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">538</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">539</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">54</span><span class="p">]</span><span class="o">=</span><span class="mi">1145</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">540</span><span class="p">]</span><span class="o">=</span><span class="mi">1157</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">541</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">542</span><span class="p">]</span><span class="o">=</span><span class="mi">1167</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">543</span><span class="p">]</span><span class="o">=</span><span class="mi">1149</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">544</span><span class="p">]</span><span class="o">=</span><span class="mi">1197</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">545</span><span class="p">]</span><span class="o">=</span><span class="mi">1167</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">546</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">547</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">548</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">55</span><span class="p">]</span><span class="o">=</span><span class="mi">1189</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">56</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">57</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">58</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">59</span><span class="p">]</span><span class="o">=</span><span class="mi">1145</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">60</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">61</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">62</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">63</span><span class="p">]</span><span class="o">=</span><span class="mi">1169</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">64</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">65</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">66</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">67</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">68</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">69</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="o">=</span><span class="mi">1145</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">70</span><span class="p">]</span><span class="o">=</span><span class="mi">1177</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">71</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">72</span><span class="p">]</span><span class="o">=</span><span class="mi">1169</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">73</span><span class="p">]</span><span class="o">=</span><span class="mi">1169</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">74</span><span class="p">]</span><span class="o">=</span><span class="mi">1171</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">75</span><span class="p">]</span><span class="o">=</span><span class="mi">1149</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">76</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">77</span><span class="p">]</span><span class="o">=</span><span class="mi">1161</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">78</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">79</span><span class="p">]</span><span class="o">=</span><span class="mi">1153</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">80</span><span class="p">]</span><span class="o">=</span><span class="mi">1161</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">81</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">82</span><span class="p">]</span><span class="o">=</span><span class="mi">1149</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">83</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">84</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">85</span><span class="p">]</span><span class="o">=</span><span class="mi">1169</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">86</span><span class="p">]</span><span class="o">=</span><span class="mi">1171</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">87</span><span class="p">]</span><span class="o">=</span><span class="mi">1187</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">88</span><span class="p">]</span><span class="o">=</span><span class="mi">1155</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">89</span><span class="p">]</span><span class="o">=</span><span class="mi">1181</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">90</span><span class="p">]</span><span class="o">=</span><span class="mi">1175</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">91</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">92</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">93</span><span class="p">]</span><span class="o">=</span><span class="mi">1159</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">94</span><span class="p">]</span><span class="o">=</span><span class="mi">1165</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">95</span><span class="p">]</span><span class="o">=</span><span class="mi">1145</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">96</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">97</span><span class="p">]</span><span class="o">=</span><span class="mi">1147</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">98</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
+<span class="n">text</span><span class="p">[</span><span class="mi">99</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
+
+<span class="n">charnow</span> <span class="o">=</span> <span class="s2">&quot;a&quot;</span>
+<span class="n">x</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">y</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="s2">&quot;xxxx&quot;</span><span class="p">:</span>
+        <span class="k">break</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)])</span>
+        <span class="nb">print</span> <span class="n">x</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="n">x</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="n">charnow</span>
+        <span class="n">y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)])</span>
+        <span class="n">charnow</span> <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">charnow</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="nb">print</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="nb">print</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;1159&quot;</span><span class="p">]</span>
+</code></pre></div>
+
+<p>output : <br />
+<code>abcdeafghhgiajhkigbalhecmhfdbbmdbmknoapknfglqehipehdbhgrheaghmalafdmdfekllqohskishoaflqtkujhbdfgbmhbmoaiikpdgshfbnohaflqmhdobmkilhecdeukigdfgebhofdfgeaihfbvebmhwihdlkpbmhebohhbidltepidemhgntkfmaednebhohphdbnoheaedcbmdbmaerokcechohgodcfgkcfafbmknwmbdfgmaebmafiateukltoheehgajfhcfkbcmdbcaigrhdebchchohdrknbbkmnfbgkcfafbmhgdojxnfwihkpuoalafdiikfgkfrnbacdechiideenohgpoklbmhrhdoafwkpbmaeldebhomnfbeldfpidwgaeukafydodbksbmdbbmhdgshfbnohcdedlkebwodshkfhcmaihbmhedogkfauelaihcmaumkuudeakfdiiqrokjhbmoknwmmaedeuhbauwikklrkghgiabbihwkkgpkobmhkrxhubkpknoznheb</code>  </p>
+
+<p>notice there are some symbols, which means there are more than 26 letters there, there are a few uppercase letter which we have to manually fix it and just put it in <a target="_blank" href="https://quipqiup.com/">quipqiup</a> to get the plaintext  </p>
+
+<p>```txt biasa caranya gimana sih supaya ngga cuma garis lurus wkwkwk
+it was indeed like old times when, at that hour, i found myself seated beside him in a hansom, my revolver in my pocket and the thrill of adventure in my heart. holmes was cold and stern and silent. as the gleam of the street-lamps flashed upon his austere features i saw that his brows were drawn down in thought and his thin lips compressed. i knew not what wild beast we were about to hunt down in the dark jungle of criminal london, but i was well assured from the bearing of this master huntsman flag disco in saratov that the adventure was a most grave one, while the sardonic smile which occasionally broke through his ascetic gloom boded little good for the object of our quest</p>
+
+<pre><code>
+it was a pharagraph from [one of the Sherlock Holmes book](https://etc.usf.edu/lit2go/178/the-return-of-sherlock-holmes/3226/chapter-i-the-adventure-of-the-empty-house/) we can see that the word that isn't in the original one is `flag disco in saratov`, and thats the flag!
+
+Flag : `FLAG{disco_in_saratov}` 
+
+---
+
+### Mind palace I  
+&gt; 802  points
+&gt; It looks like the situation is hopeless, there is no time to think. However, you can use the mind palace and solve all problems instantly.  
+&gt;  
+&gt; nc 212.47.229.1 33001  
+
+it's a morse code, just decrypt it and get the flag, here's the python script I wrote:
+```python
+from pwn import *
+
+#The decryption part of this code is from geeksforgeeks
+MORSE_CODE_DICT = { 'A':'.-', 'B':'-...', 
+                    'C':'-.-.', 'D':'-..', 'E':'.', 
+                    'F':'..-.', 'G':'--.', 'H':'....', 
+                    'I':'..', 'J':'.---', 'K':'-.-', 
+                    'L':'.-..', 'M':'--', 'N':'-.', 
+                    'O':'---', 'P':'.--.', 'Q':'--.-', 
+                    'R':'.-.', 'S':'...', 'T':'-', 
+                    'U':'..-', 'V':'...-', 'W':'.--', 
+                    'X':'-..-', 'Y':'-.--', 'Z':'--..', 
+                    '1':'.----', '2':'..---', '3':'...--', 
+                    '4':'....-', '5':'.....', '6':'-....', 
+                    '7':'--...', '8':'---..', '9':'----.', 
+                    '0':'-----', ', ':'--..--', '.':'.-.-.-', 
+                    '?':'..--..', '/':'-..-.', '-':'-....-', 
+                    '(':'-.--.', ')':'-.--.-'} 
+
+def decrypt(message): 
+
+    # extra space added at the end to access the 
+    # last morse code 
+    message += '/'
+
+    decipher = '' 
+    citext = '' 
+    for letter in message: 
+
+        if (letter != '/'): 
+        # storing '/'
+            i = 0
+
+            # storing morse code of a single character 
+            citext += letter 
+
+        else: 
+            # if i = 1 that indicates a new character 
+            i += 1
+
+            # if i = 3 that indicates a new word 
+            if i == 3 : 
+
+                 # adding space to separate words 
+                decipher += ' '
+            else:
+                try:
+                    # accessing the keys using their values (reverse of encryption) 
+                    decipher += list(MORSE_CODE_DICT.keys())[list(MORSE_CODE_DICT.values()).index(citext)] 
+                    citext = '' 
+                except ValueError:
+                    continue
+
+    return decipher 
+
+r = remote("212.47.229.1",33001)
+x = []
+while True:
+    y = r.recv()
+    if "pip" in y:
+        x.append(".")
+    elif "piiiip" in y:
+        x.append("-")
+    elif "      " in y:
+        x.append("/")
+
+    if x[len(x)-1] == "/" and x[len(x)-2] == "/" and x[len(x)-3] == "/":
+        print decrypt(x)
+</code></pre>
+
+<p>output: <br />
+<code>HERE UPON THE LAPEL OF MY COAT YOU MAY SEE THE RIBBON OF MY DECORATION BUT THE MEDAL ITSELF I KEEP IN A LEATHERN POUCH AT HOME FLAG SHERLOCK LIKES YOUR MORSE</code></p>
+
+<p>Flag : <code>FLAG{SHERLOCK_LIKES_YOUR_MORSE}</code></p>
+
+<hr />
+
+<h3>Mind palace II</h3>
+
+<blockquote>
+  <p>890 points
+  It's time to strain your brains.</p>
+  
+  <p>nc 212.47.229.1 33002</p>
+</blockquote>
+
+<p>It's rot13, just write a script to answer it automatically:</p>
+
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">r</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s2">&quot;212.47.229.1&quot;</span><span class="p">,</span><span class="mi">33002</span><span class="p">)</span>
+
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
+    <span class="nb">print</span> <span class="n">response</span>
+    <span class="k">if</span> <span class="s2">&quot;FLAG&quot;</span> <span class="ow">in</span> <span class="n">response</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="k">break</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;  &quot;</span><span class="p">)</span>
+    <span class="n">cipher</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">cipher</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;rot13&quot;</span><span class="p">)</span>
+    <span class="n">r</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="s2">&quot;DONE&quot;</span>
+</code></pre></div>
+
+<p>Flag : <code>FLAG{Y0U_V3RY_F45T3R_CRYPT0GR4PH}</code></p>
+
+<hr />
+
+<h3>Mind palace III</h3>
+
+<blockquote>
+  <p>896 points
+  100% of brain CPU</p>
+  
+  <p>nc 212.47.229.1 33003</p>
+</blockquote>
+
+<p>It's a bitwise operation, just write a script to answer it automatically:  </p>
+
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">r</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s2">&quot;212.47.229.1&quot;</span><span class="p">,</span><span class="mi">33003</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
+<span class="c1">#make this twice because there is a header at the beginning lol</span>
+<span class="n">operation</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">[&gt;] &quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+<span class="nb">print</span> <span class="n">response</span>
+<span class="n">result</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">if</span> <span class="n">operation</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;AND&quot;</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">operation</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&amp;</span> <span class="nb">int</span><span class="p">(</span><span class="n">operation</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="k">if</span> <span class="n">operation</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;OR&quot;</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">operation</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">|</span> <span class="nb">int</span><span class="p">(</span><span class="n">operation</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="k">if</span> <span class="n">operation</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;XOR&quot;</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">operation</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">^</span> <span class="nb">int</span><span class="p">(</span><span class="n">operation</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+<span class="n">r</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">result</span><span class="p">))</span>
+<span class="nb">print</span> <span class="s2">&quot;DONE&quot;</span>
+
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
+    <span class="n">operation</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;[&gt;] &quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="n">response</span>
+    <span class="k">if</span> <span class="s2">&quot;FLAG&quot;</span> <span class="ow">in</span> <span class="n">response</span><span class="p">:</span>
+        <span class="k">break</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">operation</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;AND&quot;</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">operation</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&amp;</span> <span class="nb">int</span><span class="p">(</span><span class="n">operation</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">operation</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;OR&quot;</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">operation</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">|</span> <span class="nb">int</span><span class="p">(</span><span class="n">operation</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">operation</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;XOR&quot;</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">operation</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">^</span> <span class="nb">int</span><span class="p">(</span><span class="n">operation</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+    <span class="n">r</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">result</span><span class="p">))</span>
+    <span class="nb">print</span> <span class="s2">&quot;DONE&quot;</span>
+</code></pre></div>
+
+<p>Flag : <code>FLAG{0HH_Y0UR3_4_V3RY_5M3RT_M4TH3M4T1C}</code></p>
+
+<hr />
+
+<h3>Magic of numbers</h3>
+
+<blockquote>
+  <p>902 points
+  Do you think Sherlock can beat a computer in math?</p>
+  
+  <p>nc 212.47.229.1 33004</p>
+</blockquote>
+
+<p>this is just an addition, but the last question is <code>0.1 + 0.2</code>, which have some floating point error if you type it in python interpreter, so instead send <code>0.30000000000000004</code> and get the flag  </p>
+
+<p>Flag : <code>FLAG{MaGiC_0f_NuMbErS}</code></p>
+
+<h1>SarCTF 2020 WriteUp by (mendung)10^6</h1>
+
+<h2>Author: f4r4w4y</h2>
+
+<h3>Door Paradox (821 pts)</h3>
+
+<p><strong>Category: Web</strong> <br />
+Challenge description:</p>
+
+<blockquote>
+  <p>Here comes an interesting fact. 221B Baker Street didn’t exist. During the time when the detective was being written, Baker Street was not long and house numbers did not go above 85. The house numbers were written on the front doors of the houses. Although contemporary Museum of Sherlock Holmes has an adresse « 221B Baker Street » it is actually located between house numbers 237 and 241. In reality it’s 239. But let’s go back to the point of the competition. We wrote a messenger for you, because we want you to be comfortable talking. Account for you: test:test</p>
+</blockquote>
+
+<p>Challenge Link : http://sherlock-message.ru</p>
+
+<p>First i do some reconnaissance <br />
+- Login with uname = <code>test</code>, pass = <code>test</code>
+- Check all the menu
+- find a textbox and able to send message; tried sql injection, xss and all stuff in it but no work
+- Check the message and we can see message from other user such as admin1 and admin2</p>
+
+<p>From last point of recon, we probably have to check message between admin1 and admin2 and to be able to do so we have to be one of the admin first so i check on the login request, and nothing interesting</p>
+
+<p>So i check request sent when clicking on <code>Messages</code> menu, and you can see there is <code>POST</code> request sent</p>
+
+<p><img src="img/doorparadox.png" alt="gambar1" /></p>
+
+<p>And indeed parameter of the post request seems crackable </p>
+
+<p><code>key = eccbc87e4b5ce2fe28308fd9f2a7baf3</code></p>
+
+<p>Go <a target="_blank" href="https://crackstation.net/">here</a> to crack the key and it shows that it is md5 of <code>3</code> <br />
+I guess <code>3</code> is id of user <code>test</code> so lets change the <code>key</code> param by changing local cookie of <code>access_key</code> with md5 of <code>1</code> and see the message</p>
+
+<p>And we got the flag = <strong>FLAG{iD00r<em>with</em>insecure_token}</strong></p>
+
+<p><img src="img/doorparadox2.png" alt="gambar2" /></p>
+
+<hr />
+
+<h3>Admin (957 pts)</h3>
+
+<p><strong>Category: Web</strong> <br />
+Challenge Description:</p>
+
+<blockquote>
+  <p>I'm not an expert, but it seems to me that something needs to be hacked here</p>
+</blockquote>
+
+<p>Challenge Link : http://sherlock-message.ru/admin</p>
+
+<p>This challenge is on the same site as <code>Door Paradox</code></p>
+
+<p>I stack on this challenge for long time until organizers give 2 hints which are
+- just one million possible combinations..
+- I think the code is somewhere between <strong>260000</strong> and <strong>280000</strong></p>
+
+<p>There is <code>forgot your password</code> button on the site that ask for 6 digit secret code so as what i guess before we just need to bruteforce the code, and because the hint says its around 260000 and 280000 so we only need to bruteforce numbers between them</p>
+
+<p>Here's the script i made to do so:</p>
+
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">requests</span> 
+
+<span class="c1"># defining the api-endpoint  </span>
+<span class="n">API_ENDPOINT</span> <span class="o">=</span> <span class="s2">&quot;http://sherlock-message.ru/api/admin.restore&quot;</span>
+
+<span class="n">i</span> <span class="o">=</span> <span class="mi">260000</span>
+<span class="nb">hash</span> <span class="o">=</span> <span class="s1">&#39;a48659a0024e30fdf1ff41dfee1acf69&#39;</span>
+<span class="n">need_sms</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="k">while</span><span class="p">(</span><span class="n">need_sms</span><span class="p">)</span> <span class="p">:</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;sms_code = &quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;need_sms = &quot;</span><span class="p">,</span> <span class="n">need_sms</span><span class="p">)</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;hash&#39;</span><span class="p">:</span><span class="nb">hash</span><span class="p">,</span> 
+            <span class="s1">&#39;sms_code&#39;</span><span class="p">:</span><span class="n">i</span><span class="p">,}</span> 
+
+    <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span> <span class="o">=</span> <span class="n">API_ENDPOINT</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">)</span> 
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;Incorrect hash&#39;</span> <span class="p">:</span>
+        <span class="nb">hash</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">][</span><span class="s1">&#39;new_hash&#39;</span><span class="p">]</span>
+        <span class="n">need_sms</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">][</span><span class="s1">&#39;need_sms&#39;</span><span class="p">]</span>
+        <span class="n">i</span><span class="o">+=</span><span class="mi">1</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">need_sms</span> <span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Correct Code = &#39;</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+            <span class="k">break</span>
+    <span class="k">else</span> <span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Oops auth error&quot;</span><span class="p">)</span>
+        <span class="k">break</span>
+</code></pre></div>
+
+<p>flag = <strong>FLAG{bruTe<em>with</em>hash_f0rce}</strong></p>
+
+<hr />
+
+<h3>Car for Sherlock (1964 pts)</h3>
+
+<p><strong>Category: Web</strong> <br />
+Challenge Description:</p>
+
+<blockquote>
+  <p>While chasing a serial killer Sherlock Holmes stopped a wrong person. Now, thanks to my « bot », you can buy a car for Sherlock, so he doesn’t have to run chasing taxis anymore.</p>
+</blockquote>
+
+<p>Challenge Link : https://vk.com/club187880935</p>
+
+<p>We were given a link to vk.com so we have to create an account there.</p>
+
+<p>So there is a bot in the given link
+<img src="img/car.png" alt="gambar1" /></p>
+
+<p>And we can send them a message <br />
+<img src="img/car2.png" alt="gambar2" /></p>
+
+<p>Sending <code>/commands</code> will make the bot reply like this
+<img src="img/car3.png" alt="gambar3" /></p>
+
+<p>So we need to get 101 money in order to buy FLAG from the bot but we only have 100 money</p>
+
+<p>I try all the commands and after lots of trying i just notice some noticeable delay when selling a product, maybe <code>race condition</code> (?), so i try to buy 1 product and send <code>/sell</code> commands many time at once and surely it worked</p>
+
+<p><img src="img/car4.png" alt="gambar4" /></p>
+
+<p>it gave us the <code>Good Sell</code> twice and now we have 200 money, so just buy the flag</p>
+
+<p><img src="img/car5.png" alt="gambar5" /></p>
+
+<p>flag = <strong>FLAG{RaCe<em>CtF</em>C0NdItI0n}</strong></p>
+
+<hr />
+
+<h3>Doc. Holmes (100 pts)</h3>
+
+<p><strong>Category: Forensics</strong> <br />
+Challenge Description:</p>
+
+<blockquote>
+  <p>Sherlock got it on his super secret channels. You have received a copy of mail. Is everything okay with it?</p>
+</blockquote>
+
+<p>And we were given a file : <a target="_blank" href="challs/some.file">some.file</a></p>
+
+<p>Doing file command on it says that its a Ms Word file</p>
+
+<div class="codehilite"><pre><span></span><code><span class="o">[</span>fai@f4r4w4y doc-holmes<span class="o">]</span>$ file some.file 
+some.file: Microsoft Word <span class="m">2007</span>+
+</code></pre></div>
+
+<p>I tried binwalk to extract some hidden files inside and got these bunch of files from it</p>
+
+<div class="codehilite"><pre><span></span><code><span class="o">[</span>fai@f4r4w4y doc-holmes<span class="o">]</span>$ <span class="nb">cd</span> _some.file.extracted/
+<span class="o">[</span>fai@f4r4w4y _some.file.extracted<span class="o">]</span>$ ls
+total <span class="m">288</span>
+-rw-r--r-- <span class="m">1</span> wheel <span class="m">276460</span> Feb <span class="m">15</span> <span class="m">21</span>:39  <span class="m">0</span>.zip
+-rw-r--r-- <span class="m">1</span> wheel   <span class="m">1363</span> Jan  <span class="m">1</span>  <span class="m">1980</span> <span class="s1">&#39;[Content_Types].xml&#39;</span>
+drwxr-xr-x <span class="m">2</span> wheel   <span class="m">4096</span> Feb <span class="m">15</span> <span class="m">21</span>:39  docProps
+drwxr-xr-x <span class="m">2</span> wheel   <span class="m">4096</span> Feb <span class="m">15</span> <span class="m">21</span>:39  _rels
+drwxr-xr-x <span class="m">5</span> wheel   <span class="m">4096</span> Feb <span class="m">15</span> <span class="m">21</span>:39  word
+</code></pre></div>
+
+<p>After looking some of the files, we got the flag
+<img src="img/docholmes.png" alt="gambar" /></p>
+
+<p>flag = <strong>FLAG{prominentplace}</strong></p>
+
+<hr />
+
+<h3>Blogger (632 pts)</h3>
+
+<p><strong>Category: Forensics</strong> <br />
+Challenge Description:</p>
+
+<blockquote>
+  <p>Recently, John's keys began to be pressed by themselves when he runs his blog. You need to figure out what's the matter.</p>
+</blockquote>
+
+<p>And we were given a pcap file : <a target="_blank" href="challs/usb_here.pcapng">usb_here.pcapng</a></p>
+
+<p>Looking at the pcap file in wireshark we can see a lot of USB URB packet data, and if we look at one of the packet we can see there is Leftover Capture Data, so this is a captured keyboard key typed</p>
+
+<p><img src="img/blogger.png" alt="gambar1" /></p>
+
+<p>So we need to dump all the leftover capture data from all packet using this bash script:</p>
+
+<div class="codehilite"><pre><span></span><code>tshark -r usb_here.pcapng -T fields -e usb.capdata &gt; usb_dump.txt
+</code></pre></div>
+
+<p>and use <a target="_blank" href="script/keyboardTranslator.py">this</a> script to convert it to keyboard data</p>
+
+<div class="codehilite"><pre><span></span><code><span class="o">[</span>fai@f4r4w4y blogger<span class="o">]</span>$ python keyboardTranslator.py usb_dump.txt
+    Sherlock, John, and Henry <span class="k">then</span> visit the holow in the hope of finding the hound. On the way, John notices what sems to be FLAG<span class="o">{</span>like_a_b10dh0und<span class="o">}</span>    E<span class="o">[</span>fa
+</code></pre></div>
+
+<p>and we get the flag = <strong>FLAG{like<em>a</em>b10dh0und}</strong></p>
+
+<hr />
+
+<h3>Crossw0rd (309 pts)</h3>
+
+<p><strong>Category: Reverse</strong> <br />
+Challenge Description:</p>
+
+<blockquote>
+  <p>While the children were playing toys, Sherlock was solving crosswords in large volumes.</p>
+</blockquote>
+
+<p>And we were given a binary file : <a target="_blank" href="challs/crossw0rd">crossw0rd</a></p>
+
+<p>Its a 64 bit binary</p>
+
+<div class="codehilite"><pre><span></span><code><span class="o">[</span>fai@f4r4w4y crossword<span class="o">]</span>$ file crossw0rd 
+crossw0rd: ELF <span class="m">64</span>-bit LSB pie executable, x86-64, version <span class="m">1</span> <span class="o">(</span>SYSV<span class="o">)</span>, dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, <span class="k">for</span> GNU/Linux <span class="m">3</span>.2.0, BuildID<span class="o">[</span>sha1<span class="o">]=</span>2e45dc319e3736db1643abb283b0ed9a18681261, not stripped
+</code></pre></div>
+
+<p>and when we run it</p>
+
+<div class="codehilite"><pre><span></span><code><span class="o">[</span>fai@f4r4w4y crossword<span class="o">]</span>$ ./crossw0rd 
+Welcome. You<span class="err">&#39;</span>re in <span class="k">function</span> check. Please Enter a password to <span class="k">continue</span>. <span class="m">1</span> attempt remaining:
+<span class="nb">test</span>
+Wrong password! Your attempt is over.
+<span class="o">[</span>fai@f4r4w4y crossword<span class="o">]</span>$ 
+</code></pre></div>
+
+<p>It needs a kind of <code>password</code> and when its correct maybe it will give us the flag (?)</p>
+
+<p>So i open it in ghidra and see the main function <br />
+<img src="img/crossword.png" alt="gambar1" /></p>
+
+<p>There is check function, lets see it <br />
+<img src="img/crossword2.png" alt="gambar2" /></p>
+
+<p>Inside of it we can see that our input buffer goes to other function called <code>checkInput</code> and it return a value and if its equal to <code>'\0'</code> it says <code>Wrong password! ...</code></p>
+
+<p>Looking at the <code>checkInput</code> function <br />
+<img src="img/crossword3.png" alt="gambar3" /></p>
+
+<p>There is a check to an array which is our input buffer and its checking the array or in this case the string content (char inside the string) and check it to some value and if its right then <code>isCorrect</code> will be 1 and <code>checkInput</code> will also return 1 and password will be correct</p>
+
+<p>but if we see again that the <code>cVar1</code> is also checked with <code>b</code> function with our input goes into it so lets check the function <br />
+<img src="img/crossword4.png" alt="gambar4" /></p>
+
+<p>It got another check, so i guess the flag is the password and we just need to match each char in the string with the check value</p>
+
+<p>I manually checked it and got the flag = <strong>FLAG{3a5yr3v3r5ing}</strong></p>
+
+</div>
+    </div>
+</body>
+<script>
+    $(".menu-button").hover(function(){
+        $(this).addClass("hovered");
+    }, function(){
+        $(this).removeClass("hovered");
+    });
+
+    window.setInterval(anim, 2500);
+
+    function anim() {
+        var menus = ["aboutus", "notes", "writeup", "contact", "news"]
+
+        lastPath = window.location.pathname.split("/").pop().split(".html")[0]
+        menus = menus.filter(item => item !== lastPath)
+
+        if (!hoveredExist()) {
+            menu = menus[Math.floor(Math.random() * menus.length)]
+            for (let i = 0; i < 5; i++) {
+                blink(i, menu)  
+            }
+        }
+    }
+
+    function blink(i, menu) { 
+        setTimeout(function() { 
+            $("." + menu)
+                .parent()
+                .addClass("hovered")
+            setTimeout(function () {
+                $("." + menu)
+                    .parent()
+                    .removeClass("hovered")
+            }, 50);
+        }, 100 * i); 
+    } 
+
+    function hoveredExist() {
+        var menus = ["aboutus", "notes", "writeup", "contact", "news"]
+        for (let index = 0; index < menus.length; index++) {
+            const menu = menus[index];
+            if ($("." + menu)
+                    .parent()
+                    .hasClass("hovered")) {
+                return true
+            }   
+        }
+        return false
+    }
+</script>
+</html>
