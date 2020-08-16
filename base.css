@@ -152,12 +152,15 @@ html {
 .main-content {
     margin: 10px;
     margin-top: -15px;
-    padding: 20px;
-    padding-top: 30px;
-    height: calc(100% - (10rem + 10px));
+    padding: 10px;
+    height: calc(100% - (10rem + 55px));
     background-color: var(--page-color);
     border-radius: 10px;
     overflow: auto;
+    border-top: 30px solid var(--page-color);
+    border-bottom: 15px solid var(--page-color);
+    border-left: 10px solid var(--page-color);
+    border-right: 10px solid var(--page-color);
 }
 
 .header-content {
