@@ -5,3 +5,5 @@ news.html
 notes.html
 writeup.html
 news/*.html
+writeups/*.html
+ctf-writeups-master/*

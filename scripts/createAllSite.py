@@ -1,7 +1,8 @@
 from os.path import isfile, join
 from slugify import slugify
 from jinja2 import Template
-import markdown2, os
+from glob import glob
+import markdown2, os, pathlib
 
 def convertMDtoHTML(md_text):
     html_text = markdown2.markdown(md_text, extras=[
@@ -116,7 +117,47 @@ def main():
     })
         
     print("[+] Creating writeup(s) page")
-    writeContentToTemplate("writeup", baseHtml)
+    print("[|] Downloading the writeups repo")
+    os.system(str(pathlib.Path(__file__).parent.absolute()) + "/downloadAllWriteups.sh")
+
+    allEvents = glob("./ctf-writeups-master/*/")
+    allEventsSlug = []
+    for event in allEvents:
+        eventTitle = event.replace("./ctf-writeups-master/", "")[:-1]
+        print("[|] Working on '{}'".format(eventTitle))
+
+        allEventsSlug.append({
+            "title": eventTitle,
+            "slug": slugify(eventTitle)
+        })
+        
+        md_filepaths = []
+        for path, subdirs, files in os.walk(event):
+            for name in files:
+                if name.split(".")[-1] == "md" and str(name.split(".md")[0]).lower() != "readme":
+                    md_filepaths.append(os.path.join(path, name))
+
+        writeupMd = ""
+        for path in md_filepaths:
+            writeupMd += open(path, "r").read() + "\n"
+
+        writeupHtml = markdown2.markdown(writeupMd, extras = [
+            "footnotes", 
+            "fenced-code-blocks", 
+            "tables", 
+            "markdown-in-html",
+            "target-blank-links"
+        ])
+
+        writeContentToTemplate("writeup", baseHtml, isContent=True, filenameOutput=("writeups/" + slugify(eventTitle)), props={
+            "content": writeupHtml
+        })
+
+    writeContentToTemplate("writeup", baseHtml, props={
+        "writeups": allEventsSlug
+    })
+
+    print("[+] Sites creation sequence finished successfully")
 
 if __name__ == "__main__" :
     main()
