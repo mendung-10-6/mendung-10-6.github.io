@@ -153,7 +153,7 @@ html {
     margin: 10px;
     margin-top: -15px;
     padding: 10px;
-    height: calc(100% - (10rem + 55px));
+    height: calc(100% - (10rem + 25px));
     background-color: var(--page-color);
     border-radius: 10px;
     overflow: auto;
