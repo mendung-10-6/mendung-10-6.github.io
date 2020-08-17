@@ -56,7 +56,7 @@ def main():
     print("[+] Creating about-us page")
     with open("./data/profiles.txt", "r") as f:
         profilesContent = f.read()
-        profilesContent = profilesContent.split("===")
+        profilesContent = profilesContent.split("===")[:-1]
         
         print("[|] Found {} profile(s)".format(len(profilesContent)))
 
