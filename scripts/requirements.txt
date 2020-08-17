@@ -4,3 +4,4 @@ MarkupSafe==1.1.1
 Pygments==2.5.2
 pytz==2019.3
 python-slugify==4.0.1
+beautifulsoup4==4.9.1

@@ -1,4 +1,5 @@
 from os.path import isfile, join
+from bs4 import BeautifulSoup
 from slugify import slugify
 from jinja2 import Template
 from glob import glob
