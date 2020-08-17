@@ -24,6 +24,10 @@ html {
     height: 100%;
 }
 
+.simplebar-scrollbar::before {
+    background-color: red;
+}
+
 /* ****************** */
 /* BLOG related style */
 /* ****************** */
@@ -89,7 +93,7 @@ html {
 
 .blog-content p code {
     border-radius: 5px;
-    background-color: white;
+    background-color: yellow;
     color: black;
     padding: 2.5px;
     font-size: 15px;
@@ -136,15 +140,6 @@ html {
     }
 }
 
-@media only screen and (max-width: 800px) {
-
-    /* For mobile phones: */
-    .blog-content {
-        margin-left: 1rem;
-        margin-right: 2rem;
-    }
-}
-
 /* ****************** */
 /* PAGE related style */
 /* ****************** */
@@ -153,10 +148,11 @@ html {
     margin: 10px;
     margin-top: -15px;
     padding: 10px;
-    height: calc(100% - (10rem + 25px));
+    height: calc(100% - (10rem + 10px));
     background-color: var(--page-color);
     border-radius: 10px;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
     border-top: 30px solid var(--page-color);
     border-bottom: 15px solid var(--page-color);
     border-left: 10px solid var(--page-color);
@@ -202,13 +198,14 @@ html {
 
 .team-name {
     margin: 20px;
-    font-size: 3rem;
+    font-size: 2rem;
     font-family: 'Londrina Solid', cursive;
 }
 
 .text-normal {
     font-size: 1rem;
     font-family: 'IBM Plex Sans', sans-serif;
+    word-wrap: break-word;
     color: var(--body-color);
 }
 
