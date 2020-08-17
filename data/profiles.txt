@@ -6,3 +6,10 @@ contact:email: fakhriputra123s@gmail.com
 contact:twitter: https://twitter.com/0xfa1
 contact:discord: f4r4w4y@6907
 ===
+fullname: B
+handle: Wrth
+description: hey
+opcode: 7
+contact:twitter: https://twitter.com/Wrth1_
+contact:discord: Wrth#1032
+===
