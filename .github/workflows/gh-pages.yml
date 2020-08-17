@@ -32,7 +32,7 @@ jobs:
 
       - name: Run magic script and modify .gitignore
         run: |
-          mkdir writeups
+          mkdir writeups writeups-pic
           python scripts/createAllSite.py
           rm .gitignore
           echo "ctf-writeups-master/*" > .gitignore
