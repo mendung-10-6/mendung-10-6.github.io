@@ -1,6 +1,8 @@
 from os.path import isfile, join
+from bs4 import BeautifulSoup
 from slugify import slugify
 from jinja2 import Template
+from shutil import copyfile
 from glob import glob
 import markdown2, os, pathlib
 
@@ -56,7 +58,7 @@ def main():
     print("[+] Creating about-us page")
     with open("./data/profiles.txt", "r") as f:
         profilesContent = f.read()
-        profilesContent = profilesContent.split("===")
+        profilesContent = profilesContent.split("===")[:-1]
         
         print("[|] Found {} profile(s)".format(len(profilesContent)))
 
@@ -84,7 +86,7 @@ def main():
 
     allNewsProps = []
     for news in allNews :
-        print("[|] Working on '{}'".format(news))
+        print("[|] Working on \"{}\"".format(news))
 
         props = {
             "title": news,
@@ -120,11 +122,12 @@ def main():
     print("[|] Downloading the writeups repo")
     os.system(str(pathlib.Path(__file__).parent.absolute()) + "/downloadAllWriteups.sh")
 
+    count = 1
     allEvents = glob("./ctf-writeups-master/*/")
     allEventsSlug = []
     for event in allEvents:
         eventTitle = event.replace("./ctf-writeups-master/", "")[:-1]
-        print("[|] Working on '{}'".format(eventTitle))
+        print("[|] Working on \"{}\"".format(eventTitle))
 
         allEventsSlug.append({
             "title": eventTitle,
@@ -137,17 +140,39 @@ def main():
                 if name.split(".")[-1] == "md" and str(name.split(".md")[0]).lower() != "readme":
                     md_filepaths.append(os.path.join(path, name))
 
-        writeupMd = ""
+        writeupHtml = ""
         for path in md_filepaths:
-            writeupMd += open(path, "r").read() + "\n"
+            writeupMd = open(path, "r").read() + "\n"
 
-        writeupHtml = markdown2.markdown(writeupMd, extras = [
-            "footnotes", 
-            "fenced-code-blocks", 
-            "tables", 
-            "markdown-in-html",
-            "target-blank-links"
-        ])
+            tempWriteupHtml = markdown2.markdown(writeupMd, extras = [
+                "footnotes", 
+                "fenced-code-blocks", 
+                "tables", 
+                "markdown-in-html",
+                "target-blank-links"
+            ])
+
+            sources = []
+            soup = BeautifulSoup(tempWriteupHtml, "html.parser")
+            for img in soup.find_all("img"):
+                imageSource = img["src"]
+                
+                imageFinalSource = "/writeups-pic/{}.{}".format(str(count), imageSource.split(".")[-1])
+                
+                fileMd = path.split(".md")[0].split("/")[-1]
+                finalSource = str(pathlib.Path(__file__).parent.parent.absolute()) + "/writeups-pic/{}.{}".format(str(count), imageSource.split(".")[-1])
+
+                copyfile(path.replace(fileMd + ".md", "") + imageSource, finalSource)
+
+                sources.append(imageFinalSource) 
+
+                count += 1
+
+            for index, img in enumerate(soup.find_all("img")):
+                img["src"] = sources[index]
+
+            tempWriteupHtml = str(soup)
+            writeupHtml += tempWriteupHtml
 
         writeContentToTemplate("writeup", baseHtml, isContent=True, filenameOutput=("writeups/" + slugify(eventTitle)), props={
             "content": writeupHtml

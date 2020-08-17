@@ -53,14 +53,10 @@
     <div class="main-content text-normal">
         <div>
     <h1>I Love Rainbows</h1>
-
-<p>We are given a file each line containing 32-64 characters, which looks like hashes, using <a target="_blank" href="https://crackstation.net/">crackstation</a> we can see that each hash contains 1 to 2 characters from the flag, cracking all the hash and we got the flag. <br />
-flag : <code>rgbCTF{4lw4ys_us3_s4lt_wh3n_h4shing}</code>  </p>
-
+<p>We are given a file each line containing 32-64 characters, which looks like hashes, using <a href="https://crackstation.net/" target="_blank">crackstation</a> we can see that each hash contains 1 to 2 characters from the flag, cracking all the hash and we got the flag. <br/>
+flag : <code>rgbCTF{4lw4ys_us3_s4lt_wh3n_h4shing}</code> </p>
 <h1>e</h1>
-
 <p>For this challenge N is insanely large, because of that the the ciphertext did not reach N at this point, so we can just take eth root of c and get the flag  </p>
-
 <div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">gmpy2</span>
 <span class="kn">from</span> <span class="nn">Crypto.Util.number</span> <span class="kn">import</span> <span class="n">long_to_bytes</span> <span class="k">as</span> <span class="n">ltb</span>
 <span class="n">n</span> <span class="o">=</span> <span class="mh">0x5fb76f7f36c0d7788650e3e81fe18ad105970eb2dd19576d29e8a8697ebbd97f4fc2582bf1dc53d527953d9615439ca1b546b2fc1cd533db5fce6f72419f268e3182c0324a631a17d6b3e76540f52f2df51ca34983392d274f292139c28990660fa0e23d1b350da7aa7458a3783107a296dcd1720e32afb431954d8896f0587cd1c8f1d20701d6173b7cffe53679ebda80f137c83276d6628697961f5fcd39e18316770917338c6dc59a241dcdc66417fed42524c33093251c1d318b9dbeb6c3d0a69438b875958e8885d242d196e25bc73595e7f237c8124e07a79f7066f2dee393e2130306ba29e7ece1825798ff8b35416b3a0d96bcdc6eca5616ea2874954f8f88232450ddad3e109338bcc5d84e7b592a6b0871bd4130b84f81ed188e9d5495c8545aa8dea2b65e8605f5a49e3a1c221cbcc301665187658784a8f42a23c2ca2572477ba56ff19934019b48f5a1ab8a50626c85bdd476b11e8c1fb0b740c2370de3da5cc06371a7aa2c4e12eee3dc4cda07a8c84ba2bc3ee2017156468af95111d7ee5152ce35e66fa027a944b43c27fbd27faa5b4f9075be3526a7a5be8a533b523cd5c738c724e97597fc2e3666cfcad7c79d972ff8d9572100e860395cdc3761af3f4cc225a6df83a55802723f95cfba5918d83913f2cc9b219210249928c291310d449042772e2d0a50620d666a137f79770de6f10196b30cc756e1</span>
@@ -71,19 +67,15 @@ flag : <code>rgbCTF{4lw4ys_us3_s4lt_wh3n_h4shing}</code>  </p>
 <span class="k">assert</span> <span class="nb">pow</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">e</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="o">==</span> <span class="n">c</span>
 <span class="nb">print</span> <span class="n">ltb</span><span class="p">(</span><span class="n">x</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 </code></pre></div>
-
-<p>flag : <code>rgbCTF{lucky_number_13}</code>  </p>
-
+<p>flag : <code>rgbCTF{lucky_number_13}</code> </p>
 <h1>Occasionally Tested Protocol</h1>
-
 <p>Classic OTP with time as the seed, we can just get time the same time as we connect to the server, and test the seed locally. You can see the script that I used to find the approximate time on the commented code below.  </p>
-
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">seed</span><span class="p">,</span> <span class="n">randint</span> <span class="k">as</span> <span class="n">w</span>
 <span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
 <span class="c1"># import pwn</span>
 <span class="c1"># j = int(time())</span>
 <span class="c1"># print (j)</span>
-<span class="c1"># r = pwn.remote(&quot;167.172.123.213&quot;, 12345)</span>
+<span class="c1"># r = pwn.remote("167.172.123.213", 12345)</span>
 <span class="c1"># print (r.recv())</span>
 <span class="c1"># r.close()</span>
 
@@ -102,72 +94,56 @@ flag : <code>rgbCTF{4lw4ys_us3_s4lt_wh3n_h4shing}</code>  </p>
             <span class="k">break</span>
 <span class="n">b</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([</span><span class="n">w</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">40</span><span class="p">)])</span>
 
-<span class="n">flag</span> <span class="o">=</span> <span class="nb">int</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="mi">9756397644136381438199947801771447561151891907369603561251869566720</span><span class="p">,</span><span class="mi">999</span><span class="p">,</span><span class="s1">&#39;little&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">flag</span> <span class="o">=</span> <span class="nb">int</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="mi">9756397644136381438199947801771447561151891907369603561251869566720</span><span class="p">,</span><span class="mi">999</span><span class="p">,</span><span class="s1">'little'</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="sa">b</span><span class="s2">"</span><span class="se">\x00</span><span class="s2">"</span><span class="p">)</span>
 <span class="n">n</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([</span><span class="n">l</span> <span class="o">^</span> <span class="n">p</span> <span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">flag</span><span class="p">,</span> <span class="n">b</span><span class="p">)])</span>
 <span class="nb">print</span> <span class="p">(</span><span class="n">n</span><span class="p">)</span>
 </code></pre></div>
-
-<p>flag : <code>rgbCTF{random_is_not_secure}</code>  </p>
-
+<p>flag : <code>rgbCTF{random_is_not_secure}</code> </p>
 <h1>Shakespeare Play, Lost (and found!)</h1>
-
 <p>It's a book cipher,the first number correspond to the nth line of the book, and the second number correspond to the nth character of the line.  </p>
-
 <div class="codehilite"><pre><span></span><code><span class="n">keys</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">33</span><span class="p">,</span> <span class="mi">20</span><span class="p">],[</span><span class="mi">71</span><span class="p">,</span> <span class="mi">5</span><span class="p">],[</span><span class="mi">43</span><span class="p">,</span> <span class="mi">142</span><span class="p">],[</span><span class="mi">60</span><span class="p">,</span> <span class="mi">150</span><span class="p">],[</span><span class="mi">73</span><span class="p">,</span> <span class="mi">312</span><span class="p">],[</span><span class="mi">78</span><span class="p">,</span> <span class="mi">66</span><span class="p">],[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">22</span><span class="p">],[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">115</span><span class="p">],[</span><span class="mi">29</span><span class="p">,</span> <span class="mi">18</span><span class="p">],[</span><span class="mi">51</span><span class="p">,</span> <span class="mi">147</span><span class="p">],[</span><span class="mi">45</span><span class="p">,</span> <span class="mi">68</span><span class="p">],[</span><span class="mi">34</span><span class="p">,</span> <span class="mi">14</span><span class="p">],[</span><span class="mi">54</span><span class="p">,</span> <span class="mi">126</span><span class="p">],[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">48</span><span class="p">],[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],[</span><span class="mi">60</span><span class="p">,</span> <span class="mi">126</span><span class="p">],[</span><span class="mi">45</span><span class="p">,</span> <span class="mi">77</span><span class="p">],[</span><span class="mi">13</span><span class="p">,</span> <span class="mi">69</span><span class="p">]]</span>
-<span class="n">text</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;play&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="n">flag</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+<span class="n">text</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"play"</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">flag</span> <span class="o">=</span> <span class="s1">''</span>
 <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
     <span class="n">flag</span> <span class="o">+=</span> <span class="p">(</span><span class="n">text</span><span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]])[</span><span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-<span class="nb">print</span> <span class="s2">&quot;rgbCTF{&quot;</span> <span class="o">+</span> <span class="n">flag</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span>
+<span class="nb">print</span> <span class="s2">"rgbCTF{"</span> <span class="o">+</span> <span class="n">flag</span> <span class="o">+</span> <span class="s2">"}"</span>
 </code></pre></div>
-
 <p>flag : <code>rgbCTF{itsanrgbtreeeeeee!}</code></p>
-
 <h1>Typeracer</h1>
-
-<p>if we take a look at the page source, we can see obf.js, inside it was a very obfuscated code, using <a target="_blank" href="https://beautifier.io/">this tool</a> we can see the code much clearer. Let's take a look at some interesting part of the code.  </p>
-
-<div class="codehilite"><pre><span></span><code><span class="s1">&#39;_0x1ec2f5&#39;</span><span class="o">:</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">&#39;0x26f&#39;</span><span class="p">,</span> <span class="s1">&#39;QvUT&#39;</span><span class="p">),</span>
-        <span class="s1">&#39;_0x1c2030&#39;</span><span class="o">:</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">&#39;0x20&#39;</span><span class="p">,</span> <span class="s1">&#39;zyUu&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;ou have be&#39;</span> <span class="o">+</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">&#39;0x4c4&#39;</span><span class="p">,</span> <span class="s1">&#39;9f2)&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">&#39;0x570&#39;</span><span class="p">,</span> <span class="s1">&#39;Y@$M&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">&#39;0x505&#39;</span><span class="p">,</span> <span class="s1">&#39;XVoV&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;iQ1RGe3c0M&#39;</span> <span class="o">+</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">&#39;0x649&#39;</span><span class="p">,</span> <span class="s1">&#39;*a95&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">&#39;0x55a&#39;</span><span class="p">,</span> <span class="s1">&#39;nB&amp;s&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;l80bm4weTF&#39;</span> <span class="o">+</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">&#39;0x143&#39;</span><span class="p">,</span> <span class="s1">&#39;&amp;H2q&#39;</span><span class="p">),</span>
-        <span class="s1">&#39;_0x1e6fbe&#39;</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">_0x2a6b00</span><span class="p">,</span> <span class="nx">_0x43d36c</span><span class="p">)</span> <span class="p">{</span>
+<p>if we take a look at the page source, we can see obf.js, inside it was a very obfuscated code, using <a href="https://beautifier.io/" target="_blank">this tool</a> we can see the code much clearer. Let's take a look at some interesting part of the code.  </p>
+<div class="codehilite"><pre><span></span><code><span class="s1">'_0x1ec2f5'</span><span class="o">:</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">'0x26f'</span><span class="p">,</span> <span class="s1">'QvUT'</span><span class="p">),</span>
+        <span class="s1">'_0x1c2030'</span><span class="o">:</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">'0x20'</span><span class="p">,</span> <span class="s1">'zyUu'</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'ou have be'</span> <span class="o">+</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">'0x4c4'</span><span class="p">,</span> <span class="s1">'9f2)'</span><span class="p">)</span> <span class="o">+</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">'0x570'</span><span class="p">,</span> <span class="s1">'Y@$M'</span><span class="p">)</span> <span class="o">+</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">'0x505'</span><span class="p">,</span> <span class="s1">'XVoV'</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'iQ1RGe3c0M'</span> <span class="o">+</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">'0x649'</span><span class="p">,</span> <span class="s1">'*a95'</span><span class="p">)</span> <span class="o">+</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">'0x55a'</span><span class="p">,</span> <span class="s1">'nB&amp;s'</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'l80bm4weTF'</span> <span class="o">+</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">'0x143'</span><span class="p">,</span> <span class="s1">'&amp;H2q'</span><span class="p">),</span>
+        <span class="s1">'_0x1e6fbe'</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">_0x2a6b00</span><span class="p">,</span> <span class="nx">_0x43d36c</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">return</span> <span class="nx">_0x2a6b00</span> <span class="o">+</span> <span class="nx">_0x43d36c</span><span class="p">;</span>
         <span class="p">},</span>
-        <span class="s1">&#39;_0x141f90&#39;</span><span class="o">:</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">&#39;0x3cb&#39;</span><span class="p">,</span> <span class="s1">&#39;*f#2&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">&#39;0x4eb&#39;</span><span class="p">,</span> <span class="s1">&#39;%7!)&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;y keyboard&#39;</span> <span class="o">+</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">&#39;0x22a&#39;</span><span class="p">,</span> <span class="s1">&#39;M9PA&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">&#39;0x191&#39;</span><span class="p">,</span> <span class="s1">&#39;Y@$M&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;em the fla&#39;</span> <span class="o">+</span> <span class="s1">&#39;g. Perhaps&#39;</span> <span class="o">+</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">&#39;0x120&#39;</span><span class="p">,</span> <span class="s1">&#39;T2UE&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;n?&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;_0x8fd743&#39;</span><span class="o">:</span> <span class="s1">&#39;wpm&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;_0x4ea8ac&#39;</span><span class="o">:</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">&#39;0x566&#39;</span><span class="p">,</span> <span class="s1">&#39;I7*N&#39;</span><span class="p">),</span>
+        <span class="s1">'_0x141f90'</span><span class="o">:</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">'0x3cb'</span><span class="p">,</span> <span class="s1">'*f#2'</span><span class="p">)</span> <span class="o">+</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">'0x4eb'</span><span class="p">,</span> <span class="s1">'%7!)'</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'y keyboard'</span> <span class="o">+</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">'0x22a'</span><span class="p">,</span> <span class="s1">'M9PA'</span><span class="p">)</span> <span class="o">+</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">'0x191'</span><span class="p">,</span> <span class="s1">'Y@$M'</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'em the fla'</span> <span class="o">+</span> <span class="s1">'g. Perhaps'</span> <span class="o">+</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">'0x120'</span><span class="p">,</span> <span class="s1">'T2UE'</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'n?'</span><span class="p">,</span>
+        <span class="s1">'_0x8fd743'</span><span class="o">:</span> <span class="s1">'wpm'</span><span class="p">,</span>
+        <span class="s1">'_0x4ea8ac'</span><span class="o">:</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">'0x566'</span><span class="p">,</span> <span class="s1">'I7*N'</span><span class="p">),</span>
 </code></pre></div>
-
-<p>we can see there is some strings like <code>em flag. Perhaps</code> that looks like the message that we got after we finished the typing challenge, we can confirm this by running it on the javascript console. As you continue running some part of the code around it that's actually the congratulations message. <br />
-<code>_0x7379('0x20', 'zyUu') + 'ou have be' + _0x7379('0x4c4', '9f2)') + _0x7379('0x570', 'Y@$M') + _0x7379('0x505', 'XVoV') + 'iQ1RGe3c0M' + _0x7379('0x649', '*a95') + _0x7379('0x55a', 'nB&amp;s') + 'l80bm4weTF' + _0x7379('0x143', '&amp;H2q')</code> <br />
-which translates to <br />
-<code>Congrats you have beaten me! Here's your flag: cmdiQ1RGe3c0MHdfajR2NDJjcjFwN18xMl80bm4weTFuZ30=</code> <br />
-decode the base64 and we got the flag. <br />
+<p>we can see there is some strings like <code>em flag. Perhaps</code> that looks like the message that we got after we finished the typing challenge, we can confirm this by running it on the javascript console. As you continue running some part of the code around it that's actually the congratulations message. <br/>
+<code>_0x7379('0x20', 'zyUu') + 'ou have be' + _0x7379('0x4c4', '9f2)') + _0x7379('0x570', 'Y@$M') + _0x7379('0x505', 'XVoV') + 'iQ1RGe3c0M' + _0x7379('0x649', '*a95') + _0x7379('0x55a', 'nB&amp;s') + 'l80bm4weTF' + _0x7379('0x143', '&amp;H2q')</code> <br/>
+which translates to <br/>
+<code>Congrats you have beaten me! Here's your flag: cmdiQ1RGe3c0MHdfajR2NDJjcjFwN18xMl80bm4weTFuZ30=</code> <br/>
+decode the base64 and we got the flag. <br/>
 flag : <code>rgbCTF{w40w_j4v42cr1p7_12_4nn0y1ng}</code></p>
-
 <h1>Ralphie!</h1>
-
-<p>A stego challenge, using aperisolve, we can see there is a hidden qr code in it, scan it and we get the flag. <br />
+<p>A stego challenge, using aperisolve, we can see there is a hidden qr code in it, scan it and we get the flag. <br/>
 flag : <code>rgbCTF{BESURETODRINKYOUROVALTINE}</code></p>
-
 <h1>Too Slow</h1>
-
 <p>Let's take a look at main:  </p>
-
 <div class="codehilite"><pre><span></span><code><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
 
 <span class="p">{</span>
   <span class="n">uint</span> <span class="n">uVar1</span><span class="p">;</span>
 
-  <span class="n">puts</span><span class="p">(</span><span class="s">&quot;Flag Decryptor v1.0&quot;</span><span class="p">);</span>
-  <span class="n">puts</span><span class="p">(</span><span class="s">&quot;Generating key...&quot;</span><span class="p">);</span>
+  <span class="n">puts</span><span class="p">(</span><span class="s">"Flag Decryptor v1.0"</span><span class="p">);</span>
+  <span class="n">puts</span><span class="p">(</span><span class="s">"Generating key..."</span><span class="p">);</span>
   <span class="n">uVar1</span> <span class="o">=</span> <span class="n">getKey</span><span class="p">();</span>
   <span class="n">win</span><span class="p">((</span><span class="n">ulong</span><span class="p">)</span><span class="n">uVar1</span><span class="p">);</span>
   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div>
-
 <p>so far it looks pretty normal, let's take a look at getKey: </p>
-
 <div class="codehilite"><pre><span></span><code><span class="n">ulong</span> <span class="nf">getKey</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
 
 <span class="p">{</span>
@@ -190,42 +166,34 @@ flag : <code>rgbCTF{BESURETODRINKYOUROVALTINE}</code></p>
   <span class="k">return</span> <span class="p">(</span><span class="n">ulong</span><span class="p">)</span><span class="n">i</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div>
-
-<p>as you can see it looks like <code>c</code> is operated a lot, but the function return <code>i</code>, <code>i</code> didn't affected by <code>c</code> and only incremented by 1 every loop, so we know that getKey will return 0x265d1d23. <br />
+<p>as you can see it looks like <code>c</code> is operated a lot, but the function return <code>i</code>, <code>i</code> didn't affected by <code>c</code> and only incremented by 1 every loop, so we know that getKey will return 0x265d1d23. <br/>
 We can use GDB to change the value and skip the getKey function (btw I use gdb gef).  </p>
-
 <pre><code>b main
 r
 set $eax = 0x265d1d23
 jump *main+53
 </code></pre>
-
-<p>flag : <code>rgbCTF{pr3d1ct4bl3_k3y_n33d5_no_w41t_cab79d}</code>  </p>
-
+<p>flag : <code>rgbCTF{pr3d1ct4bl3_k3y_n33d5_no_w41t_cab79d}</code> </p>
 <h1>Advanced Reversing Mechanics 1</h1>
-
 <p>let's take a look at encryptFlag() function:  </p>
-
 <div class="codehilite"><pre><span></span><code><span class="kt">void</span> <span class="nf">encryptFlag</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">flag</span><span class="p">)</span>
 
 <span class="p">{</span>
   <span class="kt">char</span> <span class="n">flag2</span><span class="p">;</span>
 
   <span class="n">flag2</span> <span class="o">=</span> <span class="o">*</span><span class="n">flag</span><span class="p">;</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">flag2</span> <span class="o">==</span> <span class="sc">&#39;\0&#39;</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">flag2</span> <span class="o">==</span> <span class="sc">'\0'</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">return</span><span class="p">;</span>
   <span class="p">}</span>
   <span class="k">do</span> <span class="p">{</span>
     <span class="o">*</span><span class="n">flag</span> <span class="o">=</span> <span class="n">flag2</span> <span class="o">+</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
     <span class="n">flag</span> <span class="o">=</span> <span class="n">flag</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
     <span class="n">flag2</span> <span class="o">=</span> <span class="o">*</span><span class="n">flag</span><span class="p">;</span>
-  <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">flag2</span> <span class="o">!=</span> <span class="sc">&#39;\0&#39;</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">flag2</span> <span class="o">!=</span> <span class="sc">'\0'</span><span class="p">);</span>
   <span class="k">return</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div>
-
 <p>it might be a little confusing for some people, but basically <code>*flag</code> with <code>*</code> is the value of the curent flag address, and <code>flag</code> without <code>*</code> is the the current index of the flag, so the code will looks something like this:  </p>
-
 <div class="codehilite"><pre><span></span><code><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">flag2</span> <span class="o">=</span> <span class="n">flag</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
@@ -236,69 +204,51 @@ jump *main+53
   <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
     <span class="k">break</span>
 </code></pre></div>
-
 <p>so basically the code lops through the flag and decrease all character by one, now let's write the solve script that increment all the character by one.  </p>
-
 <div class="codehilite"><pre><span></span><code><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0x71</span><span class="p">,</span> <span class="mh">0x66</span><span class="p">,</span> <span class="mh">0x61</span><span class="p">,</span> <span class="mh">0x42</span><span class="p">,</span> <span class="mh">0x53</span><span class="p">,</span> <span class="mh">0x45</span><span class="p">,</span> <span class="mh">0x7A</span><span class="p">,</span> <span class="mh">0x40</span><span class="p">,</span> <span class="mh">0x51</span><span class="p">,</span> <span class="mh">0x4C</span><span class="p">,</span> <span class="mh">0x5E</span><span class="p">,</span> <span class="mh">0x30</span><span class="p">,</span> <span class="mh">0x79</span><span class="p">,</span> <span class="mh">0x5E</span><span class="p">,</span> <span class="mh">0x31</span><span class="p">,</span> <span class="mh">0x5E</span><span class="p">,</span> <span class="mh">0x64</span><span class="p">,</span> <span class="mh">0x59</span><span class="p">,</span> <span class="mh">0x5E</span><span class="p">,</span> <span class="mh">0x38</span><span class="p">,</span> <span class="mh">0x61</span><span class="p">,</span> <span class="mh">0x36</span><span class="p">,</span> <span class="mh">0x65</span><span class="p">,</span> <span class="mh">0x37</span><span class="p">,</span> <span class="mh">0x63</span><span class="p">,</span> <span class="mh">0x7C</span><span class="p">]</span>
-<span class="n">flag</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="n">flag</span> <span class="o">=</span> <span class="s2">""</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">x</span><span class="p">:</span>
   <span class="n">flag</span> <span class="o">+=</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
 <span class="nb">print</span> <span class="p">(</span><span class="n">flag</span><span class="p">)</span>
 </code></pre></div>
-
 <p>flag : <code>rgbCTF{ARM_1z_2_eZ_9b7f8d}</code></p>
-
 <h1>Hallo?</h1>
-
-<p>First I convert it into a wav file, then I run <a target="_blank" href="https://github.com/ribt/dtmf-decoder/">this tool</a> to detect the dtmf tones, it's not really accurate, so I need to listen it a few times until I found the flag. <br />
+<p>First I convert it into a wav file, then I run <a href="https://github.com/ribt/dtmf-decoder/" target="_blank">this tool</a> to detect the dtmf tones, it's not really accurate, so I need to listen it a few times until I found the flag. <br/>
 flag : <code>rgbctf#yeet#dtmf#tones#</code></p>
-
 <h1>A Basic Challenge</h1>
-
 <p>This challenge is a decoding challenge from various base, starting from binary(base 2),hex(base 16), and so on. I wrote a simple python script that you can hopefully understand  </p>
-
 <div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">base64</span>
-<span class="n">cipher</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;basic_chall.txt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
-<span class="n">flag</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="n">cipher</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"basic_chall.txt"</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">" "</span><span class="p">)</span>
+<span class="n">flag</span> <span class="o">=</span> <span class="s2">""</span>
 <span class="c1"># binary decode</span>
 <span class="k">for</span> <span class="n">each</span> <span class="ow">in</span> <span class="n">cipher</span><span class="p">:</span>
     <span class="n">flag</span> <span class="o">+=</span> <span class="nb">chr</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">each</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
-<span class="n">cipher</span> <span class="o">=</span> <span class="n">flag</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
-<span class="n">flag</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="n">cipher</span> <span class="o">=</span> <span class="n">flag</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">" "</span><span class="p">)</span>
+<span class="n">flag</span> <span class="o">=</span> <span class="s2">""</span>
 <span class="c1"># hex decode</span>
 <span class="k">for</span> <span class="n">each</span> <span class="ow">in</span> <span class="n">cipher</span><span class="p">:</span>
     <span class="n">flag</span> <span class="o">+=</span> <span class="nb">chr</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">each</span><span class="p">,</span><span class="mi">16</span><span class="p">))</span>
 <span class="c1"># base 64 decode</span>
 <span class="n">flag</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
-<span class="n">cipher</span> <span class="o">=</span> <span class="n">flag</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
-<span class="n">flag</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="n">cipher</span> <span class="o">=</span> <span class="n">flag</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">" "</span><span class="p">)</span>
+<span class="n">flag</span> <span class="o">=</span> <span class="s2">""</span>
 <span class="c1"># octal decode</span>
 <span class="k">for</span> <span class="n">each</span> <span class="ow">in</span> <span class="n">cipher</span><span class="p">:</span>
     <span class="n">flag</span> <span class="o">+=</span> <span class="nb">chr</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">each</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
 <span class="nb">print</span> <span class="p">(</span><span class="n">flag</span><span class="p">)</span>
 </code></pre></div>
-
-<p>flag : <code>rgbCTF{c0ngr4ts_0n_b3ing_B4SIC}</code>  </p>
-
+<p>flag : <code>rgbCTF{c0ngr4ts_0n_b3ing_B4SIC}</code> </p>
 <h1>Joke Check!</h1>
-
-<p>Given this ciphertext <code>crmNEQ{l_nstnvpy_nlpdlc_dlwlo}</code> it looks like it's already on the flag format, decoding using caesar cipher with the amount of 15 gives us the flag. <br />
-flag : <code>rgbCTF{a_chicken_caesar_salad}</code>  </p>
-
+<p>Given this ciphertext <code>crmNEQ{l_nstnvpy_nlpdlc_dlwlo}</code> it looks like it's already on the flag format, decoding using caesar cipher with the amount of 15 gives us the flag. <br/>
+flag : <code>rgbCTF{a_chicken_caesar_salad}</code> </p>
 <h1>A Fine Day</h1>
-
-<p>This time we are given a larger ciphertext with something that looks like the flag at the end, this time because there's a lot of character it is feasible to do a <a target="_blank" href="https://quipqiup.com/">substitution cipher</a>, although <a target="_blank" href="https://www.dcode.fr/affine-cipher">affine cipher</a> is the intended solution. <br />
-flag : <code>rgbCTF{a_fine_affine_cipher}</code>  </p>
-
+<p>This time we are given a larger ciphertext with something that looks like the flag at the end, this time because there's a lot of character it is feasible to do a <a href="https://quipqiup.com/" target="_blank">substitution cipher</a>, although <a href="https://www.dcode.fr/affine-cipher" target="_blank">affine cipher</a> is the intended solution. <br/>
+flag : <code>rgbCTF{a_fine_affine_cipher}</code> </p>
 <h1>r/ciphers</h1>
-
-<p>This time the intended solution is to do a <a target="_blank" href="https://quipqiup.com/">substitution cipher</a> <br />
-flag : <code>rgbCTF{just_4sk_th3_int3rn3t_t0_d3crypt_it}</code>  </p>
-
+<p>This time the intended solution is to do a <a href="https://quipqiup.com/" target="_blank">substitution cipher</a> <br/>
+flag : <code>rgbCTF{just_4sk_th3_int3rn3t_t0_d3crypt_it}</code> </p>
 <h1>Simple RSA</h1>
-
-<p>This is where things starts to get real, we are given [RSA](https://en.wikipedia.org/wiki/RSA_(cryptosystem) public keys, where public keys are used to encrypt a message, to decrypt the message, we have to factor <code>n</code>, and then perform some calculations stated in wikipedia, RSA security heavily relies on how large the number is, however in this case <code>n</code> is relatively small, we can find it's factor at the <a target="_blank" href="http://factordb.com/">database</a>  </p>
-
+<p>This is where things starts to get real, we are given [RSA](https://en.wikipedia.org/wiki/RSA_(cryptosystem) public keys, where public keys are used to encrypt a message, to decrypt the message, we have to factor <code>n</code>, and then perform some calculations stated in wikipedia, RSA security heavily relies on how large the number is, however in this case <code>n</code> is relatively small, we can find it's factor at the <a href="http://factordb.com/" target="_blank">database</a> </p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">Crypto.Util.number</span> <span class="kn">import</span> <span class="n">long_to_bytes</span> <span class="k">as</span> <span class="n">ltb</span>
 <span class="n">n</span><span class="o">=</span> <span class="mi">5620911691885906751399467870749963159674169260381</span>
 <span class="n">e</span><span class="o">=</span><span class="mi">65537</span>
@@ -317,46 +267,35 @@ flag : <code>rgbCTF{just_4sk_th3_int3rn3t_t0_d3crypt_it}</code>  </p>
 <span class="k">def</span> <span class="nf">modinv</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
     <span class="n">g</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">egcd</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">g</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;modular inverse does not exist&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">'modular inverse does not exist'</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">x</span> <span class="o">%</span> <span class="n">m</span>
 <span class="n">d</span> <span class="o">=</span> <span class="n">modinv</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">phi</span><span class="p">)</span>
 <span class="nb">print</span> <span class="p">(</span><span class="n">ltb</span><span class="p">(</span><span class="nb">pow</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">n</span><span class="p">))</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
 </code></pre></div>
-
-<p>we get a flipped flag but we can just flip it back. <br />
-flag : <code>rgbCTF{brut3_f0rc3}</code>  </p>
-
+<p>we get a flipped flag but we can just flip it back. <br/>
+flag : <code>rgbCTF{brut3_f0rc3}</code> </p>
 <h1>Pieces</h1>
-
 <p>In this challenge we have to reverse the divide() function to get the flag back, we can see the divide function divide our input by 2, and then added it to variable ans, and then compared with something, so we can simply multiply the characters they used to compare and get the flag, however it's not that easy,  </p>
-
 <pre><code>61 / 2 = 30
 60 / 2 = 30
 </code></pre>
-
 <p>In above example we can see two different numbers have the same result when divided by 2 because of rounding, but we see that they also added <code>/</code> or <code>|</code> in variable ans so we can know whether or not the character supposed to be even, or odd numbers.  </p>
-
-<div class="codehilite"><pre><span></span><code><span class="n">cipher</span> <span class="o">=</span> <span class="s2">&quot;9|2/9/:|4/7|8|4/2/1/2/9/&quot;</span>
-<span class="n">flag</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+<div class="codehilite"><pre><span></span><code><span class="n">cipher</span> <span class="o">=</span> <span class="s2">"9|2/9/:|4/7|8|4/2/1/2/9/"</span>
+<span class="n">flag</span> <span class="o">=</span> <span class="s1">''</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">cipher</span><span class="p">),</span><span class="mi">2</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">cipher</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;|&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">cipher</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"|"</span><span class="p">:</span>
         <span class="n">flag</span> <span class="o">+=</span> <span class="nb">chr</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">cipher</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">flag</span> <span class="o">+=</span> <span class="nb">chr</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">cipher</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">*</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
 <span class="nb">print</span> <span class="p">(</span><span class="n">flag</span><span class="p">)</span>
 </code></pre></div>
-
-<p>flag: <code>rgbCTF{restinpieces}</code>  </p>
-
+<p>flag: <code>rgbCTF{restinpieces}</code> </p>
 <h1>Shoob</h1>
-
-<p>For this challenge we gonna use <a target="_blank" href="https://aperisolve.fr/">a very nice stego tool</a>, after uploading the image, we can see the very first superimposed image has some red text in it which is the flag. <br />
-flag : <code>rgbCTF{3zier_4haN_s4n1ty}</code>  </p>
-
+<p>For this challenge we gonna use <a href="https://aperisolve.fr/" target="_blank">a very nice stego tool</a>, after uploading the image, we can see the very first superimposed image has some red text in it which is the flag. <br/>
+flag : <code>rgbCTF{3zier_4haN_s4n1ty}</code> </p>
 <h1>Quirky Resolution</h1>
-
-<p>Using aperisolve, we can see a large qrcode, scanning it with a mobile qrcode scanner gives us the flag. <br />
+<p>Using aperisolve, we can see a large qrcode, scanning it with a mobile qrcode scanner gives us the flag. <br/>
 flag : <code>rgbCTF{th3_qu1rk!er_th3_b3tt3r}</code></p>
 
 </div>

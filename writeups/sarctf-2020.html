@@ -53,49 +53,33 @@
     <div class="main-content text-normal">
         <div>
     <h1>SAR CTF 2020 Writeup By (mendung)10^6</h1>
-
 <h2>Author : Wrth</h2>
-
 <h3>True Detective</h3>
-
 <blockquote>
-  <p>1681 points <br />
-  And now it's time to show the skills of a real detective! <br />
+<p>1681 points <br/>
+  And now it's time to show the skills of a real detective! <br/>
   https://clck.ru/MCop6  </p>
 </blockquote>
-
 <p>In this challenge we have to use our "detective skills" to find all the places in the picture, however I discovered a trick after the CTF ends that we can actually see the warning in the website source.</p>
-
 <p>Type <code>view source:</code> in front of the google forms website and we scroll down to the very bottom and we can find the flag  </p>
-
-<p><img src="img/img1.png" alt="img1" />  </p>
-
+<p><img alt="img1" src="/writeups-pic/1.png"/> </p>
 <p>Flag : <code>FLAG{08c49c3d9ae88983437729747bcf1be8}</code> </p>
-
-<hr />
-
+<hr/>
 <h3>Invitation</h3>
-
 <blockquote>
-  <p>873 points
+<p>873 points
   Sherlock doesn't like going to parties. But this time an invitation came to him, which he could not refuse.
-  <a target="_blank" href="https://sarctf.tk/files/d5178d11789ae7616b4c3d462b8b9a27/task_3e55f673c10d.pdf?token=eyJ1c2VyX2lkIjo1MDAsInRlYW1faWQiOjMxOCwiZmlsZV9pZCI6MTB9.Xk49Ow.6s57deWU5ZOvmTCxcS3AS_yR7ME">task_3e55f673c10d.pdf</a></p>
+  <a href="https://sarctf.tk/files/d5178d11789ae7616b4c3d462b8b9a27/task_3e55f673c10d.pdf?token=eyJ1c2VyX2lkIjo1MDAsInRlYW1faWQiOjMxOCwiZmlsZV9pZCI6MTB9.Xk49Ow.6s57deWU5ZOvmTCxcS3AS_yR7ME" target="_blank">task_3e55f673c10d.pdf</a></p>
 </blockquote>
-
-<p>In this challenge we are given a ciphertext with bunch of stick figures, I read some book of Sherlock Holmes and I know this is a <a target="_blank" href="https://www.dcode.fr/dancing-men-cipher">dancing men cipher</a>. However decoding each symbol by hand is quite inefficient, my friend propose to find the word <code>flag</code> first and starts decode around it, here is what we got:  </p>
-
-<p><code>this master huntsman flag disco in Saratov that the adventure was most grave one while the sardonic smile which occa</code>  </p>
-
+<p>In this challenge we are given a ciphertext with bunch of stick figures, I read some book of Sherlock Holmes and I know this is a <a href="https://www.dcode.fr/dancing-men-cipher" target="_blank">dancing men cipher</a>. However decoding each symbol by hand is quite inefficient, my friend propose to find the word <code>flag</code> first and starts decode around it, here is what we got:  </p>
+<p><code>this master huntsman flag disco in Saratov that the adventure was most grave one while the sardonic smile which occa</code> </p>
 <p>we think that it just put the word flag randomly because I can't really see some "flag words" in it, so we decided to decode the whole ciphertext. a pdf file store a XObject instead of a normal image file, therefore we can see all the XObject identity of each character and convert it into a plaintext  </p>
-
-<p><img src="img/img2.png" alt="img2" />  </p>
-
-<p>The <code>R/Im</code> correspond to the position of character and 4 digit code after it is the identity <br />
+<p><img alt="img2" src="/writeups-pic/2.png"/> </p>
+<p>The <code>R/Im</code> correspond to the position of character and 4 digit code after it is the identity <br/>
 Here's the python script to sort it and assign single letter to each character  </p>
-
 <div class="codehilite"><pre><span></span><code><span class="n">text</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
-    <span class="n">text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;xxxx&quot;</span><span class="p">)</span>
+    <span class="n">text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"xxxx"</span><span class="p">)</span>
 <span class="n">text</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="mi">1151</span>
 <span class="n">text</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
 <span class="n">text</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span><span class="o">=</span><span class="mi">1145</span>
@@ -646,11 +630,11 @@ Here's the python script to sort it and assign single letter to each character  
 <span class="n">text</span><span class="p">[</span><span class="mi">98</span><span class="p">]</span><span class="o">=</span><span class="mi">1163</span>
 <span class="n">text</span><span class="p">[</span><span class="mi">99</span><span class="p">]</span><span class="o">=</span><span class="mi">1143</span>
 
-<span class="n">charnow</span> <span class="o">=</span> <span class="s2">&quot;a&quot;</span>
+<span class="n">charnow</span> <span class="o">=</span> <span class="s2">"a"</span>
 <span class="n">x</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="n">y</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="s2">&quot;xxxx&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="s2">"xxxx"</span><span class="p">:</span>
         <span class="k">break</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)])</span>
@@ -660,18 +644,14 @@ Here's the python script to sort it and assign single letter to each character  
         <span class="n">y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)])</span>
         <span class="n">charnow</span> <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">charnow</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
 
-<span class="nb">print</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-<span class="nb">print</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;1159&quot;</span><span class="p">]</span>
+<span class="nb">print</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="nb">print</span> <span class="n">x</span><span class="p">[</span><span class="s2">"1159"</span><span class="p">]</span>
 </code></pre></div>
-
-<p>output : <br />
-<code>abcdeafghhgiajhkigbalhecmhfdbbmdbmknoapknfglqehipehdbhgrheaghmalafdmdfekllqohskishoaflqtkujhbdfgbmhbmoaiikpdgshfbnohaflqmhdobmkilhecdeukigdfgebhofdfgeaihfbvebmhwihdlkpbmhebohhbidltepidemhgntkfmaednebhohphdbnoheaedcbmdbmaerokcechohgodcfgkcfafbmknwmbdfgmaebmafiateukltoheehgajfhcfkbcmdbcaigrhdebchchohdrknbbkmnfbgkcfafbmhgdojxnfwihkpuoalafdiikfgkfrnbacdechiideenohgpoklbmhrhdoafwkpbmaeldebhomnfbeldfpidwgaeukafydodbksbmdbbmhdgshfbnohcdedlkebwodshkfhcmaihbmhedogkfauelaihcmaumkuudeakfdiiqrokjhbmoknwmmaedeuhbauwikklrkghgiabbihwkkgpkobmhkrxhubkpknoznheb</code>  </p>
-
-<p>notice there are some symbols, which means there are more than 26 letters there, there are a few uppercase letter which we have to manually fix it and just put it in <a target="_blank" href="https://quipqiup.com/">quipqiup</a> to get the plaintext  </p>
-
+<p>output : <br/>
+<code>abcdeafghhgiajhkigbalhecmhfdbbmdbmknoapknfglqehipehdbhgrheaghmalafdmdfekllqohskishoaflqtkujhbdfgbmhbmoaiikpdgshfbnohaflqmhdobmkilhecdeukigdfgebhofdfgeaihfbvebmhwihdlkpbmhebohhbidltepidemhgntkfmaednebhohphdbnoheaedcbmdbmaerokcechohgodcfgkcfafbmknwmbdfgmaebmafiateukltoheehgajfhcfkbcmdbcaigrhdebchchohdrknbbkmnfbgkcfafbmhgdojxnfwihkpuoalafdiikfgkfrnbacdechiideenohgpoklbmhrhdoafwkpbmaeldebhomnfbeldfpidwgaeukafydodbksbmdbbmhdgshfbnohcdedlkebwodshkfhcmaihbmhedogkfauelaihcmaumkuudeakfdiiqrokjhbmoknwmmaedeuhbauwikklrkghgiabbihwkkgpkobmhkrxhubkpknoznheb</code> </p>
+<p>notice there are some symbols, which means there are more than 26 letters there, there are a few uppercase letter which we have to manually fix it and just put it in <a href="https://quipqiup.com/" target="_blank">quipqiup</a> to get the plaintext  </p>
 <p>```txt biasa caranya gimana sih supaya ngga cuma garis lurus wkwkwk
 it was indeed like old times when, at that hour, i found myself seated beside him in a hansom, my revolver in my pocket and the thrill of adventure in my heart. holmes was cold and stern and silent. as the gleam of the street-lamps flashed upon his austere features i saw that his brows were drawn down in thought and his thin lips compressed. i knew not what wild beast we were about to hunt down in the dark jungle of criminal london, but i was well assured from the bearing of this master huntsman flag disco in saratov that the adventure was a most grave one, while the sardonic smile which occasionally broke through his ascetic gloom boded little good for the object of our quest</p>
-
 <pre><code>
 it was a pharagraph from [one of the Sherlock Holmes book](https://etc.usf.edu/lit2go/178/the-return-of-sherlock-holmes/3226/chapter-i-the-adventure-of-the-empty-house/) we can see that the word that isn't in the original one is `flag disco in saratov`, and thats the flag!
 
@@ -756,354 +736,250 @@ while True:
     if x[len(x)-1] == "/" and x[len(x)-2] == "/" and x[len(x)-3] == "/":
         print decrypt(x)
 </code></pre>
-
-<p>output: <br />
+<p>output: <br/>
 <code>HERE UPON THE LAPEL OF MY COAT YOU MAY SEE THE RIBBON OF MY DECORATION BUT THE MEDAL ITSELF I KEEP IN A LEATHERN POUCH AT HOME FLAG SHERLOCK LIKES YOUR MORSE</code></p>
-
 <p>Flag : <code>FLAG{SHERLOCK_LIKES_YOUR_MORSE}</code></p>
-
-<hr />
-
+<hr/>
 <h3>Mind palace II</h3>
-
 <blockquote>
-  <p>890 points
+<p>890 points
   It's time to strain your brains.</p>
-  
-  <p>nc 212.47.229.1 33002</p>
+<p>nc 212.47.229.1 33002</p>
 </blockquote>
-
 <p>It's rot13, just write a script to answer it automatically:</p>
-
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
 
-<span class="n">r</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s2">&quot;212.47.229.1&quot;</span><span class="p">,</span><span class="mi">33002</span><span class="p">)</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s2">"212.47.229.1"</span><span class="p">,</span><span class="mi">33002</span><span class="p">)</span>
 
 <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
     <span class="nb">print</span> <span class="n">response</span>
-    <span class="k">if</span> <span class="s2">&quot;FLAG&quot;</span> <span class="ow">in</span> <span class="n">response</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="s2">"FLAG"</span> <span class="ow">in</span> <span class="n">response</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
         <span class="k">break</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;  &quot;</span><span class="p">)</span>
-    <span class="n">cipher</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="n">cipher</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;rot13&quot;</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"  "</span><span class="p">)</span>
+    <span class="n">cipher</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">cipher</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"rot13"</span><span class="p">)</span>
     <span class="n">r</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-    <span class="nb">print</span> <span class="s2">&quot;DONE&quot;</span>
+    <span class="nb">print</span> <span class="s2">"DONE"</span>
 </code></pre></div>
-
 <p>Flag : <code>FLAG{Y0U_V3RY_F45T3R_CRYPT0GR4PH}</code></p>
-
-<hr />
-
+<hr/>
 <h3>Mind palace III</h3>
-
 <blockquote>
-  <p>896 points
+<p>896 points
   100% of brain CPU</p>
-  
-  <p>nc 212.47.229.1 33003</p>
+<p>nc 212.47.229.1 33003</p>
 </blockquote>
-
 <p>It's a bitwise operation, just write a script to answer it automatically:  </p>
-
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
 
-<span class="n">r</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s2">&quot;212.47.229.1&quot;</span><span class="p">,</span><span class="mi">33003</span><span class="p">)</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s2">"212.47.229.1"</span><span class="p">,</span><span class="mi">33003</span><span class="p">)</span>
 <span class="n">response</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
 <span class="c1">#make this twice because there is a header at the beginning lol</span>
-<span class="n">operation</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">[&gt;] &quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+<span class="n">operation</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">[&gt;] "</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">" "</span><span class="p">)</span>
 <span class="nb">print</span> <span class="n">response</span>
 <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="k">if</span> <span class="n">operation</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;AND&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="n">operation</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"AND"</span><span class="p">:</span>
         <span class="n">result</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">operation</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&amp;</span> <span class="nb">int</span><span class="p">(</span><span class="n">operation</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-<span class="k">if</span> <span class="n">operation</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;OR&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="n">operation</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"OR"</span><span class="p">:</span>
         <span class="n">result</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">operation</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">|</span> <span class="nb">int</span><span class="p">(</span><span class="n">operation</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-<span class="k">if</span> <span class="n">operation</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;XOR&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="n">operation</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"XOR"</span><span class="p">:</span>
         <span class="n">result</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">operation</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">^</span> <span class="nb">int</span><span class="p">(</span><span class="n">operation</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
 
 <span class="n">r</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">result</span><span class="p">))</span>
-<span class="nb">print</span> <span class="s2">&quot;DONE&quot;</span>
+<span class="nb">print</span> <span class="s2">"DONE"</span>
 
 <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
-    <span class="n">operation</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;[&gt;] &quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+    <span class="n">operation</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"[&gt;] "</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">" "</span><span class="p">)</span>
     <span class="nb">print</span> <span class="n">response</span>
-    <span class="k">if</span> <span class="s2">&quot;FLAG&quot;</span> <span class="ow">in</span> <span class="n">response</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">"FLAG"</span> <span class="ow">in</span> <span class="n">response</span><span class="p">:</span>
         <span class="k">break</span>
     <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">if</span> <span class="n">operation</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;AND&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">operation</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"AND"</span><span class="p">:</span>
         <span class="n">result</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">operation</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&amp;</span> <span class="nb">int</span><span class="p">(</span><span class="n">operation</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-    <span class="k">if</span> <span class="n">operation</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;OR&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">operation</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"OR"</span><span class="p">:</span>
         <span class="n">result</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">operation</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">|</span> <span class="nb">int</span><span class="p">(</span><span class="n">operation</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-    <span class="k">if</span> <span class="n">operation</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;XOR&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">operation</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"XOR"</span><span class="p">:</span>
         <span class="n">result</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">operation</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">^</span> <span class="nb">int</span><span class="p">(</span><span class="n">operation</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
 
     <span class="n">r</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">result</span><span class="p">))</span>
-    <span class="nb">print</span> <span class="s2">&quot;DONE&quot;</span>
+    <span class="nb">print</span> <span class="s2">"DONE"</span>
 </code></pre></div>
-
 <p>Flag : <code>FLAG{0HH_Y0UR3_4_V3RY_5M3RT_M4TH3M4T1C}</code></p>
-
-<hr />
-
+<hr/>
 <h3>Magic of numbers</h3>
-
 <blockquote>
-  <p>902 points
+<p>902 points
   Do you think Sherlock can beat a computer in math?</p>
-  
-  <p>nc 212.47.229.1 33004</p>
+<p>nc 212.47.229.1 33004</p>
 </blockquote>
-
 <p>this is just an addition, but the last question is <code>0.1 + 0.2</code>, which have some floating point error if you type it in python interpreter, so instead send <code>0.30000000000000004</code> and get the flag  </p>
-
 <p>Flag : <code>FLAG{MaGiC_0f_NuMbErS}</code></p>
-
 <h1>SarCTF 2020 WriteUp by (mendung)10^6</h1>
-
 <h2>Author: f4r4w4y</h2>
-
 <h3>Door Paradox (821 pts)</h3>
-
-<p><strong>Category: Web</strong> <br />
+<p><strong>Category: Web</strong> <br/>
 Challenge description:</p>
-
 <blockquote>
-  <p>Here comes an interesting fact. 221B Baker Street didn’t exist. During the time when the detective was being written, Baker Street was not long and house numbers did not go above 85. The house numbers were written on the front doors of the houses. Although contemporary Museum of Sherlock Holmes has an adresse « 221B Baker Street » it is actually located between house numbers 237 and 241. In reality it’s 239. But let’s go back to the point of the competition. We wrote a messenger for you, because we want you to be comfortable talking. Account for you: test:test</p>
+<p>Here comes an interesting fact. 221B Baker Street didn’t exist. During the time when the detective was being written, Baker Street was not long and house numbers did not go above 85. The house numbers were written on the front doors of the houses. Although contemporary Museum of Sherlock Holmes has an adresse « 221B Baker Street » it is actually located between house numbers 237 and 241. In reality it’s 239. But let’s go back to the point of the competition. We wrote a messenger for you, because we want you to be comfortable talking. Account for you: test:test</p>
 </blockquote>
-
 <p>Challenge Link : http://sherlock-message.ru</p>
-
-<p>First i do some reconnaissance <br />
+<p>First i do some reconnaissance <br/>
 - Login with uname = <code>test</code>, pass = <code>test</code>
 - Check all the menu
 - find a textbox and able to send message; tried sql injection, xss and all stuff in it but no work
 - Check the message and we can see message from other user such as admin1 and admin2</p>
-
 <p>From last point of recon, we probably have to check message between admin1 and admin2 and to be able to do so we have to be one of the admin first so i check on the login request, and nothing interesting</p>
-
 <p>So i check request sent when clicking on <code>Messages</code> menu, and you can see there is <code>POST</code> request sent</p>
-
-<p><img src="img/doorparadox.png" alt="gambar1" /></p>
-
+<p><img alt="gambar1" src="/writeups-pic/3.png"/></p>
 <p>And indeed parameter of the post request seems crackable </p>
-
 <p><code>key = eccbc87e4b5ce2fe28308fd9f2a7baf3</code></p>
-
-<p>Go <a target="_blank" href="https://crackstation.net/">here</a> to crack the key and it shows that it is md5 of <code>3</code> <br />
+<p>Go <a href="https://crackstation.net/" target="_blank">here</a> to crack the key and it shows that it is md5 of <code>3</code> <br/>
 I guess <code>3</code> is id of user <code>test</code> so lets change the <code>key</code> param by changing local cookie of <code>access_key</code> with md5 of <code>1</code> and see the message</p>
-
 <p>And we got the flag = <strong>FLAG{iD00r<em>with</em>insecure_token}</strong></p>
-
-<p><img src="img/doorparadox2.png" alt="gambar2" /></p>
-
-<hr />
-
+<p><img alt="gambar2" src="/writeups-pic/4.png"/></p>
+<hr/>
 <h3>Admin (957 pts)</h3>
-
-<p><strong>Category: Web</strong> <br />
+<p><strong>Category: Web</strong> <br/>
 Challenge Description:</p>
-
 <blockquote>
-  <p>I'm not an expert, but it seems to me that something needs to be hacked here</p>
+<p>I'm not an expert, but it seems to me that something needs to be hacked here</p>
 </blockquote>
-
 <p>Challenge Link : http://sherlock-message.ru/admin</p>
-
 <p>This challenge is on the same site as <code>Door Paradox</code></p>
-
 <p>I stack on this challenge for long time until organizers give 2 hints which are
 - just one million possible combinations..
 - I think the code is somewhere between <strong>260000</strong> and <strong>280000</strong></p>
-
 <p>There is <code>forgot your password</code> button on the site that ask for 6 digit secret code so as what i guess before we just need to bruteforce the code, and because the hint says its around 260000 and 280000 so we only need to bruteforce numbers between them</p>
-
 <p>Here's the script i made to do so:</p>
-
 <div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">requests</span> 
 
 <span class="c1"># defining the api-endpoint  </span>
-<span class="n">API_ENDPOINT</span> <span class="o">=</span> <span class="s2">&quot;http://sherlock-message.ru/api/admin.restore&quot;</span>
+<span class="n">API_ENDPOINT</span> <span class="o">=</span> <span class="s2">"http://sherlock-message.ru/api/admin.restore"</span>
 
 <span class="n">i</span> <span class="o">=</span> <span class="mi">260000</span>
-<span class="nb">hash</span> <span class="o">=</span> <span class="s1">&#39;a48659a0024e30fdf1ff41dfee1acf69&#39;</span>
+<span class="nb">hash</span> <span class="o">=</span> <span class="s1">'a48659a0024e30fdf1ff41dfee1acf69'</span>
 <span class="n">need_sms</span> <span class="o">=</span> <span class="kc">True</span>
 
 <span class="k">while</span><span class="p">(</span><span class="n">need_sms</span><span class="p">)</span> <span class="p">:</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;sms_code = &quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;need_sms = &quot;</span><span class="p">,</span> <span class="n">need_sms</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"sms_code = "</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"need_sms = "</span><span class="p">,</span> <span class="n">need_sms</span><span class="p">)</span>
 
-    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;hash&#39;</span><span class="p">:</span><span class="nb">hash</span><span class="p">,</span> 
-            <span class="s1">&#39;sms_code&#39;</span><span class="p">:</span><span class="n">i</span><span class="p">,}</span> 
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'hash'</span><span class="p">:</span><span class="nb">hash</span><span class="p">,</span> 
+            <span class="s1">'sms_code'</span><span class="p">:</span><span class="n">i</span><span class="p">,}</span> 
 
     <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span> <span class="o">=</span> <span class="n">API_ENDPOINT</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">)</span> 
 
     <span class="n">data</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;Incorrect hash&#39;</span> <span class="p">:</span>
-        <span class="nb">hash</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">][</span><span class="s1">&#39;new_hash&#39;</span><span class="p">]</span>
-        <span class="n">need_sms</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">][</span><span class="s1">&#39;need_sms&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s1">'response'</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">'Incorrect hash'</span> <span class="p">:</span>
+        <span class="nb">hash</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">'response'</span><span class="p">][</span><span class="s1">'new_hash'</span><span class="p">]</span>
+        <span class="n">need_sms</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">'response'</span><span class="p">][</span><span class="s1">'need_sms'</span><span class="p">]</span>
         <span class="n">i</span><span class="o">+=</span><span class="mi">1</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">need_sms</span> <span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Correct Code = &#39;</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">'Correct Code = '</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
             <span class="k">break</span>
     <span class="k">else</span> <span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Oops auth error&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Oops auth error"</span><span class="p">)</span>
         <span class="k">break</span>
 </code></pre></div>
-
 <p>flag = <strong>FLAG{bruTe<em>with</em>hash_f0rce}</strong></p>
-
-<hr />
-
+<hr/>
 <h3>Car for Sherlock (1964 pts)</h3>
-
-<p><strong>Category: Web</strong> <br />
+<p><strong>Category: Web</strong> <br/>
 Challenge Description:</p>
-
 <blockquote>
-  <p>While chasing a serial killer Sherlock Holmes stopped a wrong person. Now, thanks to my « bot », you can buy a car for Sherlock, so he doesn’t have to run chasing taxis anymore.</p>
+<p>While chasing a serial killer Sherlock Holmes stopped a wrong person. Now, thanks to my « bot », you can buy a car for Sherlock, so he doesn’t have to run chasing taxis anymore.</p>
 </blockquote>
-
 <p>Challenge Link : https://vk.com/club187880935</p>
-
 <p>We were given a link to vk.com so we have to create an account there.</p>
-
 <p>So there is a bot in the given link
-<img src="img/car.png" alt="gambar1" /></p>
-
-<p>And we can send them a message <br />
-<img src="img/car2.png" alt="gambar2" /></p>
-
+<img alt="gambar1" src="/writeups-pic/5.png"/></p>
+<p>And we can send them a message <br/>
+<img alt="gambar2" src="/writeups-pic/6.png"/></p>
 <p>Sending <code>/commands</code> will make the bot reply like this
-<img src="img/car3.png" alt="gambar3" /></p>
-
+<img alt="gambar3" src="/writeups-pic/7.png"/></p>
 <p>So we need to get 101 money in order to buy FLAG from the bot but we only have 100 money</p>
-
 <p>I try all the commands and after lots of trying i just notice some noticeable delay when selling a product, maybe <code>race condition</code> (?), so i try to buy 1 product and send <code>/sell</code> commands many time at once and surely it worked</p>
-
-<p><img src="img/car4.png" alt="gambar4" /></p>
-
+<p><img alt="gambar4" src="/writeups-pic/8.png"/></p>
 <p>it gave us the <code>Good Sell</code> twice and now we have 200 money, so just buy the flag</p>
-
-<p><img src="img/car5.png" alt="gambar5" /></p>
-
+<p><img alt="gambar5" src="/writeups-pic/9.png"/></p>
 <p>flag = <strong>FLAG{RaCe<em>CtF</em>C0NdItI0n}</strong></p>
-
-<hr />
-
+<hr/>
 <h3>Doc. Holmes (100 pts)</h3>
-
-<p><strong>Category: Forensics</strong> <br />
+<p><strong>Category: Forensics</strong> <br/>
 Challenge Description:</p>
-
 <blockquote>
-  <p>Sherlock got it on his super secret channels. You have received a copy of mail. Is everything okay with it?</p>
+<p>Sherlock got it on his super secret channels. You have received a copy of mail. Is everything okay with it?</p>
 </blockquote>
-
-<p>And we were given a file : <a target="_blank" href="challs/some.file">some.file</a></p>
-
+<p>And we were given a file : <a href="challs/some.file" target="_blank">some.file</a></p>
 <p>Doing file command on it says that its a Ms Word file</p>
-
 <div class="codehilite"><pre><span></span><code><span class="o">[</span>fai@f4r4w4y doc-holmes<span class="o">]</span>$ file some.file 
 some.file: Microsoft Word <span class="m">2007</span>+
 </code></pre></div>
-
 <p>I tried binwalk to extract some hidden files inside and got these bunch of files from it</p>
-
 <div class="codehilite"><pre><span></span><code><span class="o">[</span>fai@f4r4w4y doc-holmes<span class="o">]</span>$ <span class="nb">cd</span> _some.file.extracted/
 <span class="o">[</span>fai@f4r4w4y _some.file.extracted<span class="o">]</span>$ ls
 total <span class="m">288</span>
 -rw-r--r-- <span class="m">1</span> wheel <span class="m">276460</span> Feb <span class="m">15</span> <span class="m">21</span>:39  <span class="m">0</span>.zip
--rw-r--r-- <span class="m">1</span> wheel   <span class="m">1363</span> Jan  <span class="m">1</span>  <span class="m">1980</span> <span class="s1">&#39;[Content_Types].xml&#39;</span>
+-rw-r--r-- <span class="m">1</span> wheel   <span class="m">1363</span> Jan  <span class="m">1</span>  <span class="m">1980</span> <span class="s1">'[Content_Types].xml'</span>
 drwxr-xr-x <span class="m">2</span> wheel   <span class="m">4096</span> Feb <span class="m">15</span> <span class="m">21</span>:39  docProps
 drwxr-xr-x <span class="m">2</span> wheel   <span class="m">4096</span> Feb <span class="m">15</span> <span class="m">21</span>:39  _rels
 drwxr-xr-x <span class="m">5</span> wheel   <span class="m">4096</span> Feb <span class="m">15</span> <span class="m">21</span>:39  word
 </code></pre></div>
-
 <p>After looking some of the files, we got the flag
-<img src="img/docholmes.png" alt="gambar" /></p>
-
+<img alt="gambar" src="/writeups-pic/10.png"/></p>
 <p>flag = <strong>FLAG{prominentplace}</strong></p>
-
-<hr />
-
+<hr/>
 <h3>Blogger (632 pts)</h3>
-
-<p><strong>Category: Forensics</strong> <br />
+<p><strong>Category: Forensics</strong> <br/>
 Challenge Description:</p>
-
 <blockquote>
-  <p>Recently, John's keys began to be pressed by themselves when he runs his blog. You need to figure out what's the matter.</p>
+<p>Recently, John's keys began to be pressed by themselves when he runs his blog. You need to figure out what's the matter.</p>
 </blockquote>
-
-<p>And we were given a pcap file : <a target="_blank" href="challs/usb_here.pcapng">usb_here.pcapng</a></p>
-
+<p>And we were given a pcap file : <a href="challs/usb_here.pcapng" target="_blank">usb_here.pcapng</a></p>
 <p>Looking at the pcap file in wireshark we can see a lot of USB URB packet data, and if we look at one of the packet we can see there is Leftover Capture Data, so this is a captured keyboard key typed</p>
-
-<p><img src="img/blogger.png" alt="gambar1" /></p>
-
+<p><img alt="gambar1" src="/writeups-pic/11.png"/></p>
 <p>So we need to dump all the leftover capture data from all packet using this bash script:</p>
-
 <div class="codehilite"><pre><span></span><code>tshark -r usb_here.pcapng -T fields -e usb.capdata &gt; usb_dump.txt
 </code></pre></div>
-
-<p>and use <a target="_blank" href="script/keyboardTranslator.py">this</a> script to convert it to keyboard data</p>
-
+<p>and use <a href="script/keyboardTranslator.py" target="_blank">this</a> script to convert it to keyboard data</p>
 <div class="codehilite"><pre><span></span><code><span class="o">[</span>fai@f4r4w4y blogger<span class="o">]</span>$ python keyboardTranslator.py usb_dump.txt
     Sherlock, John, and Henry <span class="k">then</span> visit the holow in the hope of finding the hound. On the way, John notices what sems to be FLAG<span class="o">{</span>like_a_b10dh0und<span class="o">}</span>    E<span class="o">[</span>fa
 </code></pre></div>
-
 <p>and we get the flag = <strong>FLAG{like<em>a</em>b10dh0und}</strong></p>
-
-<hr />
-
+<hr/>
 <h3>Crossw0rd (309 pts)</h3>
-
-<p><strong>Category: Reverse</strong> <br />
+<p><strong>Category: Reverse</strong> <br/>
 Challenge Description:</p>
-
 <blockquote>
-  <p>While the children were playing toys, Sherlock was solving crosswords in large volumes.</p>
+<p>While the children were playing toys, Sherlock was solving crosswords in large volumes.</p>
 </blockquote>
-
-<p>And we were given a binary file : <a target="_blank" href="challs/crossw0rd">crossw0rd</a></p>
-
+<p>And we were given a binary file : <a href="challs/crossw0rd" target="_blank">crossw0rd</a></p>
 <p>Its a 64 bit binary</p>
-
 <div class="codehilite"><pre><span></span><code><span class="o">[</span>fai@f4r4w4y crossword<span class="o">]</span>$ file crossw0rd 
 crossw0rd: ELF <span class="m">64</span>-bit LSB pie executable, x86-64, version <span class="m">1</span> <span class="o">(</span>SYSV<span class="o">)</span>, dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, <span class="k">for</span> GNU/Linux <span class="m">3</span>.2.0, BuildID<span class="o">[</span>sha1<span class="o">]=</span>2e45dc319e3736db1643abb283b0ed9a18681261, not stripped
 </code></pre></div>
-
 <p>and when we run it</p>
-
 <div class="codehilite"><pre><span></span><code><span class="o">[</span>fai@f4r4w4y crossword<span class="o">]</span>$ ./crossw0rd 
-Welcome. You<span class="err">&#39;</span>re in <span class="k">function</span> check. Please Enter a password to <span class="k">continue</span>. <span class="m">1</span> attempt remaining:
+Welcome. You<span class="err">'</span>re in <span class="k">function</span> check. Please Enter a password to <span class="k">continue</span>. <span class="m">1</span> attempt remaining:
 <span class="nb">test</span>
 Wrong password! Your attempt is over.
 <span class="o">[</span>fai@f4r4w4y crossword<span class="o">]</span>$ 
 </code></pre></div>
-
 <p>It needs a kind of <code>password</code> and when its correct maybe it will give us the flag (?)</p>
-
-<p>So i open it in ghidra and see the main function <br />
-<img src="img/crossword.png" alt="gambar1" /></p>
-
-<p>There is check function, lets see it <br />
-<img src="img/crossword2.png" alt="gambar2" /></p>
-
+<p>So i open it in ghidra and see the main function <br/>
+<img alt="gambar1" src="/writeups-pic/12.png"/></p>
+<p>There is check function, lets see it <br/>
+<img alt="gambar2" src="/writeups-pic/13.png"/></p>
 <p>Inside of it we can see that our input buffer goes to other function called <code>checkInput</code> and it return a value and if its equal to <code>'\0'</code> it says <code>Wrong password! ...</code></p>
-
-<p>Looking at the <code>checkInput</code> function <br />
-<img src="img/crossword3.png" alt="gambar3" /></p>
-
+<p>Looking at the <code>checkInput</code> function <br/>
+<img alt="gambar3" src="/writeups-pic/14.png"/></p>
 <p>There is a check to an array which is our input buffer and its checking the array or in this case the string content (char inside the string) and check it to some value and if its right then <code>isCorrect</code> will be 1 and <code>checkInput</code> will also return 1 and password will be correct</p>
-
-<p>but if we see again that the <code>cVar1</code> is also checked with <code>b</code> function with our input goes into it so lets check the function <br />
-<img src="img/crossword4.png" alt="gambar4" /></p>
-
+<p>but if we see again that the <code>cVar1</code> is also checked with <code>b</code> function with our input goes into it so lets check the function <br/>
+<img alt="gambar4" src="/writeups-pic/15.png"/></p>
 <p>It got another check, so i guess the flag is the password and we just need to match each char in the string with the check value</p>
-
 <p>I manually checked it and got the flag = <strong>FLAG{3a5yr3v3r5ing}</strong></p>
 
 </div>
