@@ -70,7 +70,7 @@ Challenge Description:</p>
 <p>Challenge Link : https://github.com/utisss/UTCTF-20/tree/master/forensics-sstv</p>
 <p>Just by reading the description of the challenge we could understand that its a typical forensic challenge that has something to do with sstv, and with the fact that were given a <strong>wav</strong> file, my first guess is that it is the sstv signal that we have to put into some sstv decoder</p>
 <p>So i downloaded <a href="https://hamsoft.ca/pages/mmsstv.php" target="_blank">MMSSTV</a> and open it with my windows pc, play the wav file and the decoder will start to draw the image, and we should get the image like below <strong>(even though it might not as clear as this)</strong></p>
-<p><img alt="sstv" src="/writeups-pic/22.png"/></p>
+<p><img alt="sstv" src="/writeups-pic/25.png"/></p>
 <p>flag = <strong>utflag{6bdfeac1e2baa12d6ac5384cdfd166b0}</strong></p>
 <hr/>
 <h3>Basic (50 pts)</h3>
@@ -125,11 +125,11 @@ Challenge Description:</p>
 <p>Challenge Link : https://github.com/utisss/UTCTF-20/blob/master/forensics-spectrogram</p>
 <p>We are initially given a wav file, but there are no something to do with sstv so its an audio based forensic challenge, and with that lets open the wav file in <a href="https://www.audacityteam.org/" target="_blank">audacity</a></p>
 <p>Here's how it looks like in audacity</p>
-<p><img alt="audio1" src="/writeups-pic/23.png"/></p>
+<p><img alt="audio1" src="/writeups-pic/26.png"/></p>
 <p>Now lets see in spectrogram mode (as it is what always comes up in mind when solving this kind of challenge)</p>
-<p><img alt="audio2" src="/writeups-pic/24.png"/></p>
+<p><img alt="audio2" src="/writeups-pic/27.png"/></p>
 <p>There seem to be a flag but not clear, so just resize the window untill we can see it clearly</p>
-<p><img alt="audio3" src="/writeups-pic/25.png"/></p>
+<p><img alt="audio3" src="/writeups-pic/28.png"/></p>
 <p>flag = <strong>utflag{sp3tr0gr4m0ph0n3}</strong></p>
 <hr/>
 <h3>Zero (50 pts)</h3>
@@ -143,7 +143,7 @@ The file inside challenge link is different with what i got because the organize
 <p>But when you copy paste it to some of text editor (i use vscode), there are some unprintable character and when trying to delete it i got to do some countable bakcspaces to be able to delete the character</p>
 <p>After bit of researches online, there is this thing so called zero-width character, its some kind of encoding that set the char to have only zero width but indeed its still a char so it still have some value</p>
 <p>I carve content inside of the text using <a href="https://330k.github.io/misc_tools/unicode_steganography.html" target="_blank">this</a> website</p>
-<p><img alt="decode1" src="/writeups-pic/26.png"/></p>
+<p><img alt="decode1" src="/writeups-pic/29.png"/></p>
 <p>flag = <strong>utflag{whyNOT@sc11_4927aajbqk14}</strong></p>
 <hr/>
 <h3>Legend of Hackerman 1 (50 pts)</h3>
@@ -159,7 +159,7 @@ Challenge Description:</p>
 hackerman.png: data
 </code></pre></div>
 <p>I thought maybe the file is broken or something, so i checked with <code>hexdump -C hackerman.png | less</code></p>
-<p><img alt="hex1" src="/writeups-pic/27.png"/></p>
+<p><img alt="hex1" src="/writeups-pic/30.png"/></p>
 <p>Looking closely to the first couple of bytes it looks like png magic byte but some bytes are missing </p>
 <table>
 <thead>
@@ -180,7 +180,7 @@ hackerman.png: data
 </tbody>
 </table>
 <p>Just by fixing those bytes to png bytes will get the fixed image</p>
-<p><img alt="flag" src="/writeups-pic/28.png"/></p>
+<p><img alt="flag" src="/writeups-pic/31.png"/></p>
 <p>flag = <strong>utflag{3lit3_h4ck3r}</strong></p>
 <hr/>
 <h3>Legend of Hackerman 2 (50 pts)</h3>
@@ -192,7 +192,7 @@ Challenge Description:</p>
 <p>Challenge Link : https://github.com/utisss/UTCTF-20/tree/master/forensics-docx</p>
 <p>We are initially given a docx file, i straight to extract all the files inside using binwalk and got some of the files</p>
 <p>Going inside <code>word/media</code> we got so many images, because the description says that there is picture of flag so just iterate through all the pictures and find one which is the flag <strong>(image23.png)</strong></p>
-<p><img alt="image23" src="/writeups-pic/29.png"/></p>
+<p><img alt="image23" src="/writeups-pic/32.png"/></p>
 <p>flag = <strong>utflag{unz1p_3v3ryth1ng}</strong></p>
 <hr/>
 <h3>Basic [RE] (50 pts)</h3>
