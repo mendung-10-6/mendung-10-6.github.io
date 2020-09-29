@@ -59,64 +59,7 @@
     </div>
     <div class="main-content text-normal" data-simplebar>
         <div  class="blog-content">
-    <h1>I Love Rainbows</h1>
-<p>We are given a file each line containing 32-64 characters, which looks like hashes, using <a href="https://crackstation.net/" target="_blank">crackstation</a> we can see that each hash contains 1 to 2 characters from the flag, cracking all the hash and we got the flag. <br/>
-flag : <code>rgbCTF{4lw4ys_us3_s4lt_wh3n_h4shing}</code> </p>
-<h1>e</h1>
-<p>For this challenge N is insanely large, because of that the the ciphertext did not reach N at this point, so we can just take eth root of c and get the flag  </p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">gmpy2</span>
-<span class="kn">from</span> <span class="nn">Crypto.Util.number</span> <span class="kn">import</span> <span class="n">long_to_bytes</span> <span class="k">as</span> <span class="n">ltb</span>
-<span class="n">n</span> <span class="o">=</span> <span class="mh">0x5fb76f7f36c0d7788650e3e81fe18ad105970eb2dd19576d29e8a8697ebbd97f4fc2582bf1dc53d527953d9615439ca1b546b2fc1cd533db5fce6f72419f268e3182c0324a631a17d6b3e76540f52f2df51ca34983392d274f292139c28990660fa0e23d1b350da7aa7458a3783107a296dcd1720e32afb431954d8896f0587cd1c8f1d20701d6173b7cffe53679ebda80f137c83276d6628697961f5fcd39e18316770917338c6dc59a241dcdc66417fed42524c33093251c1d318b9dbeb6c3d0a69438b875958e8885d242d196e25bc73595e7f237c8124e07a79f7066f2dee393e2130306ba29e7ece1825798ff8b35416b3a0d96bcdc6eca5616ea2874954f8f88232450ddad3e109338bcc5d84e7b592a6b0871bd4130b84f81ed188e9d5495c8545aa8dea2b65e8605f5a49e3a1c221cbcc301665187658784a8f42a23c2ca2572477ba56ff19934019b48f5a1ab8a50626c85bdd476b11e8c1fb0b740c2370de3da5cc06371a7aa2c4e12eee3dc4cda07a8c84ba2bc3ee2017156468af95111d7ee5152ce35e66fa027a944b43c27fbd27faa5b4f9075be3526a7a5be8a533b523cd5c738c724e97597fc2e3666cfcad7c79d972ff8d9572100e860395cdc3761af3f4cc225a6df83a55802723f95cfba5918d83913f2cc9b219210249928c291310d449042772e2d0a50620d666a137f79770de6f10196b30cc756e1</span>
-<span class="n">e</span> <span class="o">=</span> <span class="mb">0b1101</span>
-<span class="n">c</span> <span class="o">=</span> <span class="n">gmpy2</span><span class="o">.</span><span class="n">mpz</span><span class="p">(</span><span class="mh">0x6003a15ff3f9bc74fcc48dc0f5fc59c31cb84df2424c9311d94cb40570eeaa78e0f8fc2917addd1afc8e5810b2e80a95019c88c4ee74849777eb9d0ee27ab80d3528c6f3f95a37d1581f9b3cd8976904c42f8613ee79cf8c94074ede9f034b61433f1fef835f2a0a45663ec4a0facedc068f6fa2b534c9c7a2f4789c699c2dcd952ed82180a6de00a51904c2df74eb73996845842276d5523c66800034351204b921d4780180ca646421c61033017e4986d9f6a892ed649c4fd40d4cf5b4faf0befb1e2098ee33b8bea461a8626dd8cd2eed05ccd471700e2a1b99ed347660cbd0f202212f6c0d7ad8ef6f878d887af0cd0429c417c9f7dd64890146b91152ea0c30637ce503635018fd2caf436a12378e5892992b8ec563f0988fc0cebd2926662d4604b8393fb2000</span><span class="p">)</span>
-<span class="n">gmpy2</span><span class="o">.</span><span class="n">get_context</span><span class="p">()</span><span class="o">.</span><span class="n">precision</span><span class="o">=</span><span class="mi">200</span>
-<span class="n">x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">gmpy2</span><span class="o">.</span><span class="n">root</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="n">e</span><span class="p">))</span>
-<span class="k">assert</span> <span class="nb">pow</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">e</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="o">==</span> <span class="n">c</span>
-<span class="nb">print</span> <span class="n">ltb</span><span class="p">(</span><span class="n">x</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-</code></pre></div>
-<p>flag : <code>rgbCTF{lucky_number_13}</code> </p>
-<h1>Occasionally Tested Protocol</h1>
-<p>Classic OTP with time as the seed, we can just get time the same time as we connect to the server, and test the seed locally. You can see the script that I used to find the approximate time on the commented code below.  </p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">seed</span><span class="p">,</span> <span class="n">randint</span> <span class="k">as</span> <span class="n">w</span>
-<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
-<span class="c1"># import pwn</span>
-<span class="c1"># j = int(time())</span>
-<span class="c1"># print (j)</span>
-<span class="c1"># r = pwn.remote("167.172.123.213", 12345)</span>
-<span class="c1"># print (r.recv())</span>
-<span class="c1"># r.close()</span>
-
-
-<span class="n">try_seed</span> <span class="o">=</span> <span class="mi">1594516169</span>
-<span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2327</span><span class="p">,</span><span class="mi">5113</span><span class="p">,</span><span class="mi">7373</span><span class="p">,</span><span class="mi">8967</span><span class="p">,</span><span class="mi">5424</span><span class="p">,</span><span class="mi">9245</span><span class="p">,</span><span class="mi">9867</span><span class="p">,</span><span class="mi">7147</span><span class="p">,</span><span class="mi">7924</span><span class="p">,</span><span class="mi">723</span><span class="p">]</span>
-<span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="k">while</span> <span class="ow">not</span> <span class="n">found</span><span class="p">:</span>
-    <span class="n">seed</span><span class="p">(</span><span class="n">try_seed</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">w</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">10000</span><span class="p">)</span> <span class="o">==</span> <span class="n">result</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
-            <span class="n">found</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="n">try_seed</span><span class="o">+=</span><span class="mi">1</span>
-            <span class="k">break</span>
-<span class="n">b</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([</span><span class="n">w</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">40</span><span class="p">)])</span>
-
-<span class="n">flag</span> <span class="o">=</span> <span class="nb">int</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="mi">9756397644136381438199947801771447561151891907369603561251869566720</span><span class="p">,</span><span class="mi">999</span><span class="p">,</span><span class="s1">'little'</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="sa">b</span><span class="s2">"</span><span class="se">\x00</span><span class="s2">"</span><span class="p">)</span>
-<span class="n">n</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([</span><span class="n">l</span> <span class="o">^</span> <span class="n">p</span> <span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">flag</span><span class="p">,</span> <span class="n">b</span><span class="p">)])</span>
-<span class="nb">print</span> <span class="p">(</span><span class="n">n</span><span class="p">)</span>
-</code></pre></div>
-<p>flag : <code>rgbCTF{random_is_not_secure}</code> </p>
-<h1>Shakespeare Play, Lost (and found!)</h1>
-<p>It's a book cipher,the first number correspond to the nth line of the book, and the second number correspond to the nth character of the line.  </p>
-<div class="codehilite"><pre><span></span><code><span class="n">keys</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">33</span><span class="p">,</span> <span class="mi">20</span><span class="p">],[</span><span class="mi">71</span><span class="p">,</span> <span class="mi">5</span><span class="p">],[</span><span class="mi">43</span><span class="p">,</span> <span class="mi">142</span><span class="p">],[</span><span class="mi">60</span><span class="p">,</span> <span class="mi">150</span><span class="p">],[</span><span class="mi">73</span><span class="p">,</span> <span class="mi">312</span><span class="p">],[</span><span class="mi">78</span><span class="p">,</span> <span class="mi">66</span><span class="p">],[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">22</span><span class="p">],[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">115</span><span class="p">],[</span><span class="mi">29</span><span class="p">,</span> <span class="mi">18</span><span class="p">],[</span><span class="mi">51</span><span class="p">,</span> <span class="mi">147</span><span class="p">],[</span><span class="mi">45</span><span class="p">,</span> <span class="mi">68</span><span class="p">],[</span><span class="mi">34</span><span class="p">,</span> <span class="mi">14</span><span class="p">],[</span><span class="mi">54</span><span class="p">,</span> <span class="mi">126</span><span class="p">],[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">48</span><span class="p">],[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],[</span><span class="mi">60</span><span class="p">,</span> <span class="mi">126</span><span class="p">],[</span><span class="mi">45</span><span class="p">,</span> <span class="mi">77</span><span class="p">],[</span><span class="mi">13</span><span class="p">,</span> <span class="mi">69</span><span class="p">]]</span>
-<span class="n">text</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"play"</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
-<span class="n">flag</span> <span class="o">=</span> <span class="s1">''</span>
-<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
-    <span class="n">flag</span> <span class="o">+=</span> <span class="p">(</span><span class="n">text</span><span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]])[</span><span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-<span class="nb">print</span> <span class="s2">"rgbCTF{"</span> <span class="o">+</span> <span class="n">flag</span> <span class="o">+</span> <span class="s2">"}"</span>
-</code></pre></div>
-<p>flag : <code>rgbCTF{itsanrgbtreeeeeee!}</code></p>
-<h1>Typeracer</h1>
+    <h1>Typeracer</h1>
 <p>if we take a look at the page source, we can see obf.js, inside it was a very obfuscated code, using <a href="https://beautifier.io/" target="_blank">this tool</a> we can see the code much clearer. Let's take a look at some interesting part of the code.  </p>
 <div class="codehilite"><pre><span></span><code><span class="s1">'_0x1ec2f5'</span><span class="o">:</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">'0x26f'</span><span class="p">,</span> <span class="s1">'QvUT'</span><span class="p">),</span>
         <span class="s1">'_0x1c2030'</span><span class="o">:</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">'0x20'</span><span class="p">,</span> <span class="s1">'zyUu'</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'ou have be'</span> <span class="o">+</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">'0x4c4'</span><span class="p">,</span> <span class="s1">'9f2)'</span><span class="p">)</span> <span class="o">+</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">'0x570'</span><span class="p">,</span> <span class="s1">'Y@$M'</span><span class="p">)</span> <span class="o">+</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">'0x505'</span><span class="p">,</span> <span class="s1">'XVoV'</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'iQ1RGe3c0M'</span> <span class="o">+</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">'0x649'</span><span class="p">,</span> <span class="s1">'*a95'</span><span class="p">)</span> <span class="o">+</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">'0x55a'</span><span class="p">,</span> <span class="s1">'nB&amp;s'</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'l80bm4weTF'</span> <span class="o">+</span> <span class="nx">_0x7379</span><span class="p">(</span><span class="s1">'0x143'</span><span class="p">,</span> <span class="s1">'&amp;H2q'</span><span class="p">),</span>
@@ -136,6 +79,9 @@ flag : <code>rgbCTF{w40w_j4v42cr1p7_12_4nn0y1ng}</code></p>
 <h1>Ralphie!</h1>
 <p>A stego challenge, using aperisolve, we can see there is a hidden qr code in it, scan it and we get the flag. <br/>
 flag : <code>rgbCTF{BESURETODRINKYOUROVALTINE}</code></p>
+<h1>Hallo?</h1>
+<p>First I convert it into a wav file, then I run <a href="https://github.com/ribt/dtmf-decoder/" target="_blank">this tool</a> to detect the dtmf tones, it's not really accurate, so I need to listen it a few times until I found the flag. <br/>
+flag : <code>rgbctf#yeet#dtmf#tones#</code></p>
 <h1>Too Slow</h1>
 <p>Let's take a look at main:  </p>
 <div class="codehilite"><pre><span></span><code><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
@@ -219,9 +165,63 @@ jump *main+53
 <span class="nb">print</span> <span class="p">(</span><span class="n">flag</span><span class="p">)</span>
 </code></pre></div>
 <p>flag : <code>rgbCTF{ARM_1z_2_eZ_9b7f8d}</code></p>
-<h1>Hallo?</h1>
-<p>First I convert it into a wav file, then I run <a href="https://github.com/ribt/dtmf-decoder/" target="_blank">this tool</a> to detect the dtmf tones, it's not really accurate, so I need to listen it a few times until I found the flag. <br/>
-flag : <code>rgbctf#yeet#dtmf#tones#</code></p>
+<h1>I Love Rainbows</h1>
+<p>We are given a file each line containing 32-64 characters, which looks like hashes, using <a href="https://crackstation.net/" target="_blank">crackstation</a> we can see that each hash contains 1 to 2 characters from the flag, cracking all the hash and we got the flag. <br/>
+flag : <code>rgbCTF{4lw4ys_us3_s4lt_wh3n_h4shing}</code> </p>
+<h1>e</h1>
+<p>For this challenge N is insanely large, because of that the the ciphertext did not reach N at this point, so we can just take eth root of c and get the flag  </p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">gmpy2</span>
+<span class="kn">from</span> <span class="nn">Crypto.Util.number</span> <span class="kn">import</span> <span class="n">long_to_bytes</span> <span class="k">as</span> <span class="n">ltb</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mh">0x5fb76f7f36c0d7788650e3e81fe18ad105970eb2dd19576d29e8a8697ebbd97f4fc2582bf1dc53d527953d9615439ca1b546b2fc1cd533db5fce6f72419f268e3182c0324a631a17d6b3e76540f52f2df51ca34983392d274f292139c28990660fa0e23d1b350da7aa7458a3783107a296dcd1720e32afb431954d8896f0587cd1c8f1d20701d6173b7cffe53679ebda80f137c83276d6628697961f5fcd39e18316770917338c6dc59a241dcdc66417fed42524c33093251c1d318b9dbeb6c3d0a69438b875958e8885d242d196e25bc73595e7f237c8124e07a79f7066f2dee393e2130306ba29e7ece1825798ff8b35416b3a0d96bcdc6eca5616ea2874954f8f88232450ddad3e109338bcc5d84e7b592a6b0871bd4130b84f81ed188e9d5495c8545aa8dea2b65e8605f5a49e3a1c221cbcc301665187658784a8f42a23c2ca2572477ba56ff19934019b48f5a1ab8a50626c85bdd476b11e8c1fb0b740c2370de3da5cc06371a7aa2c4e12eee3dc4cda07a8c84ba2bc3ee2017156468af95111d7ee5152ce35e66fa027a944b43c27fbd27faa5b4f9075be3526a7a5be8a533b523cd5c738c724e97597fc2e3666cfcad7c79d972ff8d9572100e860395cdc3761af3f4cc225a6df83a55802723f95cfba5918d83913f2cc9b219210249928c291310d449042772e2d0a50620d666a137f79770de6f10196b30cc756e1</span>
+<span class="n">e</span> <span class="o">=</span> <span class="mb">0b1101</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">gmpy2</span><span class="o">.</span><span class="n">mpz</span><span class="p">(</span><span class="mh">0x6003a15ff3f9bc74fcc48dc0f5fc59c31cb84df2424c9311d94cb40570eeaa78e0f8fc2917addd1afc8e5810b2e80a95019c88c4ee74849777eb9d0ee27ab80d3528c6f3f95a37d1581f9b3cd8976904c42f8613ee79cf8c94074ede9f034b61433f1fef835f2a0a45663ec4a0facedc068f6fa2b534c9c7a2f4789c699c2dcd952ed82180a6de00a51904c2df74eb73996845842276d5523c66800034351204b921d4780180ca646421c61033017e4986d9f6a892ed649c4fd40d4cf5b4faf0befb1e2098ee33b8bea461a8626dd8cd2eed05ccd471700e2a1b99ed347660cbd0f202212f6c0d7ad8ef6f878d887af0cd0429c417c9f7dd64890146b91152ea0c30637ce503635018fd2caf436a12378e5892992b8ec563f0988fc0cebd2926662d4604b8393fb2000</span><span class="p">)</span>
+<span class="n">gmpy2</span><span class="o">.</span><span class="n">get_context</span><span class="p">()</span><span class="o">.</span><span class="n">precision</span><span class="o">=</span><span class="mi">200</span>
+<span class="n">x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">gmpy2</span><span class="o">.</span><span class="n">root</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="n">e</span><span class="p">))</span>
+<span class="k">assert</span> <span class="nb">pow</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">e</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="o">==</span> <span class="n">c</span>
+<span class="nb">print</span> <span class="n">ltb</span><span class="p">(</span><span class="n">x</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</code></pre></div>
+<p>flag : <code>rgbCTF{lucky_number_13}</code> </p>
+<h1>Occasionally Tested Protocol</h1>
+<p>Classic OTP with time as the seed, we can just get time the same time as we connect to the server, and test the seed locally. You can see the script that I used to find the approximate time on the commented code below.  </p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">seed</span><span class="p">,</span> <span class="n">randint</span> <span class="k">as</span> <span class="n">w</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
+<span class="c1"># import pwn</span>
+<span class="c1"># j = int(time())</span>
+<span class="c1"># print (j)</span>
+<span class="c1"># r = pwn.remote("167.172.123.213", 12345)</span>
+<span class="c1"># print (r.recv())</span>
+<span class="c1"># r.close()</span>
+
+
+<span class="n">try_seed</span> <span class="o">=</span> <span class="mi">1594516169</span>
+<span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2327</span><span class="p">,</span><span class="mi">5113</span><span class="p">,</span><span class="mi">7373</span><span class="p">,</span><span class="mi">8967</span><span class="p">,</span><span class="mi">5424</span><span class="p">,</span><span class="mi">9245</span><span class="p">,</span><span class="mi">9867</span><span class="p">,</span><span class="mi">7147</span><span class="p">,</span><span class="mi">7924</span><span class="p">,</span><span class="mi">723</span><span class="p">]</span>
+<span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="k">while</span> <span class="ow">not</span> <span class="n">found</span><span class="p">:</span>
+    <span class="n">seed</span><span class="p">(</span><span class="n">try_seed</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">w</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">10000</span><span class="p">)</span> <span class="o">==</span> <span class="n">result</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+            <span class="n">found</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">try_seed</span><span class="o">+=</span><span class="mi">1</span>
+            <span class="k">break</span>
+<span class="n">b</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([</span><span class="n">w</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">40</span><span class="p">)])</span>
+
+<span class="n">flag</span> <span class="o">=</span> <span class="nb">int</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="mi">9756397644136381438199947801771447561151891907369603561251869566720</span><span class="p">,</span><span class="mi">999</span><span class="p">,</span><span class="s1">'little'</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="sa">b</span><span class="s2">"</span><span class="se">\x00</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">n</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([</span><span class="n">l</span> <span class="o">^</span> <span class="n">p</span> <span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">flag</span><span class="p">,</span> <span class="n">b</span><span class="p">)])</span>
+<span class="nb">print</span> <span class="p">(</span><span class="n">n</span><span class="p">)</span>
+</code></pre></div>
+<p>flag : <code>rgbCTF{random_is_not_secure}</code> </p>
+<h1>Shakespeare Play, Lost (and found!)</h1>
+<p>It's a book cipher,the first number correspond to the nth line of the book, and the second number correspond to the nth character of the line.  </p>
+<div class="codehilite"><pre><span></span><code><span class="n">keys</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">33</span><span class="p">,</span> <span class="mi">20</span><span class="p">],[</span><span class="mi">71</span><span class="p">,</span> <span class="mi">5</span><span class="p">],[</span><span class="mi">43</span><span class="p">,</span> <span class="mi">142</span><span class="p">],[</span><span class="mi">60</span><span class="p">,</span> <span class="mi">150</span><span class="p">],[</span><span class="mi">73</span><span class="p">,</span> <span class="mi">312</span><span class="p">],[</span><span class="mi">78</span><span class="p">,</span> <span class="mi">66</span><span class="p">],[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">22</span><span class="p">],[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">115</span><span class="p">],[</span><span class="mi">29</span><span class="p">,</span> <span class="mi">18</span><span class="p">],[</span><span class="mi">51</span><span class="p">,</span> <span class="mi">147</span><span class="p">],[</span><span class="mi">45</span><span class="p">,</span> <span class="mi">68</span><span class="p">],[</span><span class="mi">34</span><span class="p">,</span> <span class="mi">14</span><span class="p">],[</span><span class="mi">54</span><span class="p">,</span> <span class="mi">126</span><span class="p">],[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">48</span><span class="p">],[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],[</span><span class="mi">60</span><span class="p">,</span> <span class="mi">126</span><span class="p">],[</span><span class="mi">45</span><span class="p">,</span> <span class="mi">77</span><span class="p">],[</span><span class="mi">13</span><span class="p">,</span> <span class="mi">69</span><span class="p">]]</span>
+<span class="n">text</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"play"</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">flag</span> <span class="o">=</span> <span class="s1">''</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+    <span class="n">flag</span> <span class="o">+=</span> <span class="p">(</span><span class="n">text</span><span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]])[</span><span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+<span class="nb">print</span> <span class="s2">"rgbCTF{"</span> <span class="o">+</span> <span class="n">flag</span> <span class="o">+</span> <span class="s2">"}"</span>
+</code></pre></div>
+<p>flag : <code>rgbCTF{itsanrgbtreeeeeee!}</code></p>
 <h1>A Basic Challenge</h1>
 <p>This challenge is a decoding challenge from various base, starting from binary(base 2),hex(base 16), and so on. I wrote a simple python script that you can hopefully understand  </p>
 <div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">base64</span>

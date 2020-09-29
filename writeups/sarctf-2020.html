@@ -69,7 +69,7 @@
 </blockquote>
 <p>In this challenge we have to use our "detective skills" to find all the places in the picture, however I discovered a trick after the CTF ends that we can actually see the warning in the website source.</p>
 <p>Type <code>view source:</code> in front of the google forms website and we scroll down to the very bottom and we can find the flag  </p>
-<p><img alt="img1" src="/writeups-pic/1.png"/> </p>
+<p><img alt="img1" src="/writeups-pic/30.png"/> </p>
 <p>Flag : <code>FLAG{08c49c3d9ae88983437729747bcf1be8}</code> </p>
 <hr/>
 <h3>Invitation</h3>
@@ -81,7 +81,7 @@
 <p>In this challenge we are given a ciphertext with bunch of stick figures, I read some book of Sherlock Holmes and I know this is a <a href="https://www.dcode.fr/dancing-men-cipher" target="_blank">dancing men cipher</a>. However decoding each symbol by hand is quite inefficient, my friend propose to find the word <code>flag</code> first and starts decode around it, here is what we got:  </p>
 <p><code>this master huntsman flag disco in Saratov that the adventure was most grave one while the sardonic smile which occa</code> </p>
 <p>we think that it just put the word flag randomly because I can't really see some "flag words" in it, so we decided to decode the whole ciphertext. a pdf file store a XObject instead of a normal image file, therefore we can see all the XObject identity of each character and convert it into a plaintext  </p>
-<p><img alt="img2" src="/writeups-pic/2.png"/> </p>
+<p><img alt="img2" src="/writeups-pic/31.png"/> </p>
 <p>The <code>R/Im</code> correspond to the position of character and 4 digit code after it is the identity <br/>
 Here's the python script to sort it and assign single letter to each character  </p>
 <div class="codehilite"><pre><span></span><code><span class="n">text</span> <span class="o">=</span> <span class="p">[]</span>
@@ -839,13 +839,13 @@ Challenge description:</p>
 - Check the message and we can see message from other user such as admin1 and admin2</p>
 <p>From last point of recon, we probably have to check message between admin1 and admin2 and to be able to do so we have to be one of the admin first so i check on the login request, and nothing interesting</p>
 <p>So i check request sent when clicking on <code>Messages</code> menu, and you can see there is <code>POST</code> request sent</p>
-<p><img alt="gambar1" src="/writeups-pic/3.png"/></p>
+<p><img alt="gambar1" src="/writeups-pic/32.png"/></p>
 <p>And indeed parameter of the post request seems crackable </p>
 <p><code>key = eccbc87e4b5ce2fe28308fd9f2a7baf3</code></p>
 <p>Go <a href="https://crackstation.net/" target="_blank">here</a> to crack the key and it shows that it is md5 of <code>3</code> <br/>
 I guess <code>3</code> is id of user <code>test</code> so lets change the <code>key</code> param by changing local cookie of <code>access_key</code> with md5 of <code>1</code> and see the message</p>
 <p>And we got the flag = <strong>FLAG{iD00r<em>with</em>insecure_token}</strong></p>
-<p><img alt="gambar2" src="/writeups-pic/4.png"/></p>
+<p><img alt="gambar2" src="/writeups-pic/33.png"/></p>
 <hr/>
 <h3>Admin (957 pts)</h3>
 <p><strong>Category: Web</strong> <br/>
@@ -902,16 +902,16 @@ Challenge Description:</p>
 <p>Challenge Link : https://vk.com/club187880935</p>
 <p>We were given a link to vk.com so we have to create an account there.</p>
 <p>So there is a bot in the given link
-<img alt="gambar1" src="/writeups-pic/5.png"/></p>
+<img alt="gambar1" src="/writeups-pic/34.png"/></p>
 <p>And we can send them a message <br/>
-<img alt="gambar2" src="/writeups-pic/6.png"/></p>
+<img alt="gambar2" src="/writeups-pic/35.png"/></p>
 <p>Sending <code>/commands</code> will make the bot reply like this
-<img alt="gambar3" src="/writeups-pic/7.png"/></p>
+<img alt="gambar3" src="/writeups-pic/36.png"/></p>
 <p>So we need to get 101 money in order to buy FLAG from the bot but we only have 100 money</p>
 <p>I try all the commands and after lots of trying i just notice some noticeable delay when selling a product, maybe <code>race condition</code> (?), so i try to buy 1 product and send <code>/sell</code> commands many time at once and surely it worked</p>
-<p><img alt="gambar4" src="/writeups-pic/8.png"/></p>
+<p><img alt="gambar4" src="/writeups-pic/37.png"/></p>
 <p>it gave us the <code>Good Sell</code> twice and now we have 200 money, so just buy the flag</p>
-<p><img alt="gambar5" src="/writeups-pic/9.png"/></p>
+<p><img alt="gambar5" src="/writeups-pic/38.png"/></p>
 <p>flag = <strong>FLAG{RaCe<em>CtF</em>C0NdItI0n}</strong></p>
 <hr/>
 <h3>Doc. Holmes (100 pts)</h3>
@@ -936,7 +936,7 @@ drwxr-xr-x <span class="m">2</span> wheel   <span class="m">4096</span> Feb <spa
 drwxr-xr-x <span class="m">5</span> wheel   <span class="m">4096</span> Feb <span class="m">15</span> <span class="m">21</span>:39  word
 </code></pre></div>
 <p>After looking some of the files, we got the flag
-<img alt="gambar" src="/writeups-pic/10.png"/></p>
+<img alt="gambar" src="/writeups-pic/39.png"/></p>
 <p>flag = <strong>FLAG{prominentplace}</strong></p>
 <hr/>
 <h3>Blogger (632 pts)</h3>
@@ -947,7 +947,7 @@ Challenge Description:</p>
 </blockquote>
 <p>And we were given a pcap file : <a href="challs/usb_here.pcapng" target="_blank">usb_here.pcapng</a></p>
 <p>Looking at the pcap file in wireshark we can see a lot of USB URB packet data, and if we look at one of the packet we can see there is Leftover Capture Data, so this is a captured keyboard key typed</p>
-<p><img alt="gambar1" src="/writeups-pic/11.png"/></p>
+<p><img alt="gambar1" src="/writeups-pic/40.png"/></p>
 <p>So we need to dump all the leftover capture data from all packet using this bash script:</p>
 <div class="codehilite"><pre><span></span><code>tshark -r usb_here.pcapng -T fields -e usb.capdata &gt; usb_dump.txt
 </code></pre></div>
@@ -977,15 +977,15 @@ Wrong password! Your attempt is over.
 </code></pre></div>
 <p>It needs a kind of <code>password</code> and when its correct maybe it will give us the flag (?)</p>
 <p>So i open it in ghidra and see the main function <br/>
-<img alt="gambar1" src="/writeups-pic/12.png"/></p>
+<img alt="gambar1" src="/writeups-pic/41.png"/></p>
 <p>There is check function, lets see it <br/>
-<img alt="gambar2" src="/writeups-pic/13.png"/></p>
+<img alt="gambar2" src="/writeups-pic/42.png"/></p>
 <p>Inside of it we can see that our input buffer goes to other function called <code>checkInput</code> and it return a value and if its equal to <code>'\0'</code> it says <code>Wrong password! ...</code></p>
 <p>Looking at the <code>checkInput</code> function <br/>
-<img alt="gambar3" src="/writeups-pic/14.png"/></p>
+<img alt="gambar3" src="/writeups-pic/43.png"/></p>
 <p>There is a check to an array which is our input buffer and its checking the array or in this case the string content (char inside the string) and check it to some value and if its right then <code>isCorrect</code> will be 1 and <code>checkInput</code> will also return 1 and password will be correct</p>
 <p>but if we see again that the <code>cVar1</code> is also checked with <code>b</code> function with our input goes into it so lets check the function <br/>
-<img alt="gambar4" src="/writeups-pic/15.png"/></p>
+<img alt="gambar4" src="/writeups-pic/44.png"/></p>
 <p>It got another check, so i guess the flag is the password and we just need to match each char in the string with the check value</p>
 <p>I manually checked it and got the flag = <strong>FLAG{3a5yr3v3r5ing}</strong></p>
 

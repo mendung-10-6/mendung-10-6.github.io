@@ -59,55 +59,52 @@
     </div>
     <div class="main-content text-normal" data-simplebar>
         <div  class="blog-content">
-    <h2>Tukang ngegas (100 pts)</h2>
-<p>Kita disuruh untuk connect pada ip dengan port berikut
-<code>nc 13.76.181.86 8100</code></p>
-<p>Dan didapatkan hint <code>lokasi flag di flag.txt</code></p>
-<p>Ketika connect menggunakan netcat, bisa dilihat bahwa service ini mengubah semua command menjadi huruf besar, setelah <em>googling</em> cara execute bash shell, ternyata variable $0 dapat mengexecute bash, sehingga kita bisa mengetikkan command seperti biasa dan  mendapatkan flagnya</p>
-<div class="codehilite"><pre><span></span><code>$ nc <span class="m">13</span>.76.181.86 <span class="m">8100</span>
-<span class="o">[</span>!<span class="o">]</span> Connecting to server..
-<span class="o">[</span>*<span class="o">]</span> Switching to interactive mode
-$ <span class="nv">$0</span>
-ls
-bin
-boot
-chall.py
-dev
-etc
-flag.txt
-home
-lib
-lib64
-media
-mnt
-opt
-proc
-root
-run
-sbin
-srv
-sys
-tmp
-usr
-var
-cat flag.txt
-Foresty2019<span class="o">{</span>5a399860ecef529b27d390a1241dc688<span class="o">}</span>
-</code></pre></div>
-<h2>Mamang post (50 pts)</h2>
-<p>Pada challenge ini kita mendapatkan sebuah file <code>inisoal.pcapng</code></p>
+    <h2>This is not pcap file (50 pts)</h2>
+<p>Pada challenge ini kita diberikan file <code>SkypeIRC.pcap</code> dan telah diberi tahu secara tidak langsung oleh title challenge bahwa itu bukan merupakan file pcap</p>
+<p>Karena ini <em>mungkin</em> ada hubungannya dengan <strong>magic byte</strong> maka kita langsung saja cari magic byte untuk file <strong>pcap</strong></p>
+<p>Pada <a href="https://en.wikipedia.org/wiki/List_of_file_signatures" target="_blank">Wikipedia</a> didapatkan seperti berikut</p>
+<p><img alt="image1" src="/writeups-pic/1.png"/></p>
+<p>Karena mungkin saja ini juga pcapng jadi kita coba buka dengan <code>ghex</code> atau hex editor lainnya dan cari magic byte tersebut</p>
+<p>Dan saat pencarian dengan menggunakan magic byte yang kedua yaitu <code>d4 c3 b2 a1</code> didapatkan flag nya seperti berikut</p>
+<p><img alt="image2" src="/writeups-pic/2.png"/></p>
+<h2>John and rock (70 pts)</h2>
+<p>Disini kita mendapatkan sebuah file <code>rocky.zip</code> yang telah dilock dengan sebuah password</p>
+<p>Dilihat dari title challenge ini kita "disuruh" untuk menggunakan <code>johntheripper</code> maka langsung saja kita lakukan <code>zip2john</code> seperti berikut</p>
+<p><img alt="image1" src="/writeups-pic/3.png"/></p>
+<p>Setelah kita dapatkan hash.txt, maka langkah selanjutnya adalah menjalankan john pada file tersebut</p>
+<p><img alt="image2" src="/writeups-pic/4.png"/></p>
+<p>Kita dapatkan password <code>chinese</code> lalu kita extract dengan menggunakan password tersebut dan didapatkan sebuah image seperti berikut</p>
+<p><img alt="image3" src="/writeups-pic/5.png"/></p>
+<p>Setelah saya cari cari apa itu, ternyata itu ada kaitannya dengan password tadi yaitu merupakan sebuah simbol pada bahasa cina yang bisa kita decode dengan menggunakan <a href="https://www.dcode.fr/chinese-code" target="_blank">Chinese Decoder</a> dan dapatkan flagnya</p>
 <blockquote>
-<p>pcapng merupakan sebuah file yang berisi <code>network capture</code> jadi bisa kita buka dengan menggunakan <strong>wireshark</strong></p>
+<p>in case kesulitan mencari tanda 3 pada simbol itu (ternyata itu hanya angka 3 biasa)</p>
 </blockquote>
-<p>Dilihat dari title challenge nya mungkin ada hubungan dengan post request(?), setelah dilihat lihat pada wireshark ternyata ada <em>packet</em> yang menarik </p>
-<p><img alt="image1" src="/writeups-pic/16.png"/></p>
-<p>Sebuah post request pada login.php dengan <code>secret=Rm9yZXN0eTIwMTl7aHQ3cF9wMCR0X1IzcXVlc1RfaXNfbTNtM30</code></p>
-<p>Kita tahu bahwa itu adalah <strong>base64</strong> encrypted text jadi langsung saja kita decrypt dan dapatkan flag nya</p>
-<div class="codehilite"><pre><span></span><code><span class="nb">echo</span> Rm9yZXN0eTIwMTl7aHQ3cF9wMCR0X1IzcXVlc1RfaXNfbTNtM30 <span class="p">|</span> base64 -d &gt; flag.txt
-</code></pre></div>
+<p>flag = Foresty2019{JHONYL3BAYY}</p>
+<h2>Tiga step aja (100 pts)</h2>
+<p>Kita dapatkan cipher-cipher berikut</p>
+<pre><code>YjMyIC0+IDN4IA==
+
+JJFEYRKLKZFUQS2OIZKTMU2TLJFUMRCUIVLVGTKLJZEFMTKXJNEESTK2IRDVCU2PJRDESVKPKZNFMSSSJBKTEVCTKZFU4QKUJNKEGUCKGVFEIRKWGJMEURSDIU2FIS2XJM2UYVKLJZFU2SKKJBLEGVKLJBDUUTKVLFKEGTSJLJGUKT2RLJKEWSSBKU2FMU2UJM2DERCFKZBUGSSWJJDEWVJSIJDU4Q2FJVKEWS2LKZGFMQ2TJNCUUNKIIVGVMU2YI5FE2VKZKZFUOTCFGZKDEUCKGVEFKNSRHU6T2PI=
+
+Emuqzcxm kbh xmv? jmur, uvk nynsvai : Sbdmubl2019{Z1oqp_NbE_Xghm}
+</code></pre>
+<p>Dari text yang pertama, mudah dikenali bahwa text nya menggunakan enkripsi <strong>base64</strong>, hasil dekripsinya adalah petunjuk untuk mendekode text selanjutnya</p>
+<p><code>YjMyIC0+IDN4IA==</code> didekripsi base64 menjadi  <code>b32 -&gt; 3x</code></p>
+<p><code>JJFEYRKLKZFUQS2OIZKTMU2TLJFUMRCUIVLVGTKLJZEFMTKXJNEESTK2IRDVCU2PJRDESVKPKZNFMSSSJBKTEVCTKZFU4QKUJNKEGUCKGVFEIRKWGJMEURSDIU2FIS2XJM2UYVKLJZFU2SKKJBLEGVKLJBDUUTKVLFKEGTSJLJGUKT2RLJKEWSSBKU2FMU2UJM2DERCFKZBUGSSWJJDEWVJSIJDU4Q2FJVKEWS2LKZGFMQ2TJNCUUNKIIVGVMU2YI5FE2VKZKZFUOTCFGZKDEUCKGVEFKNSRHU6T2PI</code> didekripsi <strong>base32 sebanyak 3 kali</strong> menjadi <code>MICINN merupakan kunci untuk membuat makanan menjadi lebih nikmat.</code></p>
+<p><code>Emuqzcxm kbh xmv? jmur, uvk nynsvai : Sbdmubl2019{Z1oqp_NbE_Xghm}</code> didekripsi menggunakan vigenere cipher dengan key “MICINN” menjadi <code>Sesimple itu kan? hehe, ini flagnya : Foresty2019{M1cin_FoR_Lyfe}</code></p>
+<h2>Selamat datang crypto (50 pts)</h2>
+<p>Kita langsung disuguhkan dengan sebuah cipher text <code>u@C6DEJa_`hLrCJ!E_:$7F?N</code></p>
+<p>Terdapat hint seperti berikut</p>
+<blockquote>
+<p>https://www.reddit.com/r/MRcryptography/comments/642mav/ciphers/</p>
+</blockquote>
+<p>Langsung saja kita buka <a href="https://gchq.github.io/CyberChef/" target="_blank">CyberChef</a> dan coba satu satu semua decoder nya dan ternyata <code>ROT47</code></p>
+<p><img alt="image1" src="/writeups-pic/6.jpeg"/></p>
+<p>Bisa juga buka <a href="https://www.dcode.fr/rot-cipher" target="_blank">dcode.fr</a> dan bruteforce semua enkripsi nya</p>
 <h2>Sisipin 13x (70 pts)</h2>
 <p>Kita dapatkan sebuah file <code>sisipin-13x.zip</code> pada challenge ini</p>
 <p>Unzip file nya dan kita dapatkan sebuah image seperti berikut</p>
-<p><img alt="image1" src="/writeups-pic/17.jpeg"/></p>
+<p><img alt="image1" src="/writeups-pic/7.jpeg"/></p>
 <p>Pasti ada sesuatu hal pada gambar itu, kita coba gunakan command <code>strings</code></p>
 <div class="codehilite"><pre><span></span><code>$ strings flag.jpg
 JFIF
@@ -143,86 +140,89 @@ JFIF
 </code></pre></div>
 <p>Bisa kita lihat diakhir <code>strings</code> ada flag tetapi hanya huruf nya saja yang aneh (2019 tetap pada posisi dan  penempatan yang benar)</p>
 <p>Maka kita langsung saja coba <strong>ROT Bruteforce</strong> menggunakan <a href="https://www.dcode.fr/rot-cipher" target="_blank">dcode.fr</a> dan dapatkan flag nya</p>
-<p><img alt="image2" src="/writeups-pic/18.jpeg"/></p>
-<h2>This is not pcap file (50 pts)</h2>
-<p>Pada challenge ini kita diberikan file <code>SkypeIRC.pcap</code> dan telah diberi tahu secara tidak langsung oleh title challenge bahwa itu bukan merupakan file pcap</p>
-<p>Karena ini <em>mungkin</em> ada hubungannya dengan <strong>magic byte</strong> maka kita langsung saja cari magic byte untuk file <strong>pcap</strong></p>
-<p>Pada <a href="https://en.wikipedia.org/wiki/List_of_file_signatures" target="_blank">Wikipedia</a> didapatkan seperti berikut</p>
-<p><img alt="image1" src="/writeups-pic/19.png"/></p>
-<p>Karena mungkin saja ini juga pcapng jadi kita coba buka dengan <code>ghex</code> atau hex editor lainnya dan cari magic byte tersebut</p>
-<p>Dan saat pencarian dengan menggunakan magic byte yang kedua yaitu <code>d4 c3 b2 a1</code> didapatkan flag nya seperti berikut</p>
-<p><img alt="image2" src="/writeups-pic/20.png"/></p>
-<h2>Tiga step aja (100 pts)</h2>
-<p>Kita dapatkan cipher-cipher berikut</p>
-<pre><code>YjMyIC0+IDN4IA==
-
-JJFEYRKLKZFUQS2OIZKTMU2TLJFUMRCUIVLVGTKLJZEFMTKXJNEESTK2IRDVCU2PJRDESVKPKZNFMSSSJBKTEVCTKZFU4QKUJNKEGUCKGVFEIRKWGJMEURSDIU2FIS2XJM2UYVKLJZFU2SKKJBLEGVKLJBDUUTKVLFKEGTSJLJGUKT2RLJKEWSSBKU2FMU2UJM2DERCFKZBUGSSWJJDEWVJSIJDU4Q2FJVKEWS2LKZGFMQ2TJNCUUNKIIVGVMU2YI5FE2VKZKZFUOTCFGZKDEUCKGVEFKNSRHU6T2PI=
-
-Emuqzcxm kbh xmv? jmur, uvk nynsvai : Sbdmubl2019{Z1oqp_NbE_Xghm}
-</code></pre>
-<p>Dari text yang pertama, mudah dikenali bahwa text nya menggunakan enkripsi <strong>base64</strong>, hasil dekripsinya adalah petunjuk untuk mendekode text selanjutnya</p>
-<p><code>YjMyIC0+IDN4IA==</code> didekripsi base64 menjadi  <code>b32 -&gt; 3x</code></p>
-<p><code>JJFEYRKLKZFUQS2OIZKTMU2TLJFUMRCUIVLVGTKLJZEFMTKXJNEESTK2IRDVCU2PJRDESVKPKZNFMSSSJBKTEVCTKZFU4QKUJNKEGUCKGVFEIRKWGJMEURSDIU2FIS2XJM2UYVKLJZFU2SKKJBLEGVKLJBDUUTKVLFKEGTSJLJGUKT2RLJKEWSSBKU2FMU2UJM2DERCFKZBUGSSWJJDEWVJSIJDU4Q2FJVKEWS2LKZGFMQ2TJNCUUNKIIVGVMU2YI5FE2VKZKZFUOTCFGZKDEUCKGVEFKNSRHU6T2PI</code> didekripsi <strong>base32 sebanyak 3 kali</strong> menjadi <code>MICINN merupakan kunci untuk membuat makanan menjadi lebih nikmat.</code></p>
-<p><code>Emuqzcxm kbh xmv? jmur, uvk nynsvai : Sbdmubl2019{Z1oqp_NbE_Xghm}</code> didekripsi menggunakan vigenere cipher dengan key “MICINN” menjadi <code>Sesimple itu kan? hehe, ini flagnya : Foresty2019{M1cin_FoR_Lyfe}</code></p>
-<h2>Selamat datang crypto (50 pts)</h2>
-<p>Kita langsung disuguhkan dengan sebuah cipher text <code>u@C6DEJa_`hLrCJ!E_:$7F?N</code></p>
-<p>Terdapat hint seperti berikut</p>
+<p><img alt="image2" src="/writeups-pic/8.jpeg"/></p>
+<h2>Mamang post (50 pts)</h2>
+<p>Pada challenge ini kita mendapatkan sebuah file <code>inisoal.pcapng</code></p>
 <blockquote>
-<p>https://www.reddit.com/r/MRcryptography/comments/642mav/ciphers/</p>
+<p>pcapng merupakan sebuah file yang berisi <code>network capture</code> jadi bisa kita buka dengan menggunakan <strong>wireshark</strong></p>
 </blockquote>
-<p>Langsung saja kita buka <a href="https://gchq.github.io/CyberChef/" target="_blank">CyberChef</a> dan coba satu satu semua decoder nya dan ternyata <code>ROT47</code></p>
-<p><img alt="image1" src="/writeups-pic/21.jpeg"/></p>
-<p>Bisa juga buka <a href="https://www.dcode.fr/rot-cipher" target="_blank">dcode.fr</a> dan bruteforce semua enkripsi nya</p>
-<h2>John and rock (70 pts)</h2>
-<p>Disini kita mendapatkan sebuah file <code>rocky.zip</code> yang telah dilock dengan sebuah password</p>
-<p>Dilihat dari title challenge ini kita "disuruh" untuk menggunakan <code>johntheripper</code> maka langsung saja kita lakukan <code>zip2john</code> seperti berikut</p>
-<p><img alt="image1" src="/writeups-pic/22.png"/></p>
-<p>Setelah kita dapatkan hash.txt, maka langkah selanjutnya adalah menjalankan john pada file tersebut</p>
-<p><img alt="image2" src="/writeups-pic/23.png"/></p>
-<p>Kita dapatkan password <code>chinese</code> lalu kita extract dengan menggunakan password tersebut dan didapatkan sebuah image seperti berikut</p>
-<p><img alt="image3" src="/writeups-pic/24.png"/></p>
-<p>Setelah saya cari cari apa itu, ternyata itu ada kaitannya dengan password tadi yaitu merupakan sebuah simbol pada bahasa cina yang bisa kita decode dengan menggunakan <a href="https://www.dcode.fr/chinese-code" target="_blank">Chinese Decoder</a> dan dapatkan flagnya</p>
-<blockquote>
-<p>in case kesulitan mencari tanda 3 pada simbol itu (ternyata itu hanya angka 3 biasa)</p>
-</blockquote>
-<p>flag = Foresty2019{JHONYL3BAYY}</p>
+<p>Dilihat dari title challenge nya mungkin ada hubungan dengan post request(?), setelah dilihat lihat pada wireshark ternyata ada <em>packet</em> yang menarik </p>
+<p><img alt="image1" src="/writeups-pic/9.png"/></p>
+<p>Sebuah post request pada login.php dengan <code>secret=Rm9yZXN0eTIwMTl7aHQ3cF9wMCR0X1IzcXVlc1RfaXNfbTNtM30</code></p>
+<p>Kita tahu bahwa itu adalah <strong>base64</strong> encrypted text jadi langsung saja kita decrypt dan dapatkan flag nya</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">echo</span> Rm9yZXN0eTIwMTl7aHQ3cF9wMCR0X1IzcXVlc1RfaXNfbTNtM30 <span class="p">|</span> base64 -d &gt; flag.txt
+</code></pre></div>
+<h2>Tukang ngegas (100 pts)</h2>
+<p>Kita disuruh untuk connect pada ip dengan port berikut
+<code>nc 13.76.181.86 8100</code></p>
+<p>Dan didapatkan hint <code>lokasi flag di flag.txt</code></p>
+<p>Ketika connect menggunakan netcat, bisa dilihat bahwa service ini mengubah semua command menjadi huruf besar, setelah <em>googling</em> cara execute bash shell, ternyata variable $0 dapat mengexecute bash, sehingga kita bisa mengetikkan command seperti biasa dan  mendapatkan flagnya</p>
+<div class="codehilite"><pre><span></span><code>$ nc <span class="m">13</span>.76.181.86 <span class="m">8100</span>
+<span class="o">[</span>!<span class="o">]</span> Connecting to server..
+<span class="o">[</span>*<span class="o">]</span> Switching to interactive mode
+$ <span class="nv">$0</span>
+ls
+bin
+boot
+chall.py
+dev
+etc
+flag.txt
+home
+lib
+lib64
+media
+mnt
+opt
+proc
+root
+run
+sbin
+srv
+sys
+tmp
+usr
+var
+cat flag.txt
+Foresty2019<span class="o">{</span>5a399860ecef529b27d390a1241dc688<span class="o">}</span>
+</code></pre></div>
 <h2>Cookies choco chips (50 pts)</h2>
 <p>Pada challenge ini kita dihadapi dengan sebuah website seperti berikut</p>
-<p><img alt="image1" src="/writeups-pic/25.png"/></p>
+<p><img alt="image1" src="/writeups-pic/10.png"/></p>
 <p>Karena pada title challenge mengatakan <strong>cookie</strong> maka kita langsung saja lihat pada inspect element bagian storage dan kita akan mendapatkan <strong>url encoded</strong> text</p>
-<p><img alt="image1" src="/writeups-pic/26.png"/></p>
+<p><img alt="image1" src="/writeups-pic/11.png"/></p>
 <p>langsung saja decode dan dapatkan flag nya</p>
 <p>untuk mendecode bisa menggunakan <a href="https://gchq.github.io/CyberChef/" target="_blank">CyberChef</a></p>
-<h2>Request me (80 pts)</h2>
-<p>Di challenge ini kita akan dihadapi pada sebuah website</p>
-<p><img alt="image1" src="/writeups-pic/27.png"/></p>
-<p>Kita lihat ada sebuah kolom yang bisa kita inputkan sesuatu dan tombol untuk mensubmit query, karena kita tidak tahu apa yang harus dimasukkan kita langsung saja lihat pada source di inspect element</p>
-<p><img alt="image1" src="/writeups-pic/28.png"/></p>
-<p>Terlihat sesuatu hal yang <em>menarik</em> maka dari itu kita copy semua text yang commented dan disitu terlihat seperti sebuah pengecekan pada <strong>post request</strong> dan mengecek suatu value dari <code>inputan</code> serta mengecek setiap karakter nya dan jika benar dia akan <code>echo "flag"</code> langsung saja gunakan text editor favorite kalian dan ambil setiap karakter nya, satukan dan didapatkan flagnya</p>
 <h2>Ngoding web skuy (50 pts)</h2>
 <p>Kita buka challege nya dan kita akan langsung dihadapi dengan sebuah website seperti berikut</p>
-<p><img alt="image1" src="/writeups-pic/29.png"/></p>
+<p><img alt="image1" src="/writeups-pic/12.png"/></p>
 <p>Setelah itu kita langsung cari cari hal yang sekiranya akan menarik perhatian (<em>mencurigakan</em>)</p>
 <p>Dan setelah dilihat lihat kita akan mendapatkan hal berikut</p>
-<p><img alt="image2" src="/writeups-pic/30.png"/></p>
+<p><img alt="image2" src="/writeups-pic/13.png"/></p>
 <p>Dia mengatakan flag nya ada di style maka kita langsung saja lihat pada style nya dengan inspect element</p>
-<p><img alt="image2" src="/writeups-pic/31.png"/></p>
+<p><img alt="image2" src="/writeups-pic/14.png"/></p>
 <p>Ternyata style nya berada pada <code>/style/style.css</code></p>
 <p>Maka kita langsung saja masuk pada link itu dan kita cari kembali hal yang <em>interesting</em></p>
-<p><img alt="image2" src="/writeups-pic/32.png"/></p>
+<p><img alt="image2" src="/writeups-pic/15.png"/></p>
 <p>Digambar terlihat ada sebuah text yang kita sudah pasti biasa melihat dan bisa langsung <em>recognize</em> bahwa itu adalah <strong>base64</strong> encrypted text maka kita langsung saja decrypt</p>
 <div class="codehilite"><pre><span></span><code><span class="nb">echo</span> <span class="s1">'Rm9yZXN0eTEwMX'</span> <span class="p">|</span> base64 -d &gt; flag.txt
 </code></pre></div>
 <p>Bisa kita lihat pada <code>flag.txt</code> dan mungkin flag nya belum selesai(?) maka dari itu kita kembali melihat pada source di inspect element, dan kita akan dapatkan hal menarik seperti berikut</p>
-<p><img alt="image2" src="/writeups-pic/33.png"/></p>
+<p><img alt="image2" src="/writeups-pic/16.png"/></p>
 <p>Terlihat ada source file lainnya yaitu <code>/style/script.js</code></p>
-<p><img alt="image2" src="/writeups-pic/34.png"/></p>
+<p><img alt="image2" src="/writeups-pic/17.png"/></p>
 <p>Setelah kita buka dan lihat maka kita akan menemukan <strong>base64</strong> encrypted text lainnya, lakukan hal yang sama dan kita dapatkan seluruh flag nya</p>
 <div class="codehilite"><pre><span></span><code><span class="nb">echo</span> <span class="s1">'X3RpZGFrX2FkYV95Z19hbWFu'</span> <span class="p">|</span> base64 -d &gt; flag.txt
 </code></pre></div>
 <blockquote>
 <p>Masukkan flag nya dengan wrapper <strong>Foresty2019{}</strong></p>
 </blockquote>
+<h2>Request me (80 pts)</h2>
+<p>Di challenge ini kita akan dihadapi pada sebuah website</p>
+<p><img alt="image1" src="/writeups-pic/18.png"/></p>
+<p>Kita lihat ada sebuah kolom yang bisa kita inputkan sesuatu dan tombol untuk mensubmit query, karena kita tidak tahu apa yang harus dimasukkan kita langsung saja lihat pada source di inspect element</p>
+<p><img alt="image1" src="/writeups-pic/19.png"/></p>
+<p>Terlihat sesuatu hal yang <em>menarik</em> maka dari itu kita copy semua text yang commented dan disitu terlihat seperti sebuah pengecekan pada <strong>post request</strong> dan mengecek suatu value dari <code>inputan</code> serta mengecek setiap karakter nya dan jika benar dia akan <code>echo "flag"</code> langsung saja gunakan text editor favorite kalian dan ambil setiap karakter nya, satukan dan didapatkan flagnya</p>
 
 </div>
     </div>

